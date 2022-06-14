@@ -13,6 +13,7 @@
         width:auto;
         height:790px; /* 이미지 높이 변경 */
       }
+    div { padding: 10px;}
     
 </style>
 </head>
@@ -43,6 +44,86 @@
   </button>
 </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+<div class="container" >
+	<div class="row">
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="card h-100">
+                                <a href="#!"><img class="card-img-top" src="https://via.placeholder.com/700x400" alt="..." /></a>
+                                <div class="card-body">
+                                    <h4 class="card-title"><a href="#!">Item One</a></h4>
+                                    <h5>$24.99</h5>
+                                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!</p>
+                                </div>
+                                <div class="card-footer"><small class="text-muted">★ ★ ★ ★ ☆</small></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="card h-100">
+                                <a href="#!"><img class="card-img-top" src="https://via.placeholder.com/700x400" alt="..." /></a>
+                                <div class="card-body">
+                                    <h4 class="card-title"><a href="#!">Item Two</a></h4>
+                                    <h5>$24.99</h5>
+                                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur! Lorem ipsum dolor sit amet.</p>
+                                </div>
+                                <div class="card-footer"><small class="text-muted">★ ★ ★ ★ ☆</small></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="card h-100">
+                                <a href="#!"><img class="card-img-top" src="https://via.placeholder.com/700x400" alt="..." /></a>
+                                <div class="card-body">
+                                    <h4 class="card-title"><a href="#!">Item Three</a></h4>
+                                    <h5>$24.99</h5>
+                                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!</p>
+                                </div>
+                                <div class="card-footer"><small class="text-muted">★ ★ ★ ★ ☆</small></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="card h-100">
+                                <a href="#!"><img class="card-img-top" src="https://via.placeholder.com/700x400" alt="..." /></a>
+                                <div class="card-body">
+                                    <h4 class="card-title"><a href="#!">Item Four</a></h4>
+                                    <h5>$24.99</h5>
+                                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!</p>
+                                </div>
+                                <div class="card-footer"><small class="text-muted">★ ★ ★ ★ ☆</small></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="card h-100">
+                                <a href="#!"><img class="card-img-top" src="https://via.placeholder.com/700x400" alt="..." /></a>
+                                <div class="card-body">
+                                    <h4 class="card-title"><a href="#!">Item Five</a></h4>
+                                    <h5>$24.99</h5>
+                                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur! Lorem ipsum dolor sit amet.</p>
+                                </div>
+                                <div class="card-footer"><small class="text-muted">★ ★ ★ ★ ☆</small></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="card h-100">
+                                <a href="#!"><img class="card-img-top" src="https://via.placeholder.com/700x400" alt="..." /></a>
+                                <div class="card-body">
+                                    <h4 class="card-title"><a href="#!">Item Six</a></h4>
+                                    <h5>$24.99</h5>
+                                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!</p>
+                                </div>
+                                <div class="card-footer"><small class="text-muted">★ ★ ★ ★ ☆</small></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2021</p></div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+    </body>
 </html>

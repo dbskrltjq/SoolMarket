@@ -11,8 +11,9 @@
 <body>
 <div class="container">
 <%
-	 int listNo = Integer.parseInt(request.getParameter("no")) ;
-
+	 int listNo = Integer.parseInt(request.getParameter("categoryNo")) ;
+%>
+<% 
 	if (listNo == 100) {
 %>
 		<h1>소주/증류주입니다.</h1>

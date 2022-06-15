@@ -6,6 +6,7 @@ public class Review {
 
 	private int no;
 	private int userNo;
+	private String userId;
 	private int pdNo;
 	private String content;
 	private String fileName;
@@ -31,6 +32,13 @@ public class Review {
 
 	public void setUserNo(int userNo) {
 		this.userNo = userNo;
+	}
+	
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 	public int getPdNo() {

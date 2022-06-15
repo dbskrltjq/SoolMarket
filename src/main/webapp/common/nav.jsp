@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bootstrap demo</title>
+<title>전통주 마켓</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://kit.fontawesome.com/2628157b3b.js" crossorigin="anonymous"></script>
 
@@ -14,7 +14,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&display=swap');	
 	body {font-family: 'Nanum Gothic Coding', monospace;}
 	nav {border-bottom-style: solid;
- 		 border-bottom-color: coral;}
+ 		 border-bottom-color: coral;
+ 		 margin-top: 30px;}
 	.nav-link { font-size: large; 
 				color:black;
 				font-weight: bold;}
@@ -27,14 +28,12 @@
 </head>
 <body>
 <%
-	String menu = request.getParameter("menu");
-
 	User user = (User)session.getAttribute("LOGINED_USER");
 %>
 
- <nav class="navbar navbar-expand-lg  p-2 text-dark ">
+ <nav class="navbar navbar-expand-lg  p-2 text-dark">
 	  <div class="container-fluid">
-		  	<div class="row p-3">
+		  	<div class="row p-4 mb-3">
 		  		<div class="col-3">
 				    <a class="navbar-brand" aria-current="page" href="/semi/home.jsp"><img src="/semi/images/mainLogo.png" style="width: 80%;"> </a>
 				    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,7 +65,7 @@
 					    </div>
 				      </form>
 				</div>     
-				<div class="col-3 p-3" style="text-align: center;" >
+				<div class="col-3" style="text-align: right;">
 						<%
 							if (user == null) {
 						%>
@@ -76,7 +75,8 @@
 							} else { 
 						%>
 							  <a class="nav-link" id="inline" href="/semi/cart.jsp"><i class="fa-solid fa-cart-shopping"></i>장바구니</a>
-						      <a class="nav-link" id="inline" href="/semi/logout.jsp" onclick="logout();">로그아웃</a>
+							  <a class="nav-link" id="inline" href="/semi/myPage.jsp"><i class="fa-solid fa-user"></i>마이페이지</a>
+						      <a class="nav-link" id="inline" href="/semi/logout.jsp" onclick="logout();"><i class="fa-solid fa-user-xmark"></i>로그아웃</a>
 						<%
 							}
 						%>

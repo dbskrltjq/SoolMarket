@@ -14,7 +14,7 @@
 <body>
 <jsp:include page="common/nav.jsp"></jsp:include>
 <div class="container" style="width: 60%;">
-	<form form class="border bg-light p-3 " method="post" action="register.jsp" onsubmit="return submitRegisterForm()">
+	<form class="border bg-light p-3 " method="post" action="register.jsp" onsubmit="return submitRegisterForm()">
 		<div class="form-group">
 			<legend>기본정보</legend>
 			<div>
@@ -205,12 +205,24 @@
 		let telField = document.querySelector("input[name=tel]");
 		if (telField.value === '') {
 			alert("전화번호를 입력해주세요.")
+			telField.focus();
 			return false;
 		}
+		
+		let postcodeField = document.getElementById("posecode");
+		let addrField = document.getElementById("addr");
+		let detailAddrField = document.getElementById("detailAddr");
+		if (postcodeField.value === '' || addrField === '' || detailAddrField === '') {
+			alert("주소를 입력해주세요.")
+			postcodeField.focus();
+			return false;
+		}
+		
 		
 		return true;
 	} 
 	
+	// 다음api를 사용한 주소찾기 기능 구현 부분
 	function findAddr() {
         new daum.Postcode({
             oncomplete: function(data) {

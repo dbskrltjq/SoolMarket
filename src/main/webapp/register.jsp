@@ -1,3 +1,4 @@
+<%@page import="java.net.URLEncoder"%>
 <%@page import="util.PasswordUtil"%>
 <%@page import="vo.User"%>
 <%@page import="dao.UserDao"%>
@@ -44,6 +45,27 @@
 	
 	userDao.insertUser(user);
 	
-	// 회원가입이 완료되면 회원가입롼료 화면에 이름을 표시한다.
-	response.sendRedirect("loginComplete.jsp?name=" + name);
+	// 회원가입이 완료되면 회원가입롼료 화면에 이름을 표시한다. 한글을 요청파라미터로 보낼 때, 깨지므로 인코딩 사용
+	response.sendRedirect("loginComplete.jsp?name=" + URLEncoder.encode(name, "utf-8"));
+	
+
+
+
 %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

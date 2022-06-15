@@ -39,7 +39,7 @@
                <strong>회원님의 정보를 안전하게 보호하기 위해 비밀번호를 다시 한번 확인해 주세요.</strong>
             </div>
          </div>
-         <form method="post" action="myPageUpdate.jsp" onsubmit="return formSubmitCheck()">
+	     <form method="post" action="myPageUpdate.jsp" onsubmit="return formSubmitCheck()">
          <div class="row p-3 bg-light border text-center">
             <div class="col-12">
             <%
@@ -47,15 +47,16 @@
             %>
                <p class="m-3">
                   <strong>아이디 <span id="id" class="text-primary me-4"><%=user.getId() %></span></strong>
-                  <strong>비밀번호 </strong> <input type="password" id="password" /> 
+                  
+                  <strong>비밀번호 </strong> <input type="password" id="password" />
                   <div id="pwHelper"></div>
                </p>
             </div>
          </div>
          <div class="row my-3">
             <div class="col-12 text-center">
-               <a href="" class="btn btn-outline-secondary">취소</a>
-               <button type="submit" class="btn btn-warning">인증하기</button>
+               <a href="myPage.jsp" class="btn btn-outline-secondary"><strong>취소</strong></a>
+               <button type="submit" class="btn btn-primary"><strong style="color: white;">인증하기</strong></button>
             </div>
          </div>
          </form>
@@ -89,12 +90,15 @@
 				let result = JSON.parse(jsonText);				     
 				if(!result.check) {
 					pwHelperField.textContent = "비밀번호를 정확하게 입력해주세요." ;
-				} 
+					return flase;
+				}  else {
+					return true;
+				}
 			}
 	    }
 	    xhr.open("GET", 'passwordCheck.jsp?password=' + password);						
 	    xhr.send();	
-	    return false;
+	    
 		}
 	}
 	

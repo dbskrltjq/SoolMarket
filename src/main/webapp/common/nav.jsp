@@ -34,7 +34,7 @@
  <nav class="navbar navbar-expand-lg  p-2 text-dark">
 	  <div class="container-fluid">
 		  	<div class="row p-4 mb-3">
-		  		<div class="col-3">
+		  		<div class="col-2">
 				    <a class="navbar-brand" aria-current="page" href="/semi/home.jsp"><img src="/semi/images/mainLogo.png" style="width: 80%;"> </a>
 				    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				      <span class="navbar-toggler-icon"></span>
@@ -46,17 +46,26 @@
 				          <a class="nav-link " aria-current="page" href="/semi/list.jsp?categoryNo=100">소주/증류주</a>
 				        </li>
 				        <li class="nav-item">
-				          <a class="nav-link " href="/semi/list.jsp?categoryNo=200">리큐르</a>
+				        	<a class="nav-link " href="/semi/list.jsp?categoryNo=200">리큐르</a>
 				        </li>
 				        <li class="nav-item">
-				          <a class="nav-link " href="/semi/list.jsp?categoryNo=300">막걸리</a>
+				          	<a class="nav-link " href="/semi/list.jsp?categoryNo=300">막걸리</a>
 				        </li>
 				        <li class="nav-item">
-				          <a class="nav-link " href="/semi/list.jsp?categoryNo=400">약주/청주</a>
+				         	<a class="nav-link " href="/semi/list.jsp?categoryNo=400">약주/청주</a>
 				        </li>
 				        <li class="nav-item">
-				          <a class="nav-link " href="/semi/list.jsp?categoryNo=500">과실주</a>
+				          	<a class="nav-link " href="/semi/list.jsp?categoryNo=500">과실주</a>
 				        </li>
+				        <li class="nav-item dropdown">
+		        		<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+		           		커뮤니티
+		        		</a>
+		          			<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+		            			<li><a class="dropdown-item" href="review/totalReview.jsp">상품후기보기</a></li>
+		            			<li><a class="dropdown-item" href="#">1:1문의하기</a></li>
+		          			</ul>
+		        		</li>
 				      </ul>
 				      <form class="d-flex" role="search">
 				      	<div class="input-group">

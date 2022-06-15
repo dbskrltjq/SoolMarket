@@ -1,11 +1,12 @@
-package vo;
+package dto;
 
 import java.util.Date;
 
-public class Review {
+public class ReviewDto {
 
 	private int no;
 	private int userNo;
+	private String userId;
 	private int pdNo;
 	private String content;
 	private String fileName;
@@ -15,7 +16,7 @@ public class Review {
 	private int score;
 	private int likeCount;
 	
-	public Review() {}
+	public ReviewDto () {}
 
 	public int getNo() {
 		return no;
@@ -32,7 +33,15 @@ public class Review {
 	public void setUserNo(int userNo) {
 		this.userNo = userNo;
 	}
-	
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
 	public int getPdNo() {
 		return pdNo;
 	}
@@ -97,9 +106,5 @@ public class Review {
 		this.likeCount = likeCount;
 	}
 	
-	
-	
-	
-	
-	
+
 }

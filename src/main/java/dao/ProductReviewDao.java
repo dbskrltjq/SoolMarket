@@ -3,8 +3,8 @@ package dao;
 import java.sql.SQLException;
 import java.util.List;
 
+import dto.ReviewDto;
 import helper.DaoHelper;
-import vo.Review;
 
 public class ProductReviewDao {
 
@@ -16,7 +16,7 @@ public class ProductReviewDao {
 	
 	private DaoHelper helper = DaoHelper.getInstance();
 	
-	public List<Review> getProductReviews(int productNo) throws SQLException {
+	public List<ReviewDto> getProductReviews(int productNo) throws SQLException {
 		String sql = "select R.review_no, U.user_no, U.user_id, R.pd_no, R.review_content, R.review_file_name "
 					+ ", R.review_deleted,R.review_created_date, R.review_updated_date, R.review_score, R.review_like_count "
 			       + "from sul_reviews R, sul_users U "
@@ -24,7 +24,7 @@ public class ProductReviewDao {
 			       + "and R.pd_no = ? ";
 		
 		return helper.selectList(sql, rs -> {
-			Review review = new Review();
+			ReviewDto review = new ReviewDto();
 			review.setNo(rs.getInt("review_no"));
 			review.setUserNo(rs.getInt("user_no"));
 			review.setUserId(rs.getString("user_id"));

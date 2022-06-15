@@ -1,3 +1,6 @@
+<%@page import="dto.QuestionDto"%>
+<%@page import="dao.ProductQuestionDao"%>
+<%@page import="dto.ReviewDto"%>
 <%@page import="java.util.List"%>
 <%@page import="vo.Review"%>
 <%@page import="dao.ProductReviewDao"%>
@@ -19,11 +22,11 @@
 	<jsp:param name="menu" value="product"/>
 </jsp:include>
 <div class="container">
-   	<div class="row">
+ <!--   	<div class="row">
 		<div class="col">
 			<h1 class="fs-4 border p-2">상품 상세정보</h1>
 		</div>
-	</div>
+	</div> -->
 	<div class="row">
 		<div class="col-6">
 		<div>
@@ -40,7 +43,10 @@
 		Product product = productDao.getProductByNo(productNo);
 		
 		ProductReviewDao productReviewDao = ProductReviewDao.getInstance();
-		List<Review> reviews = productReviewDao.getProductReviews(productNo);
+		List<ReviewDto> reviews = productReviewDao.getProductReviews(productNo);
+		
+		ProductQuestionDao productQuestionDao = ProductQuestionDao.getInstance();
+		List<QuestionDto> questions = productQuestionDao.getProductQuestions(productNo);
 	%>
 	<h3><%=product.getName() %></h3>
 	<table class="table">
@@ -117,7 +123,7 @@
 			</div>
 		<%
 			} else {
-				for (Review review : reviews) {
+				for (ReviewDto review : reviews) {
 		%>
 			<%-- <div class="card mb-3">
 				<div class="card-body">
@@ -152,6 +158,26 @@
 				}
 			}
 		%>
+		</div>
+	</div>
+	<div>
+		<div>
+			<%
+				if (questions.isEmpty()) {
+			%>
+				<div class="container">
+					<div>
+						<p>작성된 문의가 없습니다.</p>
+					</div>
+				</div>
+			<%
+				} else {
+					for (QuestionDto question : questions)	
+			%>
+			
+			<%			
+				}
+			%>
 		</div>
 	</div>
 </div>

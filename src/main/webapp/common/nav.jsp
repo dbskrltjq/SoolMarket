@@ -9,9 +9,12 @@
 <title>Bootstrap demo</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://kit.fontawesome.com/2628157b3b.js" crossorigin="anonymous"></script>
+
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&display=swap');		
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&display=swap');	
 	body {font-family: 'Nanum Gothic Coding', monospace;}
+	nav {border-bottom-style: solid;
+ 		 border-bottom-color: coral;}
 	.nav-link { font-size: large; 
 				color:black;
 				font-weight: bold;}
@@ -37,7 +40,7 @@
 		    </button>
 		</div>
 		<div class="collapse navbar-collapse col-6" id="navbarSupportedContent">
-		      <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
+		      <ul class="navbar-nav me-auto mb-2 mb-lg-0 justify-content-center">
 		        <li class="nav-item">
 		          <a class="nav-link " aria-current="page" href="/semi/list.jsp?categoryNo=100">소주/증류주</a>
 		        </li>

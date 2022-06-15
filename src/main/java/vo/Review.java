@@ -96,8 +96,7 @@ public class Review {
 	public void setLikeCount(int likeCount) {
 		this.likeCount = likeCount;
 	}
-	
-	
+
 	
 	
 	

@@ -17,14 +17,9 @@
 		<div class="row">
 			<h1>회원가입완료페이지입니다.</h1>
 			<%
-				User user = (User) session.getAttribute("LOGINED_USER");
-			
-				if (user != null) {
+				String name = request.getParameter("name");
 			%>
-					<strong><%=user.getName() %></strong>님 환영합니다.
-			<%
-				}
-			%>
+					<strong><%=name %></strong>님 환영합니다.
 		
 		</div>
 	</div>

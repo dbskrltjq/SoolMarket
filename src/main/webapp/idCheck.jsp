@@ -11,12 +11,14 @@
  	UserDao userDao = UserDao.getInstance();
  	User savedUser = userDao.getUserById(userId);
  	
- 	Map<String, Boolean> result = new HashMap<>();
+ 	Map<String, Object> result = new HashMap<>();
  	
  	if(savedUser != null) {
 		result.put("exist", true);
+		result.put("id", userId);
 	} else {
 		result.put("exist", false);				
+		result.put("id", userId);
 	}
  	
  	Gson gson = new Gson();

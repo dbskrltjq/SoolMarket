@@ -60,6 +60,16 @@ public class CartItemDao {
 		// update
 
 	}
+	
+	// 지정된 장바구니 아이템 정보를 전달받아서 수량을 업데이트한다.
+	public void updateCartItem(Cart cart) throws SQLException {
+		String sql = "update SUL_CARTS "
+				+ "set CART_ITEM_QUANTITY = ? , "
+				+ "	   CART_ITEM_UPDATED_DATE = sysdate "
+				+ "where cart_no = ? ";
+		
+		helper.update(sql, cart.getQuantity(), cart.getNo());
+	}
 
 	
 	// 지정된 장바구니 아이템번호와 일치하는 장바구니 아이템정보를 반환한다. - 장바구니에서 아이템 사진이나 이름 누르면 실행되는 거
@@ -84,11 +94,11 @@ public class CartItemDao {
 	
 	
 	// 지정된 장바구니 아이템번호화 일치하는 장바구니 아이템정보를 삭제한다. - delete
-	public void deleteCartItem(int pdNo) throws SQLException {
+	public void deleteCartItem(int cartNo) throws SQLException {
 		String sql = "delete from SUL_CARTS "
-				+ "where PD_NO = ? ";
+				+ "where CART_NO = ? ";
 	
-		helper.delete(sql, pdNo);
+		helper.delete(sql, cartNo);
 	}
 
 }

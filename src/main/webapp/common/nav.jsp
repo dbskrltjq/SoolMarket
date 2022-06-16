@@ -1,21 +1,13 @@
 <%@page import="vo.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>전통주 마켓</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://kit.fontawesome.com/2628157b3b.js" crossorigin="anonymous"></script>
-
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&display=swap');	
-	body {font-family: 'Nanum Gothic Coding', monospace;}
-	nav {border-bottom-style: solid;
+	nav {font-family: 'Nanum Gothic Coding', monospace;
+		 border-bottom-style: solid;
  		 border-bottom-color: coral;
- 		 margin-top: 30px;}
+ 		 margin-top: 30px;
+ 		 background-color: white; }
 	.nav-link { font-size: large; 
 				color:black;
 				font-weight: bold;}
@@ -25,13 +17,11 @@
 	
 	   
 </style>
-</head>
-<body>
 <%
 	User user = (User)session.getAttribute("LOGINED_USER");
 %>
-
- <nav class="navbar navbar-expand-lg  p-2 text-dark">
+<!-- 내비바에서 사용되는 주소는 절대주소로 적어야 합니다. -->
+ <nav class="navbar navbar-expand-lg  p-2 text-dark sticky-top">
 	  <div class="container-fluid">
 		  	<div class="row p-4 mb-3">
 		  		<div class="col-2">
@@ -40,7 +30,7 @@
 				      <span class="navbar-toggler-icon"></span>
 				    </button>
 				</div>
-				<div class="collapse navbar-collapse col-6" id="navbarSupportedContent">
+				<div class="collapse navbar-collapse col-6 " id="navbarSupportedContent">
 				      <ul class="navbar-nav me-auto mb-2 mb-lg-0 justify-content-center">
 				        <li class="nav-item">
 				          <a class="nav-link " aria-current="page" href="/semi/list.jsp?categoryNo=100">소주/증류주</a>
@@ -62,7 +52,7 @@
 		           		커뮤니티
 		        		</a>
 		          			<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-		            			<li><a class="dropdown-item" href="review/totalReview.jsp">상품후기보기</a></li>
+		            			<li><a class="dropdown-item" href="/semi/review/totalReview.jsp">상품후기보기</a></li>
 		            			<li><a class="dropdown-item" href="#">1:1문의하기</a></li>
 		          			</ul>
 		        		</li>
@@ -94,8 +84,7 @@
 	  	</div>
 </nav>  
 
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://kit.fontawesome.com/2628157b3b.js"></script>
 <script type="text/javascript">
 
 	function logout() {
@@ -103,5 +92,3 @@
 		return;
 	}
 </script>
-</body>
-</html>

@@ -25,6 +25,18 @@ public class UserDao {
 		helper.insert(sql, user.getId(), user.getPassword(), user.getName(), user.getEmail(), user.getTel(), user.getPostCode(), user.getAddress(), user.getDetailAddress());
 	}
 	
+	public void updateUser(User user) throws SQLException {
+		String sql = "update sul_users "
+				   + "	set user_pw = ?, "
+				   + "      user_name = ?, "
+				   + "      user_email = ?, "
+				   + "      user_tel = ?, "
+				   + "      user_post_code = ?, "
+				   + "      user_address = ?,"
+				   + " 		user_detail_address = ? "
+				   + "where user_no =? ";
+		helper.update(sql, user.getPassword(), user.getName(), user.getEmail(), user.getTel(), user.getPostCode(), user.getAddress(), user.getDetailAddress(), user.getNo());
+	}
 	
 	public User getUserById(String id) throws SQLException {
 		

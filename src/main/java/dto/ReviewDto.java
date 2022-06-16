@@ -32,7 +32,7 @@ public class ReviewDto {
 
 	public void setUserNo(int userNo) {
 		this.userNo = userNo;
-	}
+
 
 	public String getUserId() {
 		return userId;
@@ -106,5 +106,21 @@ public class ReviewDto {
 		this.likeCount = likeCount;
 	}
 	
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
+	public int getLikeCount() {
+		return likeCount;
+	}
+
+	public void setLikeCount(int likeCount) {
+		this.likeCount = likeCount;
+	}
 
 }

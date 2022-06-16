@@ -16,10 +16,17 @@
 		return;
 	}
 	
+	
 	String secretPassword = PasswordUtil.generateSecretPassword(id, password);
 	
 	if(!secretPassword.equals(savedUser.getPassword())) {				
 		response.sendRedirect("loginform.jsp?fail=invalid");
+		return;
+	}
+	
+	// 탈퇴한 사용자일 경우 
+	if ("Y".equals(savedUser.getDeleted())) {
+		response.sendRedirect("loginform.jsp?fail=deleted");
 		return;
 	}
 	

@@ -12,65 +12,60 @@
 <jsp:include page="common/nav.jsp">
 	<jsp:param  name="menu" value="login" />
 </jsp:include>
+
+<div class="container" style="width: 40%">
+	<main class="form-signin w-100 m-auto border">
+	  <form method="post" action="login.jsp" onsubmit="return submitLoginForm()">
+	    <img class="mb-4" src="images/logo.png" alt="" width="200" height="200">
+	    <h1 class="h3 mb-3 fw-normal">로그인</h1>
 <%
 	String fail = request.getParameter("fail");
 
 	if ("invalid".equals(fail)) {
 %>
-
-
-
-		<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		  <div class="modal-dialog">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-		      </div>
-		      <div class="modal-body">
-		        ...
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-		        <button type="button" class="btn btn-primary">Save changes</button>
-		      </div>
-		    </div>
-		  </div>
+		<div class="alert alert-danger">
+				<strong>로그인 실패</strong> 아이디 혹은 비밀번호가 올바르지 않습니다.
 		</div>
-	
-	
+<%
+	} else if ("deleted".equals(fail)) {
+%>
+		<div class="alert alert-danger">
+				<strong>로그인 실패</strong> 이미 탈퇴한 계정입니다.
+		</div>
 <%
 	}
 %>
-
-<div class="container">
-	<main class="form-signin w-100 m-auto">
-	  <form method="post" action="login.jsp" onsubmit="return submitLoginForm()">
-	    <img class="mb-4" src="images/logo.png" alt="" width="200" height="200">
-	    <h1 class="h3 mb-3 fw-normal">로그인</h1>
 	
 	    <div class="form-floating">
-	      <input type="text" class="form-control" name="id" id="" placeholder="아이디를 입력하세요">
+	      <input type="text" class="form-control" name="id" id="id" placeholder="아이디를 입력하세요">
 	      <label for="floatingInput">아이디를 입력하세요</label>
+	      <div id="id-helper" class="form-text text-bold"></div>
 	    </div>
 	    <div class="form-floating">
-	      <input type="password" class="form-control" name="password" id="" placeholder="비밀번호를 입력하세요">
+	      <input type="password" class="form-control" name="password" id="password" placeholder="비밀번호를 입력하세요">
 	      <label for="floatingPassword">비밀번호를 입력하세요</label>
 	    </div>
+	    <button class="w-100 btn btn-lg btn-primary" type="submit">로그인</button>
 	
 	    <div class="checkbox mb-3">
 	      <label>
 	        <input type="checkbox" value="remember-me"> 아이디 저장
 	      </label>
 	    </div>
-	    <button class="w-100 btn btn-lg btn-primary" type="submit">로그인</button>
+	   	<div>
+	   		<a class="btn btn-secondary" href="registerform.jsp" >회원가입 </a>
+	   		<a class="btn btn-outline-secondary" href="">아이디찾기</a>
+	   		<a class="btn btn-outline-secondary" href="">비밀번호찾기</a>
+	   	</div>
 	  </form>
 	</main>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
 
-	function submitLoginFormlet idField = document.querySelector("input[name=id]");
+	
+	function submitLoginForm() {
+	let idField = document.querySelector("input[name=id]");
 	if (idField.value === '') {
 		alert("아이디는 필수입력값입니다.");
 		idField.focus();
@@ -82,10 +77,11 @@
 		passwordField.focus();
 		return false;
 	}
-	return true;() {
-		
+	return true; 
 	}
 
 </script>
+
+
 </body>
 </html>

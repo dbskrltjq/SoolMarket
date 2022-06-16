@@ -1,21 +1,22 @@
-package vo;
+package dto;
 
 import java.util.Date;
 
-public class Review {
-
+public class QuestionDto {
+	
 	private int no;
 	private int userNo;
+	private String userName;
 	private int pdNo;
+	private String title;
 	private String content;
-	private String fileName;
+	private String answerContent;
 	private String deleted;
 	private Date createdDate;
 	private Date updatedDate;
-	private int score;
-	private int likeCount;
+	private Date answerCreatedDate;
 	
-	public Review() {}
+	public QuestionDto () {}
 
 	public int getNo() {
 		return no;
@@ -32,13 +33,29 @@ public class Review {
 	public void setUserNo(int userNo) {
 		this.userNo = userNo;
 	}
-	
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
 	public int getPdNo() {
 		return pdNo;
 	}
 
 	public void setPdNo(int pdNo) {
 		this.pdNo = pdNo;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public String getContent() {
@@ -49,12 +66,12 @@ public class Review {
 		this.content = content;
 	}
 
-	public String getFileName() {
-		return fileName;
+	public String getAnswerContent() {
+		return answerContent;
 	}
 
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
+	public void setAnswerContent(String answerContent) {
+		this.answerContent = answerContent;
 	}
 
 	public String getDeleted() {
@@ -81,24 +98,13 @@ public class Review {
 		this.updatedDate = updatedDate;
 	}
 
-	public int getScore() {
-		return score;
+	public Date getAnswerCreatedDate() {
+		return answerCreatedDate;
 	}
 
-	public void setScore(int score) {
-		this.score = score;
+	public void setAnswerCreatedDate(Date answerCreatedDate) {
+		this.answerCreatedDate = answerCreatedDate;
 	}
-
-	public int getLikeCount() {
-		return likeCount;
-	}
-
-	public void setLikeCount(int likeCount) {
-		this.likeCount = likeCount;
-	}
-
-	
-	
 	
 	
 }

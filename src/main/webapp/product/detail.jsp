@@ -22,11 +22,6 @@
 	<jsp:param name="menu" value="product"/>
 </jsp:include>
 <div class="container">
- <!--   	<div class="row">
-		<div class="col">
-			<h1 class="fs-4 border p-2">상품 상세정보</h1>
-		</div>
-	</div> -->
 	<div class="row">
 		<div class="col-6">
 		<div>
@@ -37,7 +32,7 @@
 	<%
 		User user = (User) session.getAttribute("LOGINED_USER");
 		
-		int productNo = Integer.parseInt(request.getParameter("productNo"));
+		int productNo = Integer.parseInt(request.getParameter("pdNo"));
 	
 		ProductDao productDao = ProductDao.getInstance();
 		Product product = productDao.getProductByNo(productNo);
@@ -49,7 +44,7 @@
 		List<QuestionDto> questions = productQuestionDao.getProductQuestions(productNo);
 	%>
 	<h3><%=product.getName() %></h3>
-	<table class="table">
+	<table class="table-boardless">
 		<tbody>
 			<tr>
 				<th>상품명</th>
@@ -86,16 +81,18 @@
 	</table>
 	</div>
 	</div>
-	<div class="row mb-4">
+	<div class="container">
+	<div class="row text-center">
 		<div class="col-4">
-			<P>상세정보</P>
+			<span class="border border-primary" style="background-color: #eee;">상세정보</span>
 		</div>
 		<div class="col-4">
-			<P>구매평</P>
+			<span class="border border-primary " style="background-color: #eee;">구매평</span>
 		</div>
 		<div class="col-4">
-			<P>Q&A</P>
+			<span class="border border-primary" style="background-color: #eee;">Q&A</span>
 		</div>
+	</div>
 	</div>
 		<div class="row mb-3">
 		<div class="col">
@@ -105,7 +102,7 @@
 						<textarea rows="2" class="form-control" placeholder="전통주와 함께한 좋은 기억을 다른 분들과 나눠주세요♥"></textarea>
 					</div>
 					<div class="col-1">
-						<button type="submit" class="btn btn-outline-secondary w-100 h-100">등록</button>
+						<button type="submit" class="btn btn-outline-secondary w-100 h-100">리뷰등록</button>
 					</div>
 				</form>
 			</div>
@@ -113,10 +110,11 @@
 	</div>
 	<div>
 		<div>
+		<h3>플러스리뷰</h3>
 		<%
 			if (reviews.isEmpty()) {
 		%>
-			<div class="container">
+			<div class="text-center">
 				<div>
 					<p>작성된 리뷰가 없습니다.</p>
 				</div>
@@ -125,32 +123,14 @@
 			} else {
 				for (ReviewDto review : reviews) {
 		%>
-			<%-- <div class="card mb-3">
-				<div class="card-body">
-					<div class="d-flex justify-content-between">
-						<h6><%=review.getUserId() %></h6>
-						<span><%=review.getCreatedDate() %></span>
-					</div>
-					<div class="row">
-						<div class="col-9">
-							<p class="mb-0"><%=review.getContent() %></p>
-						</div>
-						<div>
-							<a href=""></a>
-						</div>
-					</div>
-				</div>
-			</div> --%>
 			
 	<div class="row border-bottom mb-3">
-   			   <div class="col-2 py-3 ">
-         <p class="text-muted mb-1"><%=review.getCreatedDate() %></p>
-         <p class="text-muted"><%=review.getUserId() %></p>
-      </div>
+   		<div class="col-2 p-3 ">
+         	<p class="text-muted mb-1"><%=review.getCreatedDate() %></p>
+        	 <p class="text-muted"><%=review.getUserId() %></p>
+		</div>
       <div class="col-10 p-3">
          <p class="small"><%=review.getContent() %> </p>
-       
-       
          <p><a href="">1</a>개의 댓글이 있습니다. <span class="text-info">추천 </span> : <span class="test-info">1</span> <a href="" class="btn btn-info btn-sm">추천하기</a></p>
       </div>
    </div>
@@ -160,27 +140,72 @@
 		%>
 		</div>
 	</div>
+	
 	<div>
 		<div>
+				<h3>상품Q&A</h3>
+				<div class="row">
+				<div class="col-4">
+					<a href="questionform.jsp" class="btn btn-primary btn-sm  " >상품문의 글쓰기</a>
+				</div>
+				<table class="table">
+				<colgroup>
+					<col width="5%">
+					<col width="%">
+					<col width="10%">
+					<col width="10%">
+				</colgroup>
+				<thead>
+					<tr>
+						<th>번호</th>
+						<th>제목</th>
+						<th>이름</th>
+						<th>등록일</th>
+					</tr>
+				</thead>
+				<tbody class="table-group-divider">
+				</tbody>
+				</table>
 			<%
 				if (questions.isEmpty()) {
 			%>
-				<div class="container">
+				<div class="text-center">
 					<div>
-						<p>작성된 문의가 없습니다.</p>
+						<p>등록된 상품 문의가 없습니다.</p>
 					</div>
 				</div>
 			<%
 				} else {
-					for (QuestionDto question : questions)	
+					for (QuestionDto question : questions) {	
 			%>
-			
-			<%			
+				<div>
+					
+				</div>
+			<%	
+					}
 				}
 			%>
 		</div>
 	</div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript">
+	function reviewCheck() {
+		
+		let 
+		let xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState === 4 && xhr.status === 200) {
+				let jsonText = xhr.responseText;
+				let result = JSON.parse(jsonText);
+				if (result.exist) {
+					
+				}
+			}
+		}
+		xhr.open("GET",'reviewCheck.jsp?productNo=' + )
+		xhr.send();
+	}
+</script>
 </body>
 </html>

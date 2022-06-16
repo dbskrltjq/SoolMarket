@@ -26,7 +26,7 @@ public class ReviewDao {
 					
 		return helper.selectList(sql, rs -> {
 			ReviewDto review = new ReviewDto();
-			review.setCreateDate(rs.getDate("review_created_date"));
+			review.setCreatedDate(rs.getDate("review_created_date"));
 			review.setUserId(rs.getString("user_id"));
 			review.setScore(rs.getInt("review_score"));
 			review.setLikeCount(rs.getInt("review_like_count"));

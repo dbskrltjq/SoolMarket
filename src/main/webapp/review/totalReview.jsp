@@ -89,7 +89,7 @@
 			<div>
 				<img alt="" src="../images/sample1.jpg" class="img-thumbnail">
 			</div>
-			<p class="text-muted mb-1"><%=review.getCreateDate() %></p>
+			<p class="text-muted mb-1"><%=review.getCreatedDate() %></p>
 			<p class="text-muted"><%=review.getUserId() %></p>
 		</div>
 		<div class="col-10 p-3">

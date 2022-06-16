@@ -8,6 +8,7 @@ public class ReviewDto {
 	private int userNo;
 	private String userId;
 	private int pdNo;
+	private String pdName;
 	private String content;
 	private String fileName;
 	private String deleted;
@@ -32,7 +33,7 @@ public class ReviewDto {
 
 	public void setUserNo(int userNo) {
 		this.userNo = userNo;
-
+	}
 
 	public String getUserId() {
 		return userId;
@@ -48,6 +49,12 @@ public class ReviewDto {
 
 	public void setPdNo(int pdNo) {
 		this.pdNo = pdNo;
+	}
+	public String getPdName() {
+		return pdName;
+	}
+	public void setPdName(String pdName) {
+		this.pdName = pdName;
 	}
 
 	public String getContent() {
@@ -89,23 +96,6 @@ public class ReviewDto {
 	public void setUpdatedDate(Date updatedDate) {
 		this.updatedDate = updatedDate;
 	}
-
-	public int getScore() {
-		return score;
-	}
-
-	public void setScore(int score) {
-		this.score = score;
-	}
-
-	public int getLikeCount() {
-		return likeCount;
-	}
-
-	public void setLikeCount(int likeCount) {
-		this.likeCount = likeCount;
-	}
-	
 
 	public int getScore() {
 		return score;

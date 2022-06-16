@@ -149,11 +149,9 @@
 				if(result.exist) {
 					classList.add("text-danger");
 					emailHelperElement.textContent = "이미 존재하는 이메일입니다.";
-					isEmailChecked = false;
 				} else {
 					classList.add("text-success");
 					emailHelperElement.textContent = "사용가능한 이메일입니다.";
-					isEmailChecked = true;
 				}
 			}
 	    }

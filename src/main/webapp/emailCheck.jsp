@@ -7,21 +7,34 @@
     pageEncoding="UTF-8" trimDirectiveWhitespaces="true" %>
 
  <%
- 	String email = request.getParameter("email");
- 	UserDao userDao = UserDao.getInstance();
- 	
- 	User savedUser = userDao.getUserByEmail(email);
- 	
  	Map<String, Boolean> result = new HashMap<>();
+ 	Gson gson = new Gson();
+
+ 	String email = request.getParameter("email");
+    String job = request.getParameter("job");
+    
+    if (job != null) {
+    	User user = (User) session.getAttribute("LOGINED_USER");
+    	
+    	if (user != null && user.getEmail().equals(email)) {
+    		result.put("exist", false);			
+		 	String jsonText = gson.toJson(result);
+		 	out.write(jsonText);
+		 	return;
+    	}
+    }
+    
+ 	UserDao userDao = UserDao.getInstance(); 	
+ 	User savedUser = userDao.getUserByEmail(email); 	 	
  	
  	if (savedUser != null) {
- 		result.put("exist", true);
+	 	result.put("exist", true); 			
+ 		
  	} else {
  		result.put("exist", false);	
  	}
  	
- 	Gson gson = new Gson();
  	String jsonText = gson.toJson(result);
  	out.write(jsonText);
- 	
+ 	return;
  %>

@@ -33,19 +33,19 @@
 				<div class="collapse navbar-collapse col-6 " id="navbarSupportedContent">
 				      <ul class="navbar-nav me-auto mb-2 mb-lg-0 justify-content-center">
 				        <li class="nav-item">
-				          <a class="nav-link " aria-current="page" href="/semi/list.jsp?categoryNo=100">소주/증류주</a>
+				          <a class="nav-link " aria-current="page" href="/semi/list.jsp?categoryNo=100&sort=sell&page=1">소주/증류주</a>
 				        </li>
 				        <li class="nav-item">
-				        	<a class="nav-link " href="/semi/list.jsp?categoryNo=200">리큐르</a>
+				        	<a class="nav-link " href="/semi/list.jsp?categoryNo=200&sort=sell&page=1">리큐르</a>
 				        </li>
 				        <li class="nav-item">
-				          	<a class="nav-link " href="/semi/list.jsp?categoryNo=300">막걸리</a>
+				          	<a class="nav-link " href="/semi/list.jsp?categoryNo=300&sort=sell&page=1">막걸리</a>
 				        </li>
 				        <li class="nav-item">
-				         	<a class="nav-link " href="/semi/list.jsp?categoryNo=400">약주/청주</a>
+				         	<a class="nav-link " href="/semi/list.jsp?categoryNo=400&sort=sell&page=1">약주/청주</a>
 				        </li>
 				        <li class="nav-item">
-				          	<a class="nav-link " href="/semi/list.jsp?categoryNo=500">과실주</a>
+				          	<a class="nav-link " href="/semi/list.jsp?categoryNo=500&sort=sell&page=1">과실주</a>
 				        </li>
 				        <li class="nav-item dropdown">
 		        		<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">

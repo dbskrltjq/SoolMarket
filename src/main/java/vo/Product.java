@@ -1,5 +1,7 @@
 package vo;
 
+import java.util.Date;
+
 public class Product {
 
 	private int no;
@@ -15,6 +17,7 @@ public class Product {
 	private int saleQuantity;
 	private String recommended;
 	private String fileName;
+	private Date createdDate;
 	
 	public Product() {}
 
@@ -122,7 +125,13 @@ public class Product {
 		this.fileName = fileName;
 	}
 	
+	public Date getCreatedDate() {
+		return createdDate;
+	}
 	
+	public void setCreatedDate() {
+		this.createdDate = createdDate;
+	}
 	
 	
 	

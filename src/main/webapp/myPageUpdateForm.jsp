@@ -42,7 +42,7 @@
 			<p><strong class="fs-6">회원정보</strong></p>
          	<div class="list-group list-group-flush">
          		<a href="myPagePassword.jsp" class="list-group-item list-group-item-action">- 회원정보 변경</a>
-         		<a href="userDelete.jsp" class="list-group-item list-group-item-action">- 회원 탈퇴</a>
+         		<a href="userDeleteForm.jsp" class="list-group-item list-group-item-action">- 회원 탈퇴</a>
          		<a href="#" class="list-group-item list-group-item-action">- 나의 상품문의</a>
 			</div>
 		</div>
@@ -64,7 +64,7 @@
          		<h6><strong>기본정보</strong></h6> 
          		<p style="font-size: xx-small; text-align: right;"><span>*</span>표시는 반드시 입력해야할 항목입니다.</p>
          	</div>
-         	<form action="userInfoUpdate.jsp" method="post" onsubmit="return submitForm()">
+         	<form action="userInfoUpdate.jsp" method="post" onsubmit="return submitForm()" class="bg-light">
          		<table class="table">
 	   	      		<tr>
 	   	      			<th><span>*</span> 아이디</th>
@@ -119,13 +119,12 @@
 	   	      		<tr>
 	   	      			<th><span>*</span> 주소</th>
 	   	      			<td  class="d-grid gap-3">
-	   	      			<div class="w-50">
-	   	      				<input type="text" value=<%=user.getPostCode() %>  class="" name="postcode" id="postcode" placeholder="우편번호">
-	   	      				<button type="button" class="btn btn-outline-secondary btn-sm" onclick="findAddr()" >우편번호 찾기</button>
-	   	      			</div>
+	   	      				<div class="w-50">
+	   	      					<input type="text" value=<%=user.getPostCode() %>  class="" name="postcode" id="postcode" placeholder="우편번호">
+	   	      					<button type="button" class="btn btn-outline-secondary btn-sm" onclick="findAddr()" >우편번호 찾기</button>
+	   	      				</div>
 							<input type="text" value=<%=user.getAddress() %> name="addr" id="addr" placeholder="주소">
 							<input type="text" value=<%=user.getDetailAddress() %> name="detailAddr" id="detailAddr" placeholder="상세주소">	
-							<input type="text" name="extraAddr" id="extraAddr" placeholder="동/로/가">
 	   	      			</td>
 	   	      		</tr>
          		</table>
@@ -200,8 +199,8 @@
 		
 		// 이메일의 input 값에 @가 포함되어 있으면 true를 반환한다.
 		if(inputEmailValue.includes("@")) {
-			let atSignIndex = inputEmailValue.indexOf("@");
-			let frontEmail = inputEmailValue.substring(0, atSignIndex);
+			let index = inputEmailValue.indexOf("@");
+			let frontEmail = inputEmailValue.substring(0, index);
 			inputEmailField.value = frontEmail + selectValue;		// input[type=email] 원본에 접근해야 한다.
 			// console.log(inputEmailValue);
 			
@@ -321,7 +320,7 @@ function findAddr() {
                     extraAddr = ' (' + extraAddr + ')';
                 }
                 // 조합된 참고항목을 해당 필드에 넣는다.
-                document.getElementById("extraAddr").value = extraAddr;
+                document.getElementById("detailAddr").value = extraAddr;
             
             } else {
                 document.getElementById("extraAddr").value = '';

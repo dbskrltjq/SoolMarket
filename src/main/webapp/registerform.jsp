@@ -9,43 +9,102 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
 <style type="text/css">
 	span {color: red;}
+	input {width: 50%;}	
 </style>
 </head>
 <body>
 <jsp:include page="common/nav.jsp"></jsp:include>
-<div class="container" style="width: 60%;">
-	<form class="border bg-light p-3 " method="post" action="register.jsp" onsubmit="return submitRegisterForm()">
-		<div class="form-group">
-			<legend>기본정보</legend>
-			<div>
-				<label class="form-label"><span>*</span> 아이디</label>
-				<input type="text" class="form-control required" name="id" onkeyup="idCheck()"  />
-				<div class="form-text text-bold" id="id-helper" ></div>
+	<div class="container" class="padding: 30px;">
+		<div class="row">
+			<div class="col-8">
+				<div class="row mb-5 border-bottom">
+					<div class="col-12">
+						<h5>
+							<strong>회원가입</strong>
+						</h5>
+					</div>
+				</div>
+				<div class="col-12 border-bottom">
+					<h6>
+						<strong>기본정보</strong>
+					</h6>
+					<p style="font-size: xx-small; text-align: right;">
+						<span>*</span>표시는 반드시 입력해야할 항목입니다.
+					</p>
+				</div>
+				<form action="register.jsp" method="post" onsubmit="return submitRegisterForm()" class="bg-light">
+					<table class="table">
+						<tr>
+							<th><span>*</span> 아이디</th>
+							<td>
+								<input type="text" name="id" onkeyup="idCheck()" />
+								<div class="form-text text-bold" id="id-helper"></div>
+							</td>
+						</tr>
+						<tr>
+							<th><span>*</span> 비밀번호</th>
+							<td>
+								<input type="password" id="password1" name="password" />
+							</td>
+						</tr>
+						<tr>
+							<th><span>*</span> 비밀번호 확인 </th>	
+							<td>				
+								<input type="password" id="password2" onkeyup="passwordCheck()" />
+								<div id="password-helper" class="form-text text-bold"></div>
+							</td>
+						</tr>	
+						<tr>
+							<th><span>*</span> 이름</th>
+							<td>
+								<input type="text" name="name" />
+							</td>
+						</tr>
+						<tr>
+							<th><span>*</span> 이메일</th>
+							<td>
+								<input type="email"  name="email" onkeyup="emailCheck()" /> 
+								<select name="domain" onchange="changeDomain()">
+									<option selected="selected" disabled="disabled">직접입력</option>
+									<option value="@naver.com">naver.com</option>
+									<option value="@hanmail.net">hanmail.net</option>
+									<option value="@gmail.com">gmail.com</option>
+									<option value="@nate.com">nate.com</option>
+								</select>
+								<div id="email-helper" class="form-text text-bold"></div>
+							</td>
+						</tr>
+						<tr>
+							<th><span>*</span> 휴대폰번호</th>
+							<td>
+								<input type="text" name="tel">
+							</td>
+						</tr>
+						<tr>
+							<th><span>*</span> 주소</th>
+							<td class="d-grid gap-3">
+								<div class="w-50">
+									<input type="text" name="postcode" id="postcode" readonly placeholder="우편번호">
+									<button type="button" class="btn btn-outline-secondary btn-sm" onclick="findAddr()">우편번호 찾기</button>
+								</div> 
+								<input type="text" name="addr" id="addr" placeholder="주소" readonly />
+								<input type="text" name="detailAddr" id="detailAddr" placeholder="상세주소" />
+							</td>
+						</tr>
+					</table>
+					<div class="row my-3">
+						<div class="col-12 text-center">
+							<a href="home.jsp" class="btn btn-outline-secondary"><strong>취소</strong></a>
+							<button type="submit" class="btn btn-primary">
+								<strong style="color: white;">회원가입</strong>
+							</button>
+						</div>
+					</div>
+				</form>
 			</div>
-				<label class="form-label"><span>*</span> 비밀번호 <input type="password" class="form-control" id="password1" name="password" /></label>
-				<label class="form-label"><span>*</span> 비밀번호 확인 <input type="password" class="form-control" id="password2" onkeyup="passwordCheck()"/></label>
-				<div id="password-helper" class="form-text text-bold"></div>
-			<div>
-				<span>*</span> 이름 <input type="text" class="form-control" name="name" />
-				<span>*</span> 이메일 <input type="text" class="form-control" name="email" onkeyup="emailCheck()" />
-				<div id="email-helper" class="form-text text-bold"></div>
-			</div>
-				<span>*</span> 휴대폰번호 <input type="text" class="form-control" name="tel" />
-				<span>*</span> 주소 
-					<input type="text" name="postcode" id="postcode" placeholder="우편번호">
-					<input type="button" onclick="findAddr()" value="우편번호 찾기"><br>
-					<input type="text" name="addr" id="addr" placeholder="주소"><br>
-					<input type="text" name="detailAddr" id="detailAddr" placeholder="상세주소">	
-					<input type="text" name="extraAddr" id="extraAddr" placeholder="참고항목">
-			
-			<a href="home.jsp" class="btn btn-secondary">취소</a>
-			<button type="submit" class="btn btn-primary">회원가입</button>
 		</div>
-	</form>
-
-   
-</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript">
 	let isIdChecked = false;
@@ -135,7 +194,7 @@
 	    
 	    if (emailValue === "") {
 		       classList.add("text-danger");								 	
-		       emailHelperElement.textContent = "아이디는 필수입력값입니다.";			
+		       emailHelperElement.textContent = "이메일을 입력해주세요.";			
 		       isEmailChecked = false;
 		       return;         
 		    }
@@ -149,15 +208,36 @@
 				if(result.exist) {
 					classList.add("text-danger");
 					emailHelperElement.textContent = "이미 존재하는 이메일입니다.";
+					isEmailChecked = false;
 				} else {
 					classList.add("text-success");
 					emailHelperElement.textContent = "사용가능한 이메일입니다.";
+					isEmailChecked = true;
 				}
 			}
 	    }
 	    xhr.open("GET", 'emailCheck.jsp?email=' + emailValue);						
 	    xhr.send();	
 		
+	}
+	
+	function changeDomain() {
+		
+		let inputEmailField = document.querySelector("input[type=email]");
+		let inputEmailValue = inputEmailField.value;		// inputEmailValue는 단순히 value 값을 담고있는 변수
+		let selectValue = document.querySelector("select[name=domain]").value;
+		
+		// 이메일의 input 값에 @가 포함되어 있으면 true를 반환한다.
+		if(inputEmailValue.includes("@")) {
+			let index = inputEmailValue.indexOf("@");
+			let frontEmail = inputEmailValue.substring(0, index);
+			inputEmailField.value = frontEmail + selectValue;		// input[type=email] 원본에 접근해야 한다.
+			// console.log(inputEmailValue);
+			
+		} else {
+			
+			inputEmailField.value = inputEmailValue + selectValue;
+		}
 	}
 	
 	function submitRegisterForm() {
@@ -254,10 +334,10 @@
                         extraAddr = ' (' + extraAddr + ')';
                     }
                     // 조합된 참고항목을 해당 필드에 넣는다.
-                    document.getElementById("extraAddr").value = extraAddr;
+                    document.getElementById("detailAddr").value = extraAddr;
                 
                 } else {
-                    document.getElementById("extraAddr").value = '';
+                    document.getElementById("detailAddr").value = '';
                 }
 
                 // 우편번호와 주소 정보를 해당 필드에 넣는다.

@@ -33,9 +33,10 @@ public class UserDao {
 				   + "      user_tel = ?, "
 				   + "      user_post_code = ?, "
 				   + "      user_address = ?,"
-				   + " 		user_detail_address = ? "
+				   + " 		user_detail_address = ?, "
+				   + "		user_deleted = ? "
 				   + "where user_no =? ";
-		helper.update(sql, user.getPassword(), user.getName(), user.getEmail(), user.getTel(), user.getPostCode(), user.getAddress(), user.getDetailAddress(), user.getNo());
+		helper.update(sql, user.getPassword(), user.getName(), user.getEmail(), user.getTel(), user.getPostCode(), user.getAddress(), user.getDetailAddress(), user.getDeleted(), user.getNo());
 	}
 	
 	public User getUserById(String id) throws SQLException {

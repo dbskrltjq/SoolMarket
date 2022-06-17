@@ -14,7 +14,6 @@
 	String postcode = request.getParameter("postcode");
 	String addr = request.getParameter("addr");
 	String detailAddr = request.getParameter("detailAddr");
-	String extraAddr = request.getParameter("extraAddr");
 	
 	UserDao userDao = UserDao.getInstance();
 	
@@ -41,7 +40,7 @@
 	user.setTel(tel);
 	user.setPostCode(postcode);
 	user.setAddress(addr);
-	user.setDetailAddress(detailAddr + extraAddr);
+	user.setDetailAddress(detailAddr);
 	
 	userDao.insertUser(user);
 	

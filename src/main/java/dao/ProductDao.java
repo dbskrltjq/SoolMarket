@@ -31,7 +31,7 @@ public class ProductDao {
 			product.setStock(rs.getInt("pd_stock"));
 			product.setOnSale(rs.getString("pd_onsale"));
 			product.setReviewScore(rs.getInt("pd_review_score"));
-			product.setReviewCount(rs.getInt("review_count"));
+			product.setReviewCount(rs.getInt("pd_review_count"));
 			product.setCompany(rs.getString("pd_company"));
 			product.setSaleQuantity(rs.getInt("pd_sale_quantity"));
 			product.setRecommended(rs.getString("pd_recommended"));

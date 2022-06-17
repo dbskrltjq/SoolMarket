@@ -89,5 +89,31 @@ public class UserDao {
 		}, email);
 	}
 	
+	public User getUserByTel(String tel) throws SQLException {
+		
+		String sql = "select * "
+				+ "from sul_users "
+				+ "where user_tel = ? ";
+		
+		return helper.selectOne(sql, rs -> {
+			User user = new User();
+			user.setNo(rs.getInt("user_no"));
+			user.setId(rs.getString("user_id"));
+			user.setPassword(rs.getString("user_pw"));
+			user.setName(rs.getString("user_name"));
+			user.setEmail(rs.getString("user_email"));
+			user.setTel(rs.getString("user_tel"));
+			user.setPostCode(rs.getString("user_post_code"));
+			user.setAddress(rs.getString("user_address"));
+			user.setDetailAddress(rs.getString("user_detail_address"));
+			user.setPoint(rs.getInt("user_point"));
+			user.setDeleted(rs.getString("user_deleted"));
+			user.setCreatedDate(rs.getDate("user_created_date"));
+			user.setUpdatedDate(rs.getDate("user_updated_date"));
+			
+			return user;
+		}, tel);
+	}
+	
 	
 }

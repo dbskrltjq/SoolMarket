@@ -1,6 +1,12 @@
 <%@page import="vo.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" errorPage="error/500.jsp" %>
+<%
+	User user = (User)session.getAttribute("LOGINED_USER");
+	if (user == null) {
+		throw new RuntimeException("회원정보 수정은 로그인 후 사용가능한 서비스 입니다."); 
+	}
+%>
 <!DOCTYPE html>
 <!-- 회원정보 수정 페이지 넘어가기 전의 비밀번호 재입력 페이지 -->
 <html>
@@ -47,10 +53,8 @@
                <strong>회원님의 정보를 안전하게 보호하기 위해 비밀번호를 다시 한번 확인해 주세요.</strong>
             </div>
          </div>
-         <%
-            User user = (User)session.getAttribute("LOGINED_USER");
-         %>
-	     <form method="post" action="myPageUpdate.jsp" id="pw-form">
+         
+	     <form method="post" action="myPageUpdateForm.jsp" id="pw-form">
          	<div class="row p-3 bg-light border text-center">
             	<div class="col-12">
                 	<strong>아이디 <span id="id" class="text-primary me-4"><%=user.getId() %></span></strong>

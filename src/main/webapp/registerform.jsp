@@ -32,7 +32,7 @@
 						<span>*</span>표시는 반드시 입력해야할 항목입니다.
 					</p>
 				</div>
-				<form action="register.jsp" method="post" onsubmit="return submitRegisterForm()" class="bg-light">
+				<form action="register.jsp" method="post" onsubmit="return submitRegisterForm();" class="bg-light">
 					<table class="table">
 						<tr>
 							<th><span>*</span> 아이디</th>
@@ -50,7 +50,7 @@
 						<tr>
 							<th><span>*</span> 비밀번호 확인 </th>	
 							<td>				
-								<input type="password" id="password2" onkeyup="passwordCheck()" />
+								<input type="password" id="password2" onkeyup="passwordCheck();" />
 								<div id="password-helper" class="form-text text-bold"></div>
 							</td>
 						</tr>	
@@ -63,8 +63,8 @@
 						<tr>
 							<th><span>*</span> 이메일</th>
 							<td>
-								<input type="email"  name="email" onkeyup="emailCheck()" /> 
-								<select name="domain" onchange="changeDomain()">
+								<input type="email"  name="email" onkeyup="emailCheck();" /> 
+								<select name="domain" onchange="changeDomain(); emailCheck();">
 									<option selected="selected" disabled="disabled">직접입력</option>
 									<option value="@naver.com">naver.com</option>
 									<option value="@hanmail.net">hanmail.net</option>
@@ -78,6 +78,7 @@
 							<th><span>*</span> 휴대폰번호</th>
 							<td>
 								<input type="text" name="tel">
+								<button type="button" class="btn btn-outline-secondary btn-sm" onclick="telCheck();">인증하기</button>
 							</td>
 						</tr>
 						<tr>
@@ -85,7 +86,7 @@
 							<td class="d-grid gap-3">
 								<div class="w-50">
 									<input type="text" name="postcode" id="postcode" readonly placeholder="우편번호">
-									<button type="button" class="btn btn-outline-secondary btn-sm" onclick="findAddr()">우편번호 찾기</button>
+									<button type="button" class="btn btn-outline-secondary btn-sm" onclick="findAddr();">우편번호 찾기</button>
 								</div> 
 								<input type="text" name="addr" id="addr" placeholder="주소" readonly />
 								<input type="text" name="detailAddr" id="detailAddr" placeholder="상세주소" />
@@ -109,6 +110,7 @@
 <script type="text/javascript">
 	let isIdChecked = false;
 	let isEmailChecked = false;
+	let isTelChecked = false;
 	
 	function idCheck() {
 		
@@ -204,7 +206,8 @@
 	    xhr.onreadystatechange = function() {					
 			if (xhr.readyState === 4 && xhr.status === 200) {	
 				let jsonText = xhr.responseText;				
-				let result = JSON.parse(jsonText);				     
+				let result = JSON.parse(jsonText);			
+				
 				if(result.exist) {
 					classList.add("text-danger");
 					emailHelperElement.textContent = "이미 존재하는 이메일입니다.";
@@ -221,8 +224,37 @@
 		
 	}
 	
+	function telCheck() {
+		
+		let telElement = document.querySelector("input[name=tel]");
+		let telValue = telElement.value;
+		
+		let xhr = new XMLHttpRequest();
+		
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState === 4 && xhr.status === 200) {
+				let jsonText = xhr.responseText;
+				let result = JSON.parse(jsonText);
+				
+				if(result.exist) {
+					alert("이미 존재하는 전화번호입니다.");
+					telElement.focus();
+					isTelChecked = false;
+				} else {
+					alert("사용가능한 전화번호입니다.");
+					isTelChecked = true;
+				}
+				
+			}
+			
+		}
+		xhr.open("GET", 'telCheck.jsp?tel=' + telValue );						
+	    xhr.send();	
+	}
+	
 	function changeDomain() {
 		
+		let emailHelperElement = document.getElementById("email-helper");
 		let inputEmailField = document.querySelector("input[type=email]");
 		let inputEmailValue = inputEmailField.value;		// inputEmailValue는 단순히 value 값을 담고있는 변수
 		let selectValue = document.querySelector("select[name=domain]").value;
@@ -283,6 +315,12 @@
 		let telField = document.querySelector("input[name=tel]");
 		if (telField.value === '') {
 			alert("전화번호를 입력해주세요.")
+			telField.focus();
+			return false;
+		}
+		
+		if (!isTelChecked) {
+			alert("전화번호를 확인해주세요");
 			telField.focus();
 			return false;
 		}

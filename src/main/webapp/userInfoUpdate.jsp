@@ -38,5 +38,5 @@
 	
 	userDao.updateUser(user);
 	
-	response.sendRedirect("myPageUpdate.jsp?name=" + URLEncoder.encode(name, "utf-8"));
+	response.sendRedirect("myPageUpdateForm.jsp?name=" + URLEncoder.encode(name, "utf-8"));
 %>

@@ -53,7 +53,7 @@
 					</tr>
 					<tr>
 						<th class="p-2">정가</th>
-						<td class="p-2"><del><%=product.getPrice() %></del></td>
+						<td class="p-2 text-decoration-line-through"><%=product.getPrice() %></td>
 					</tr>
 					<tr>
 						<th class="p-2">판매가</th>
@@ -65,7 +65,7 @@
 					</tr>
 					<tr>
 						<th class="p-2">수량변경</th>
-						<td class="p-2"></td>
+						<td><input class=" p-2" type="number" min="1" max="100" id="" value="1"></td>
 					</tr>
 					<tr>
 						<th class="p-2">상품번호</th>
@@ -97,6 +97,16 @@
 		<div class="col-12">
 			<div class="card-body">
 				<h3>구매평</h3>
+				
+				<select class="form-select form-select-sm" aria-label=".form-select-sm example">
+  					<option selected>평점을 입력해주세요</option>
+ 					<option value="1">★★★★★</option>
+ 					<option value="2">★★★★</option>
+  					<option value="3">★★★</option>
+  					<option value="3">★★</option>
+  					<option value="3">★</option>
+				</select>
+				
 				<form class="row g-3">
 					<input type="hidden" id="is-login" value="<%=user == null ? "no" : "yes"%>">
 					<div class="col-11">
@@ -144,7 +154,7 @@
 			<h3>상품 Q&A</h3>
 			<div>
 				<a href="questionform.jsp" class="btn btn-primary btn-sm  " >상품문의 글쓰기</a>
-				<a href="question.jsp" class="btn btn-secondary btn-sm  " >상품문의 전체보기</a>
+				<a href="question.jsp" class="btn btn-outline-secondary btn-sm  " >상품문의 전체보기</a>
 			</div>
 		</div>
 	</div>

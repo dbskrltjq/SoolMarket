@@ -1,10 +1,12 @@
 package util;
 
+import java.text.DecimalFormat;
+
 public class StringUtil {
 	
 	
 	
-	
+	private static DecimalFormat decimalFormat = new DecimalFormat("#,###");
 
 	/**
 	 * value가 null이면 빈 문자열을 반환한다
@@ -82,5 +84,13 @@ public class StringUtil {
 		} catch (NumberFormatException e) {
 			return defaultValue;
 		}
+	}
+	
+	public static String numberToString(int value) {
+		return decimalFormat.format(value);
+	}
+	
+	public static String numberToString(long value) {
+		return decimalFormat.format(value);
 	}
 }

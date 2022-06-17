@@ -1,3 +1,4 @@
+<%@page import="util.StringUtil"%>
 <%@page import="dto.CartItemDto"%>
 <%@page import="java.util.List"%>
 <%@page import="dao.CartItemDao"%>
@@ -12,6 +13,11 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <style>
+	#cart-notice {
+		color: #B8874D;
+		color: #B8874D;
+		font-size: 12px;
+	}
 
 </style>
 </head>
@@ -21,15 +27,18 @@
 	<jsp:param name="menu" value="cart"/>
 </jsp:include>
 <div class="container">   
-	<div class="row">
+	<div class="row mb-3">
 		<div class="col">
 		<!-- 로그인된 유저 정보 받아야 한다.
 		로그인되지 않은 채로 카트에 접근하려 하면 deny를 반환하고 로그인창으로 이동시킨다. -->
-		<br />
 		<hr />
 		<%
 			CartItemDao cartItemDao = CartItemDao.getInstance();
 			List<CartItemDto> cartItems = cartItemDao.getCartItemByUser(1);
+			
+			int totalPdsPrice = 0;				// 총상품금액(상품*수량*카트갯수)
+			int totalDeliveryCharge = 0;		// 배송비(총상품금액 3만원 이상 ? 0원 : 3000원)
+			int totalPdsPoint = 0;				// 총포인트
 		%>
 			<div id="orderStatus">
 			<!-- 단계별로 font-color: skyblue, strong 효과가 들어가야 한다. -->
@@ -37,11 +46,16 @@
 				<span>2. 주문서작성/결제 ></span>
 				<span>3. 주문완료</span>
 			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col">
 			<form id="cart-form">
-			<table class="cart-list">
+			<table class="cart-list table">
 				<colgroup>
 					<col width="3%">
-					<col>
+					<!-- 사진 파일 넣어야 한다. 클릭하면 datail.jsp로 이동해야 한다. -->
+					<col width="*">
 					<col width="13%">
 					<col width="10%">
 					<col width="13%">
@@ -52,7 +66,7 @@
 					<tr class="border bg-light p-3" >
 						<th>
 							<div class="form-element">
-								<input type="checkbox" id="all-toggle-checkbox" onchange="toggleCheckbox();" checked="checked"/>
+								<input type="checkbox" id="all-toggle-checkbox" onchange="toggleCheckbox(); cntAllCheckbox();" checked="checked"/>
 								<label for="allCheck1"></label>
 							</div>
 						</th>
@@ -75,20 +89,41 @@
 					} else {
 						int count = 0;
 						for(CartItemDto item : cartItems) {
+							
+							totalPdsPrice += item.getPdPrice() * item.getCartItemQuantity();
+							totalPdsPoint += item.getPdEarnPoint();
+							
 							count++;
 				%>
 						<tr>
-							<td><input type="checkbox" name="cartNo" checked="checked" value="<%=item.getCartNo()%>" onchange="changeCheckboxChecked();"/></td>
-							<td><a href="detail.jsp?pdNo=<%=item.getPdNo()%>" ><strong><%=item.getPdName() %></strong></a></td>
-							<td><input class="w-50" type="number" min="1" max="100" id="cartPdNum-<%=item.getCartNo()%>" value="<%=item.getCartItemQuantity() %>">
-								<button onclick="cartPdUpdown(<%=item.getCartNo()%>);">확인</button>
+							<td class="align-middle">
+								<input type="checkbox" 
+									name="cartNo" 
+									checked="checked" 
+									value="<%=item.getCartNo()%>" 
+									onchange="changeCheckboxChecked(); updateCartPrice();"/>
 							</td>
-							<td><strong><%=item.getPdPrice() %>원</strong></td>
-							<td>
-								<em>적립 상품</em>
-								<strong>+<%=item.getPdEarnPoint() %>원</strong>
+							<td class="align-middle">
+								<a class="text-dark text-decoration-none" href="detail.jsp?pdNo=<%=item.getPdNo()%>" >
+									<strong><%=item.getPdName() %></strong>
+								</a>
 							</td>
-							<td><strong><%=item.getPdPrice() * item.getCartItemQuantity() %>원</strong></td> 
+							<td class="align-middle">
+								<input class="w-50" 
+									type="number" 
+									min="1" max="100" 
+									id="cartPdNum-<%=item.getCartNo()%>" 
+									value="<%=item.getCartItemQuantity() %>">
+								<button onclick="cartPdUpdown(<%=item.getCartNo()%>);" class="btn btn-outline-secondary btn-sm">확인</button>
+							</td>
+							<td class="align-middle">
+								<strong class="text-danger"><%=StringUtil.numberToString(item.getPdPrice()) %> 원</strong>
+							</td>
+							<td class="align-middle">
+								<em>적립 </em>
+								<strong id="order-point-<%=item.getCartNo()%>">+<%=StringUtil.numberToString(item.getPdEarnPoint()) %> 원</strong>
+							</td>
+							<td class="align-middle"><span><strong id="order-price-<%=item.getCartNo()%>"><%=StringUtil.numberToString(item.getPdPrice() * item.getCartItemQuantity()) %></strong> 원</span></td> 
 						<% 
 							if (count == 1) {
 						%>
@@ -102,28 +137,55 @@
 						</tr>
 				<%
 						}
+						
+						totalDeliveryCharge = totalPdsPrice > 30000 ? 0 : 3000;
 					}
 				%>
 
 				</tbody>
 			</table>
 			</form>
-			<div class="btn_left_box">
-                <a href="https://soolmarket.com:443/goods/goods_list.php?cateCd=014001" class="shop_go_link"><em>&lt; 쇼핑 계속하기</em></a>
-            </div>
-			<p>총 <strong id="totalPdsCnt"><%=cartItems.size() %></strong>개의 상품금액 <strong id="totalItemsPrice">53,000</strong>원</p>
-			<p>적립 예정 포인트 <strong id="totalEarnPoints">3,000</strong>point</p>
-			<span class="btn_left_box">
-                    <button type="button" class="btn_order_choice_del" onclick="cartPdDelete();">선택 상품 삭제</button>
-            </span>
-			<span class="btn_right_box">
-                    <button type="button" class="btn_order_choice_buy" onclick="">선택 상품 주문</button>
-                    <button type="button" class="btn_order_whole_buy" onclick="">전체 상품 주문</button>
-            </span>
-            <div><em class="chk_none">주문서 작성단계에서 할인/마일리지 적용을 하실 수 있습니다.</em></div>
 		</div>
 	</div>
-</div>
+	<div class="row mb-3"> <!-- 버튼이 위에 있을지 밑에 있을지 고민 중 -->
+    	<div class="col-6">
+			<button type="button" id="btn-order-choice-del" class="btn btn-outline-secondary btn-sm" onclick="cartPdDelete(); ">선택 상품 삭제</button>
+      		<a href="https://soolmarket.com:443/goods/goods_list.php?cateCd=014001" id="shop-go-link" class="btn btn-outline-secondary btn-sm">쇼핑 계속하기</a>
+    	</div>
+		<div class="col-6 text-end">
+            <button type="button" class="btn btn-primary btn-sm" onclick="">선택 상품 주문</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="">전체 상품 주문</button>
+       </div>
+    </div>
+    <div class="row mb-3 justify-content-end border">
+    	<div class="col-5 p-3">
+    		<table class="table table-borderless">
+    			<tbody>
+    				<tr>
+    					<th class="text-end">총 <strong id="totalPdsCnt"><%=cartItems.size() %></strong>개의 상품금액</th>
+    					<td rowspan="2" class="align-middle text-center"><img src="images/order_price_plus.png" alt="더하기"></td>
+    					<th class="text-end">배송비</th>
+    					<td rowspan="2" class="align-middle text-center"><img src="images/order_price_total.png" alt="합계"></td>
+    					<th class="text-end">합계</th>
+    				</tr>
+    				<tr>
+    					<td class="text-end"><strong id="totalPdsPrice"><%=StringUtil.numberToString(totalPdsPrice) %></strong>원</td>
+    					<td class="text-end"><strong id="totalDeliveryCharge"><%=StringUtil.numberToString(totalDeliveryCharge) %></strong>원</td>
+    					<td class="text-end"><strong id="totalCartPrice"><%=StringUtil.numberToString(totalPdsPrice + totalDeliveryCharge) %></strong>원</td>
+    				</tr>
+    				<tr>
+    					<td colspan="5" class="text-end">
+    						적립예정 포인트 : <span id="totalPdsMileage"><%=StringUtil.numberToString(totalPdsPoint) %></span> 원
+    					</td>
+    				</tr>
+    			</tbody>
+    		</table>
+    	</div>
+    </div>
+   	<p class="text-end" id="cart-notice">* 주문서 작성단계에서 할인/마일리지 적용을 하실 수 있습니다.</p>
+   	<!-- <a href="cartItemAdd.jsp?pdNo=101&quantity=5" id="shop-go-link" class="btn btn-outline-secondary btn-sm">상품 추가</a> -->
+	</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
 	
@@ -156,9 +218,13 @@
 	
 	// 체크박스 상태 함수
 	function changeCheckboxChecked() {
+		
 	    let checkboxCount = document.querySelectorAll('input[name="cartNo"]').length;
 	    let checkedCheckboxCount = document.querySelectorAll('input[name="cartNo"]:checked').length;
+	    // n개의 상품금액의 n을 담당한다.
+	    document.getElementById("totalPdsCnt").textContent = document.querySelectorAll('input[name="cartNo"]:checked').length; 
 	    document.getElementById("all-toggle-checkbox").checked = (checkboxCount === checkedCheckboxCount);
+	    updateCartPrice();
 	}
 	
 	//체크박스 상태 함수
@@ -169,8 +235,51 @@
 	        let cartCheckbox = cartCheckboxNodeList[index];
 	        cartCheckbox.checked = allToggleChecboxCheckedStatus;
 	    }
+	    updateCartPrice();
 	}
 	
+	// 맨 위 체크박스 체크상태에 따라 총 0개 혹은 length개의 상품금액이 나온다.
+	function cntAllCheckbox() {
+		if (document.getElementById("all-toggle-checkbox").checked) {
+			document.getElementById("totalPdsCnt").textContent = document.querySelectorAll('input[name="cartNo"]').length;
+		} else {
+			document.getElementById("totalPdsCnt").textContent = 0;
+		}
+	}
+	
+	// 체크된 상품의 가격에 따라 총구매금액 / 배송비 / 포인트 바뀌게 할 것. 
+	function updateCartPrice() {					
+		let boxes = document.querySelectorAll("input[name=cartNo]:checked");	// 할 때마다 시행하니까 onchange() 안에 넣어 준다.
+		let totalPrice = 0;
+		let totalPoint = 0;
+		
+		for(let i = 0 ; i < boxes.length ; i ++ ) {							// 이대로 f12 콘솔에 치면 값이 그대로 나온다. (위에 변수 정의하고 해야 함)
+			let checkbox = boxes[i]; 										// i번째 배열 값 꺼내기
+			let no = checkbox.value;										// i번째 배열의 value는 cartNo이다. 여기선 10이라고 하자.
+			let strong = document.getElementById("order-price-" + no);		// ex) order-price-10 과 같은 형식의 아이디를 꺼내 변수 strong으로 넣는다.
+			let commaPrice = strong.textContent; 							// 변수 strong의 text를 꺼내 변수에 넣는다. 20,000 과 같은 형태이다.
+			let text = commaPrice.replaceAll(",", "");						// 20,000 -> 20000과 같은 형태로 바꾼다. (int로 바꾸기 위함)
+			let price = parseInt(text);										// 위의 값을 int 형식으로 바꾼다. (왜냐면 string 타입이었음)
+			totalPrice += price;											// 체크된 가격들을 totalPrice 변수에 넣는다.
+			
+			let strongPoint = document.getElementById("order-point-" + no);		
+			let commaPoint = strongPoint.textContent; 							
+			let textPoint = commaPoint.replaceAll(",", "");						
+			let point = parseInt(textPoint);										
+			totalPoint += point; 
+			
+		}	
+			let deliveryPrice = 3000;											// 기본 배달료 : 3000원
+			if (totalPrice > 30000) {											// 총주문액이 30000원 이상이라면
+				deliveryPrice = 0;												// 무료배송 해드립니다!
+		}
+		
+		// 세 자리마다 , 붙이는 형식으로 바꾸어 total ~ 에 대입한다.
+		document.getElementById("totalPdsPrice").textContent = new Number(totalPrice).toLocaleString();						// 단순 총가격
+		document.getElementById("totalDeliveryCharge").textContent = new Number(deliveryPrice).toLocaleString();			// 배달료
+		document.getElementById("totalCartPrice").textContent = new Number(totalPrice + deliveryPrice).toLocaleString();	// 배달료 합한 총가격
+		document.getElementById("totalPdsMileage").textContent = new Number(totalPoint).toLocaleString();					// 총포인트
+	}
 
 
 </script>

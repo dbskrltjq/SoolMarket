@@ -53,7 +53,7 @@
 					</tr>
 					<tr>
 						<th class="p-2">정가</th>
-						<td class="p-2"><%=product.getPrice() %></td>
+						<td class="p-2"><del><%=product.getPrice() %></del></td>
 					</tr>
 					<tr>
 						<th class="p-2">판매가</th>
@@ -87,8 +87,8 @@
 		<div class="col-12">
 			<nav class="nav nav-pills flex-column flex-sm-row  g-2">
 			  <a class="border flex-sm-fill text-sm-center nav-link active rounded-0" aria-current="page" href="#">상세정보</a>
-			  <a class="border flex-sm-fill text-sm-center nav-link rounded-0" href="#">상세정보</a>
 			  <a class="border flex-sm-fill text-sm-center nav-link rounded-0" href="#">구매평</a>
+			  <a class="border flex-sm-fill text-sm-center nav-link rounded-0" href="#">Q&A</a>
 			</nav>
 		</div>
 	</div>
@@ -96,6 +96,7 @@
 	<div class="row mb-3">
 		<div class="col-12">
 			<div class="card-body">
+				<h3>구매평</h3>
 				<form class="row g-3">
 					<input type="hidden" id="is-login" value="<%=user == null ? "no" : "yes"%>">
 					<div class="col-11">
@@ -110,7 +111,6 @@
 	</div>
 	<div class="row mb-3">
 		<div class="col-12">
-			<h3>플러스 리뷰</h3>
 		<%
 			if (reviews.isEmpty()) {
 		%>
@@ -167,7 +167,20 @@
 				</thead>
 				<tbody class="table-group-divider">
 					<tr>
+					<%
+						if (questions.isEmpty()) {					
+					%>
 						<td colspan="4" class="text-center">등록된 상품 문의가 없습니다.</td>
+					<%
+						} else {
+							for (QuestionDto question : questions) {
+						
+					%>
+					
+					<%
+							}
+						}
+					%>
 					</tr>
 				</tbody>
 			</table>

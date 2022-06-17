@@ -64,7 +64,7 @@
 						<td class="p-2"><%=product.getCompany() %></td>
 					</tr>
 					<tr>
-						<th class="p-2">수량변경</th>
+						<th class="p-2">수량</th>
 						<td><input class=" p-2" type="number" min="1" max="100" id="" value="1"></td>
 					</tr>
 					<tr>

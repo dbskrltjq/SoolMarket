@@ -20,7 +20,6 @@
 	String postcode = request.getParameter("postcode");
 	String addr = request.getParameter("addr");
 	String detailAddr = request.getParameter("detailAddr");
-	String extraAddr = request.getParameter("extraAddr");
 	
 	UserDao userDao = UserDao.getInstance();
 	
@@ -35,9 +34,9 @@
 	user.setTel(tel);
 	user.setPostCode(postcode);
 	user.setAddress(addr);
-	user.setDetailAddress(detailAddr + extraAddr);
+	user.setDetailAddress(detailAddr);
 	
 	userDao.updateUser(user);
 	
-	response.sendRedirect("myPageUpdate.jsp?name=" + URLEncoder.encode(name, "utf-8"));
+	response.sendRedirect("myPageUpdateForm.jsp?name=" + URLEncoder.encode(name, "utf-8"));
 %>

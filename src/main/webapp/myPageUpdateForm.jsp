@@ -42,7 +42,7 @@
 			<p><strong class="fs-6">회원정보</strong></p>
          	<div class="list-group list-group-flush">
          		<a href="myPagePassword.jsp" class="list-group-item list-group-item-action">- 회원정보 변경</a>
-         		<a href="userDelete.jsp" class="list-group-item list-group-item-action">- 회원 탈퇴</a>
+         		<a href="userDeleteForm.jsp" class="list-group-item list-group-item-action">- 회원 탈퇴</a>
          		<a href="#" class="list-group-item list-group-item-action">- 나의 상품문의</a>
 			</div>
 		</div>
@@ -64,7 +64,7 @@
          		<h6><strong>기본정보</strong></h6> 
          		<p style="font-size: xx-small; text-align: right;"><span>*</span>표시는 반드시 입력해야할 항목입니다.</p>
          	</div>
-         	<form action="userInfoUpdate.jsp" method="post" onsubmit="return submitForm()">
+         	<form action="userInfoUpdate.jsp" method="post" onsubmit="return submitForm();" class="bg-light">
          		<table class="table">
 	   	      		<tr>
 	   	      			<th><span>*</span> 아이디</th>
@@ -84,7 +84,7 @@
 	   	      						<tr>
 	   	      							<th class="align-middle"><small>새 비밀번호 확인</small></th>
 	   	      							<td>
-	   	      								<input type="password" name="password" id="password2" class="form-control form-control-sm h-55 w-75" disabled onkeyup="passwordCheck()">
+	   	      								<input type="password" name="password" id="password2" class="form-control form-control-sm h-55 w-75" disabled onkeyup="passwordCheck();s">
 	   	      							</td>
 	   	      							<td>
 	   	      								<small id="password-helper"></small>
@@ -96,12 +96,12 @@
 	   	      		</tr>
 	   	      		<tr>
 	   	      			<th><span>*</span> 이름</th>
-	   	      			<td><input type="text" name="name" value=<%=user.getName() %>></td>
+	   	      			<td><input type="text" name="name" value="<%=user.getName() %>" /></td>
 	   	      		</tr>
 	   	      		<tr>
 	   	      			<th><span>*</span> 이메일</th>
 	   	      			<td>
-	   	      				<input type="email" name="email" value=<%=user.getEmail() %>>
+	   	      				<input type="email" name="email" value="<%=user.getEmail() %>">
 	   	      				<select name="domain" onchange="changeDomain()">
 	   	      					<option selected="selected" disabled="disabled" >직접입력</option>
 	   	      					<option value="@naver.com">naver.com</option>
@@ -114,24 +114,26 @@
 	   	      		</tr>
 	   	      		<tr>
 	   	      			<th><span>*</span> 휴대폰번호</th>
-	   	      			<td><input type="text" name="tel" value=<%=user.getTel() %>></td>
+	   	      			<td>
+	   	      				<input type="text" name="tel" value="<%=user.getTel() %>">
+	   	      				<button type="button" class="btn btn-outline-secondary btn-sm" onclick="telCheck();">인증하기</button>
+	   	      			</td>
 	   	      		</tr>
 	   	      		<tr>
 	   	      			<th><span>*</span> 주소</th>
 	   	      			<td  class="d-grid gap-3">
-	   	      			<div class="w-50">
-	   	      				<input type="text" value=<%=user.getPostCode() %>  class="" name="postcode" id="postcode" placeholder="우편번호">
-	   	      				<button type="button" class="btn btn-outline-secondary btn-sm" onclick="findAddr()" >우편번호 찾기</button>
-	   	      			</div>
-							<input type="text" value=<%=user.getAddress() %> name="addr" id="addr" placeholder="주소">
-							<input type="text" value=<%=user.getDetailAddress() %> name="detailAddr" id="detailAddr" placeholder="상세주소">	
-							<input type="text" name="extraAddr" id="extraAddr" placeholder="동/로/가">
+	   	      				<div class="w-50">
+	   	      					<input type="text" value="<%=user.getPostCode() %>"  class="" name="postcode" id="postcode" placeholder="우편번호">
+	   	      					<button type="button" class="btn btn-outline-secondary btn-sm" onclick="findAddr();" >우편번호 찾기</button>
+	   	      				</div>
+							<input type="text" value="<%=user.getAddress() %>" name="addr" id="addr" placeholder="주소">
+							<input type="text" value="<%=user.getDetailAddress() %>" name="detailAddr" id="detailAddr" placeholder="상세주소">	
 	   	      			</td>
 	   	      		</tr>
          		</table>
          		<div class="row my-3">
             		<div class="col-12 text-center">
-               			<a href="home.jsp" class="btn btn-outline-secondary"><strong>취소</strong></a>
+            			<button type="button" class="btn btn-secondary" onclick="pageBack();">취소</button>
                			<button type="submit" class="btn btn-primary"><strong style="color: white;">정보수정</strong></button>
             		</div>
          		</div>
@@ -200,8 +202,8 @@
 		
 		// 이메일의 input 값에 @가 포함되어 있으면 true를 반환한다.
 		if(inputEmailValue.includes("@")) {
-			let atSignIndex = inputEmailValue.indexOf("@");
-			let frontEmail = inputEmailValue.substring(0, atSignIndex);
+			let index = inputEmailValue.indexOf("@");
+			let frontEmail = inputEmailValue.substring(0, index);
 			inputEmailField.value = frontEmail + selectValue;		// input[type=email] 원본에 접근해야 한다.
 			// console.log(inputEmailValue);
 			
@@ -234,6 +236,34 @@
 		xhr.send();	
 	}
 
+	// 전화번호 중복체크 
+	function telCheck() {
+			
+			let telElement = document.querySelector("input[name=tel]");
+			let telValue = telElement.value;
+			
+			let xhr = new XMLHttpRequest();
+			
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState === 4 && xhr.status === 200) {
+					let jsonText = xhr.responseText;
+					let result = JSON.parse(jsonText);
+					
+					if(result.exist) {
+						alert("이미 존재하는 전화번호입니다.");
+						telElement.focus();
+						isTelChecked = false;
+					} else {
+						alert("사용가능한 전화번호입니다.");
+						isTelChecked = true;
+					}
+					
+				}
+				
+			}
+			xhr.open("GET", 'telCheck.jsp?job=update&tel=' + telValue );						
+		    xhr.send();	
+		}
 
 	function submitForm() {
 		
@@ -321,7 +351,7 @@ function findAddr() {
                     extraAddr = ' (' + extraAddr + ')';
                 }
                 // 조합된 참고항목을 해당 필드에 넣는다.
-                document.getElementById("extraAddr").value = extraAddr;
+                document.getElementById("detailAddr").value = extraAddr;
             
             } else {
                 document.getElementById("extraAddr").value = '';
@@ -335,6 +365,10 @@ function findAddr() {
         }
     }).open();
 }
+
+	function pageBack() {
+		history.back();
+	}
 
 </script>
 </body>

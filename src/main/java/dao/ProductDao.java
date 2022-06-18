@@ -31,7 +31,7 @@ public class ProductDao {
 			product.setStock(rs.getInt("pd_stock"));
 			product.setOnSale(rs.getString("pd_onsale"));
 			product.setReviewScore(rs.getInt("pd_review_score"));
-			product.setReviewCount(rs.getInt("review_count"));
+			product.setReviewCount(rs.getInt("pd_review_count"));
 			product.setCompany(rs.getString("pd_company"));
 			product.setSaleQuantity(rs.getInt("pd_sale_quantity"));
 			product.setRecommended(rs.getString("pd_recommended"));
@@ -39,5 +39,13 @@ public class ProductDao {
 			
 			return product;
 		},productNo);
+	}
+	
+	public int getTotalRows(int categoryNo) throws SQLException {
+		String sql = "select count(*) cnt from sul_products where category_No = ? ";
+		
+		return helper.selectOne(sql, rs -> {
+			return rs.getInt("cnt");
+		}, categoryNo);
 	}
 }

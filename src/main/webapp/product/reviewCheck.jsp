@@ -13,7 +13,7 @@
     	int reviewCount = productReviewDao.getReviewCount(productNo, userNo);
     	
     	Map<String, Boolean> result = new HashMap<>();
-    	if(reviewCount < 0) {
+    	if(reviewCount > 0) {
     		result.put("exist", true);
     	} else {
     		result.put("exist",false);

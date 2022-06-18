@@ -3,16 +3,16 @@
     pageEncoding="UTF-8"%>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&display=swap');	
-	nav {font-family: 'Nanum Gothic Coding', monospace;
+	nav.navbar {font-family: 'Nanum Gothic Coding', monospace;
 		 border-bottom-style: solid;
  		 border-bottom-color: coral;
  		 margin-top: 30px;
  		 background-color: white; }
-	.nav-link { font-size: large; 
+	nav.navbar .nav-link { font-size: large; 
 				color:black;
 				font-weight: bold;}
 	#inline {display: inline-block;}
-	i {margin-right: 10px;
+	nav.navbar i {margin-right: 10px;
 	   color: orange;}
 	
 	   
@@ -21,7 +21,7 @@
 	User user = (User)session.getAttribute("LOGINED_USER");
 %>
 <!-- 내비바에서 사용되는 주소는 절대주소로 적어야 합니다. -->
- <nav class="navbar navbar-expand-lg  p-2 text-dark sticky-top">
+ <nav class="navbar navbar-expand-lg  p-2 text-dark sticky-top ">
 	  <div class="container-fluid">
 		  	<div class="row p-4 mb-3">
 		  		<div class="col-2">

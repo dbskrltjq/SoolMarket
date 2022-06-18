@@ -18,6 +18,7 @@ public class CategoryDao {
 	private DaoHelper helper = DaoHelper.getInstance();
 	
 
+
 	public String getCategroyNameByNo(int categoryNo) throws SQLException {
 		String sql = "select category_name "
 				   + "from sul_category "
@@ -110,4 +111,20 @@ public class CategoryDao {
 			return product;
 		}, categoryNo, beginIndex, endIndex);
 	}
+  
+	public List<Category> getCategories() throws SQLException {
+		String sql = "select * "
+					+"from sul_category " ;
+		
+		
+		return helper.selectList(sql, rs -> {
+			Category category = new Category();
+			category.setNo(rs.getInt("category_no"));
+			category.setName(rs.getString("category_name"));
+			
+			return category;
+		});
+			
+	}
 }
+

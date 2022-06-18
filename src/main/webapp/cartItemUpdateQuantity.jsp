@@ -7,14 +7,14 @@
 	int cartNo = Integer.parseInt(request.getParameter("cartNo"));
 	int quantity = Integer.parseInt(request.getParameter("quantity"));
 
-	// cartPd 객체를 생성하고, 카트 번호와 수량을 넣는다.
-	Cart cartPd = new Cart();
-	cartPd.setNo(cartNo);
-	cartPd.setQuantity(quantity);
+	// cart 객체를 생성하고, 카트 번호와 수량을 넣는다.
+	Cart cart = new Cart();
+	cart.setNo(cartNo);
+	cart.setQuantity(quantity);
 	
 	// 값이 들어간 객체를 updateCartItem 메소드로 보낸다.
 	CartItemDao cartItemDao = CartItemDao.getInstance();
-	cartItemDao.updateCartItem(cartPd);
+	cartItemDao.updateCartItem(cart);
 	
 	// cart.jsp를 리다이렉트한다.
 	response.sendRedirect("cart.jsp");

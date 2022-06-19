@@ -16,6 +16,8 @@
  	if(savedUser != null) {
 		result.put("exist", true);
 		result.put("id", userId);
+		result.put("email", savedUser.getEmail());
+		result.put("tel", savedUser.getTel());
 	} else {
 		result.put("exist", false);				
 		result.put("id", userId);

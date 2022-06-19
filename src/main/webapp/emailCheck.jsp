@@ -33,22 +33,24 @@
     	
     	String inputName = request.getParameter("name");
     	
-    	if(savedUser != null && inputName.equals(savedUser.getName())) {
+    	if(savedUser != null && inputName.equals(savedUser.getName()) && "N".equals(savedUser.getDeleted())) {
     		result.put("pass", true);
     		result.put("foundId", savedUser.getId());
     		result.put("name", savedUser.getName());
-    		String jsonText = gson.toJson(result);
-    	 	out.write(jsonText);
-    	 	//response.sendRedirect("findId.jsp&foundId=" + savedUser.getId());
-    		return;
-    	} else {
-    		result.put("pass", false);
-    		String jsonText = gson.toJson(result);
-    	 	out.write(jsonText);
-    		System.out.println(result.get("pass"));
-    		return;
-    	}
-    }
+    		
+    	} else if(!"N".equals(savedUser.getDeleted())) {
+			
+			result.put("deleted", true);
+			result.put("pass", false);
+		} else {
+			
+			result.put("pass", false);
+		}
+		
+		String jsonText = gson.toJson(result);
+	 	out.write(jsonText);
+	 	return;
+	}
     
  	
  	if (savedUser != null) {

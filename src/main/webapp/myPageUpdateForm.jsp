@@ -123,10 +123,10 @@
 	   	      			<th><span>*</span> 주소</th>
 	   	      			<td  class="d-grid gap-3">
 	   	      				<div class="w-50">
-	   	      					<input type="text" value="<%=user.getPostCode() %>"  class="" name="postcode" id="postcode" placeholder="우편번호">
+	   	      					<input type="text" value="<%=user.getPostCode() %>"  class="" name="postcode" id="postcode" placeholder="우편번호" readonly="readonly">
 	   	      					<button type="button" class="btn btn-outline-secondary btn-sm" onclick="findAddr();" >우편번호 찾기</button>
 	   	      				</div>
-							<input type="text" value="<%=user.getAddress() %>" name="addr" id="addr" placeholder="주소">
+							<input type="text" value="<%=user.getAddress() %>" name="addr" id="addr" placeholder="주소" readonly="readonly">
 							<input type="text" value="<%=user.getDetailAddress() %>" name="detailAddr" id="detailAddr" placeholder="상세주소">	
 	   	      			</td>
 	   	      		</tr>
@@ -281,13 +281,13 @@
 		// 비밀번호를 변경하지 않는 사용자의 경우: userInfoUpdate.jsp로 넘어가는 password의 요청파라미터 값이 null이 된다. 
 		
 		let nameField = document.querySelector("input[name=name]");
-		if (nameField.value === '') {
+		if (!nameField.value.trim()) {
 			alert("이름을 입력해주세요.");
 			nameField.focus();
 			return false;
 		}
 		let emailField = document.querySelector("input[name=email]");
-		if (emailField.value === '' || !isEmailChecked) {
+		if (!emailField.value.trim() || !isEmailChecked) {
 			alert("이메일을 다시 확인해주세요");
 			emailField.focus();
 			return false;
@@ -295,18 +295,18 @@
 		
 		
 		let telField = document.querySelector("input[name=tel]");
-		if (telField.value === '') {
+		if (!telField.value.trim()) {
 			alert("전화번호를 입력해주세요.");
 			telField.focus();
 			return false;
 		}
 		
-		let postcodeField = document.getElementById("posecode");
+		let postcodeField = document.getElementById("postcode");
 		let addrField = document.getElementById("addr");
 		let detailAddrField = document.getElementById("detailAddr");
-		if (postcodeField.value === '' || addrField === '' || detailAddrField === '') {
+		if (!postcodeField.value.trim() || !addrField.value.trim() || !detailAddrField.value.trim()) {
 			alert("정확한 주소를 입력해주세요.")
-			postcodeField.focus();
+			detailAddrField.focus();
 			return false;
 		}
 		

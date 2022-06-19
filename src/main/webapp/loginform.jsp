@@ -54,8 +54,8 @@
 	    </div>
 	   	<div>
 	   		<a class="btn btn-secondary" href="registerform.jsp" >회원가입 </a>
-	   		<a class="btn btn-outline-secondary" href="">아이디찾기</a>
-	   		<a class="btn btn-outline-secondary" href="">비밀번호찾기</a>
+	   		<a class="btn btn-outline-secondary" href="findId.jsp">아이디찾기</a>
+	   		<a class="btn btn-outline-secondary" href="findPassword.jsp">비밀번호찾기</a>
 	   	</div>
 	  </form>
 	</main>
@@ -66,13 +66,15 @@
 	
 	function submitLoginForm() {
 	let idField = document.querySelector("input[name=id]");
-	if (idField.value === '') {
+	let idValue = idField.value.trim();
+	if (!idValue) {
 		alert("아이디는 필수입력값입니다.");
 		idField.focus();
 		return false;
 	}
 	let passwordField = document.querySelector("input[name=password]");
-	if (passwordField.value === '') {
+	let passwordValue = passwordField.value.trim();
+	if (!passwordValue) {
 		alert("비밀번호는 필수입력값입니다.");
 		passwordField.focus();
 		return false;

@@ -76,8 +76,8 @@
 			</table>
 			<hr />
 			<div class="p-2">
-				<a href="../order.jsp?productNo=<%=product.getNo() %>" class="me-3 btn btn-lg  <%=user == null ? "btn-outline-secondary disabled" : "btn-outline-primary" %>">바로구매</a>
-				<a href="../cart.jsp?productNo=<%=product.getNo() %>" class="btn btn-lg  <%=user == null ? "btn-outline-secondary disabled" : "btn-outline-primary" %>">장바구니</a>
+				<a href="../order.jsp?pdNo=<%=product.getNo() %>" class="me-3 btn btn-lg  <%=user == null ? "btn-outline-secondary disabled" : "btn-outline-primary" %>">바로구매</a>
+				<a href="../cartitemAdd.jsp?pdNo=<%=product.getNo() %>" class="btn btn-lg  <%=user == null ? "btn-outline-secondary disabled" : "btn-outline-primary" %>">장바구니</a>
 			</div>
 								
 		</div>
@@ -97,20 +97,19 @@
 		<div class="col-12">
 			<div class="card-body">
 				<h3>구매평</h3>
-				
-				<select class="form-select form-select-sm" aria-label=".form-select-sm example">
+
+				<form class="row g-3" method="post" action="reviewRegister.jsp">
+				<select class="form-select form-select-sm" name="reviewScore" aria-label=".form-select-sm example">
   					<option selected>평점을 입력해주세요</option>
- 					<option value="1">★★★★★</option>
- 					<option value="2">★★★★</option>
+ 					<option value="5">★★★★★</option>
+ 					<option value="4">★★★★</option>
   					<option value="3">★★★</option>
-  					<option value="3">★★</option>
-  					<option value="3">★</option>
+  					<option value="2">★★</option>
+  					<option value="1">★</option>
 				</select>
-				
-				<form class="row g-3">
 					<input type="hidden" id="is-login" value="<%=user == null ? "no" : "yes"%>">
 					<div class="col-11">
-						<textarea rows="2" class="form-control" placeholder="전통주와 함께한 좋은 기억을 다른 분들과 나눠주세요♥" onclick="reviewCheck(<%=product.getNo() %>)"></textarea>
+						<textarea rows="2" class="form-control" name="reviewContent" placeholder="전통주와 함께한 좋은 기억을 다른 분들과 나눠주세요♥" onclick="reviewCheck(<%=product.getNo() %>)"></textarea>
 					</div>
 					<div class="col-1">
 						<button type="submit" class="btn btn-outline-secondary w-100 h-100">리뷰등록</button>
@@ -186,7 +185,11 @@
 							for (QuestionDto question : questions) {
 						
 					%>
-					
+						<td><%=question.getNo() %></td>
+						<td><%=question.getTitle() %></td>
+						<td><%=question.getUserName() %></td>
+						<td><%=question.getCreatedDate() %></td>
+						
 					<%
 							}
 						}
@@ -223,3 +226,4 @@
 </script>
 </body>
 </html>
+

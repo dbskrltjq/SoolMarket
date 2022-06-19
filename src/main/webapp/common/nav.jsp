@@ -57,10 +57,10 @@
 		          			</ul>
 		        		</li>
 				      </ul>
-				      <form class="d-flex" role="search">
+				      <form class="d-flex" role="search" >
 				      	<div class="input-group">
-					        <input class="form-control border-warning" type="search" placeholder="막걸리" aria-label="Search">
-					        <button class="btn btn-outline-warning" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+					        <input class="form-control border-warning" type="search" name="keyword" placeholder="제품검색 ex)소주" aria-label="Search">
+					        <button class="btn btn-outline-warning" type="button" onclick="searchKeyword();"><i class="fa-solid fa-magnifying-glass"></i></button>
 					    </div>
 				      </form>
 				</div>     
@@ -90,5 +90,10 @@
 	function logout() {
 		alert("로그아웃되었습니다.")
 		return;
+	}
+	
+	function searchKeyword() {
+		location.href="/semi/searchList.jsp?sort=sell&keyword=" + document.querySelector("input[name=keyword]").value
+		
 	}
 </script>

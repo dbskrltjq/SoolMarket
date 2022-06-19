@@ -41,11 +41,27 @@ public class ProductDao {
 		},productNo);
 	}
 	
+	public int getTotalRows() throws SQLException {
+		String sql = "select count(*) cnt from sul_products ";
+		
+		return helper.selectOne(sql, rs -> {
+			return rs.getInt("cnt");
+		});
+	}
+	
 	public int getTotalRows(int categoryNo) throws SQLException {
 		String sql = "select count(*) cnt from sul_products where category_No = ? ";
 		
 		return helper.selectOne(sql, rs -> {
 			return rs.getInt("cnt");
 		}, categoryNo);
+	}
+	
+	public int getTotalRows(String keyword) throws SQLException {
+		String sql = "select count(*) cnt from sul_products where pd_name like '%' || ? || '%' ";
+		
+		return helper.selectOne(sql, rs -> {
+			return rs.getInt("cnt");
+		}, keyword);
 	}
 }

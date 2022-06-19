@@ -25,43 +25,48 @@
 	</div>
 	
 <%
-	int categoryNo = Integer.parseInt(request.getParameter("categoryNo")) ;
-	String sort = request.getParameter("sort");
-	
 	CategoryDao categoryDao = CategoryDao.getInstance();
 	ProductDao productDao = ProductDao.getInstance();
 	
+	String keyword = request.getParameter("keyword");
+	if (keyword == null || keyword.isEmpty()) {
+		keyword = "안동소주";
+	}
+	
+	String sort = request.getParameter("sort");
+
 	int currentPage = StringUtil.stringToInt(request.getParameter("page"), 1);			// 현재페이지 지정
 	int rows = StringUtil.stringToInt(request.getParameter("rows"), 5);					// 페이지에 표시될 행 개수
-	int totalRows = productDao.getTotalRows(categoryNo);											// 전체 행 개수
+	
+	int totalQuantity = categoryDao.getTotalQunatity(keyword);
+	
+	int totalRows = productDao.getTotalRows(keyword);									// 전체 행 개수(keyword 있을 경우)
 	
 	Pagination pagination = new Pagination(rows, totalRows, currentPage);
 
-	String categoryName = categoryDao.getCategoryNameByNo(categoryNo);		// 카테고리 이름 
-	int pdQuantity = categoryDao.getTotalQunatity(categoryNo);				// 카테고리별 총상품수량
-	
 	List<Product> productList = null;
-	if ("sell".equals(sort)) {
-		productList = categoryDao.getItemBySaleQuantity(categoryNo, pagination.getBeginIndex(), pagination.getEndIndex());		
-	} else if ("low".equals(sort)) {
-		productList = categoryDao.getItemByMinPrice(categoryNo, pagination.getBeginIndex(), pagination.getEndIndex());
+		
+	if ("low".equals(sort)) {
+		productList = categoryDao.getItemByMinPrice(keyword, pagination.getBeginIndex(), pagination.getEndIndex());
 	} else if ("high".equals(sort)) {
-		productList = categoryDao.getItemByMaxPrice(categoryNo, pagination.getBeginIndex(), pagination.getEndIndex());
+		productList = categoryDao.getItemByMaxPrice(keyword, pagination.getBeginIndex(), pagination.getEndIndex());
+	} else if ("date".equals(sort)) {
+		productList = categoryDao.getItemByDate(keyword, pagination.getBeginIndex(), pagination.getEndIndex());
 	} else {
-		productList = categoryDao.getItemByDate(categoryNo, pagination.getBeginIndex(), pagination.getEndIndex());
+		productList = categoryDao.getItemBySaleQuantity(keyword, pagination.getBeginIndex(), pagination.getEndIndex());
 	}
-	
+			
 %>
-	<p><%=categoryName %></p>
-	<p>전체상품<strong><%=pdQuantity %></strong>개</p>
+	<p><strong>"<%=keyword %>"" 검색결과 <%=totalQuantity %></strong></p>
+
 	<div>
 		<form>
 		 <div class="row mb-3 border-top border-bottom border-1 p3">
 	 		<div class="col p-2">
-	 			<a href="list.jsp?categoryNo=<%=categoryNo %>&sort=sell&rows=<%=rows %>" class="btn btn-outline-primary">판매량순</a>	 
-	 			<a href="list.jsp?categoryNo=<%=categoryNo %>&sort=low&rows=<%=rows %>" class="btn btn-outline-primary">낮은가격순</a>	 	
-	 			<a href="list.jsp?categoryNo=<%=categoryNo %>&sort=high&rows=<%=rows %>" class="btn btn-outline-primary">높은가격순</a>	 	
-	 			<a href="list.jsp?categoryNo=<%=categoryNo %>&sort=date&rows=<%=rows %>" class="btn btn-outline-primary">등록일순</a>
+	 			<a href="searchList.jsp?sort=sell&rows=<%=rows %>&keyword=<%=keyword %>" class="btn btn-outline-primary">판매량순</a>	 
+	 			<a href="searchList.jsp?sort=low&rows=<%=rows %>&keyword=<%=keyword %>" class="btn btn-outline-primary">낮은가격순</a>	 	
+	 			<a href="searchList.jsp?sort=high&rows=<%=rows %>&keyword=<%=keyword %>" class="btn btn-outline-primary">높은가격순</a>	 	
+	 			<a href="searchList.jsp?sort=date&rows=<%=rows %>&keyword=<%=keyword %>" class="btn btn-outline-primary">등록일순</a>
 	 		</div>
 	 		<select class="form-control form-control-sm w-25 float-end" name="rows" onchange="changeRows();">
 	 			<option value="5" <%=rows == 5 ? "selected" : "" %>> 5개씩 보기</option>
@@ -110,8 +115,8 @@
 				</li>
 			</ul>
 	</nav>
-		<form id="search-form" class="row g-3" method="get" action="list.jsp">
-			<input type="hidden" name="categoryNo" value=<%=categoryNo %> />
+		<form id="search-form" class="row g-3" method="get" action="searchList.jsp">
+			<input type="hidden" name="keyword" value=<%=keyword %> />
 			<input type="hidden" name="sort" value=<%=sort %> />	
 			<input type="hidden" name="page" />
 			<input type="hidden" name="rows" />	
@@ -128,9 +133,9 @@
 	function clickPageNo(pageNo) {
 		document.querySelector("input[name=page]").value = pageNo;
 		document.querySelector("input[name=rows]").value = document.querySelector("select[name=rows]").value;
-		console.log('$'+document.querySelector("input[name=sort]").value+'$');
 		document.getElementById("search-form").submit();
 	}
+
 
 </script>
 </body>

@@ -12,15 +12,16 @@
  	User savedUser = userDao.getUserById(userId);
  	
  	Map<String, Object> result = new HashMap<>();
- 	if(savedUser != null && "N".equals(savedUser.getDeleted())) {
-		result.put("exist", true);
+ 	
+ 	if(savedUser == null) {
+ 		result.put("exist", false);				
+		result.put("id", userId);
+ 	} else {
+ 		result.put("exist", true);
 		result.put("id", userId);
 		result.put("email", savedUser.getEmail());
 		result.put("tel", savedUser.getTel());
-	} else {
-		result.put("exist", false);				
-		result.put("id", userId);
-	}
+ 	}
  	
  	Gson gson = new Gson();
  	String jsonText = gson.toJson(result);

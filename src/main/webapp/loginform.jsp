@@ -51,12 +51,12 @@
 	
 	    <div class="checkbox my-3">
 	      <label>
-	        <input type="checkbox" value="remember-me"> 아이디 저장
+	        <input type="checkbox" id="idSaveCheck" value="remember-me"> 아이디 저장
 	      </label>
 	    </div>
 	   	<div>
 	   		<a class="btn btn-secondary" href="registerform.jsp" >회원가입 </a>
-	   		<a class="btn btn-outline-secondary" href="findId.jsp">아이디찾기</a>
+	   		<a class="btn btn-outline-secondary" href="findId.jsp" >아이디찾기</a>
 	   		<a class="btn btn-outline-secondary" href="findPassword.jsp">비밀번호찾기</a>
 	   	</div>
 	  </form>
@@ -95,6 +95,8 @@
 	return true; 
 	}
 
+	
+	
 </script>
 
 

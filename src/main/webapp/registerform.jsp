@@ -37,20 +37,20 @@
 						<tr>
 							<th><span>*</span> 아이디</th>
 							<td>
-								<input type="text" name="id" onkeyup="idCheck()" />
+								<input type="text" name="id" onkeydown="keydown(event);" onkeyup="idCheck();" />
 								<div class="form-text text-bold" id="id-helper"></div>
 							</td>
 						</tr>
 						<tr>
 							<th><span>*</span> 비밀번호</th>
 							<td>
-								<input type="password" id="password1" name="password" />
+								<input type="password" id="password1" name="password" onkeydown="keydown(event);"/>
 							</td>
 						</tr>
 						<tr>
 							<th><span>*</span> 비밀번호 확인 </th>	
 							<td>				
-								<input type="password" id="password2" onkeyup="passwordCheck();" />
+								<input type="password" id="password2" onkeyup="passwordCheck();" onkeydown="keydown(event);" />
 								<div id="password-helper" class="form-text text-bold"></div>
 							</td>
 						</tr>	
@@ -112,6 +112,18 @@
 	let isPasswordChecked = false;
 	let isEmailChecked = false;
 	let isTelChecked = false;
+	
+	function keydown(e) {
+		if(e.repeat) {
+            e.preventDefault();
+        }
+		
+		// 비밀번호 입력란에서 space는 인식하지 못하도록 한다.
+		if(e.keyCode === 32) {
+			e.preventDefault();
+		}
+	}
+	
 	
 	function idCheck() {
 		let idField = document.querySelector("input[name=id]");			

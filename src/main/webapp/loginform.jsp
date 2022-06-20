@@ -42,7 +42,7 @@
 	      <div id="id-helper" class="form-text text-bold"></div>
 	    </div>
 	    <div class="form-floating">
-	      <input type="password" class="form-control" name="password" id="password" placeholder="비밀번호를 입력하세요">
+	      <input type="password" class="form-control" name="password" id="password" onkeydown="keydown(event);" placeholder="비밀번호를 입력하세요">
 	      <label for="floatingPassword">비밀번호를 입력하세요</label>
 	    </div>
 	    <button class="w-100 btn btn-lg btn-primary" type="submit">로그인</button>
@@ -63,6 +63,16 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
 
+	function keydown(e) {
+		if(e.repeat) {
+	        e.preventDefault();
+	    }
+		
+		// 비밀번호 입력란에서 space는 인식하지 못하도록 한다.
+		if(e.keyCode === 32) {
+			e.preventDefault();
+		}
+	}
 	
 	function submitLoginForm() {
 	let idField = document.querySelector("input[name=id]");

@@ -12,8 +12,7 @@
  	User savedUser = userDao.getUserById(userId);
  	
  	Map<String, Object> result = new HashMap<>();
- 	
- 	if(savedUser != null) {
+ 	if(savedUser != null && "N".equals(savedUser.getDeleted())) {
 		result.put("exist", true);
 		result.put("id", userId);
 		result.put("email", savedUser.getEmail());

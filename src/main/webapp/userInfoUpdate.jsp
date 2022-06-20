@@ -6,11 +6,16 @@
     pageEncoding="UTF-8" errorPage="error/500.jsp" %>
 
 <%
+	String job = request.getParameter("job");
 	User user = (User) session.getAttribute("LOGINED_USER");
-	if (user == null) {
+
+	if (job == null && user == null) {
 		throw new RuntimeException("회원정보 수정은 로그인 후 사용가능한 서비스 입니다.");
 	}
 
+	
+	UserDao userDao = UserDao.getInstance();
+	
 	String password = request.getParameter("password");
 	
 	
@@ -21,7 +26,19 @@
 	String addr = request.getParameter("addr");
 	String detailAddr = request.getParameter("detailAddr");
 	
-	UserDao userDao = UserDao.getInstance();
+	
+	// resetPassword.jsp에서 새로운비밀번호를 설정하는 경우
+	// 이 경우 password 값은 사용자가 변경한 새로운 비밀번호이다.
+	if (job != null && "resetPassword".equals(job)) {
+		String foundEmail = request.getParameter("foundEmail");
+		User savedUser = userDao.getUserByEmail(foundEmail);
+		
+		savedUser.setPassword(PasswordUtil.generateSecretPassword(savedUser.getId(), password));
+		userDao.updateUser(savedUser);
+		response.sendRedirect("resetPassword.jsp?name=" + URLEncoder.encode(savedUser.getName(), "utf-8"));
+		return;
+	}
+	
 	
 	if (password != null) {	// 비밀번호 변경을 하는 사용자
 		String secretPassword = PasswordUtil.generateSecretPassword(user.getId(), password);

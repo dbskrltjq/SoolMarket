@@ -1,7 +1,5 @@
 package dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -18,6 +16,29 @@ public class CartItemDao {
 	}
 	
 	DaoHelper helper = DaoHelper.getInstance();
+	
+	// 카트 번호로 저장된 장바구니 아이템정보를 반환한다. - orderForm
+	public CartItemDto getCartItemByCartNo(int cartNo) throws SQLException {
+		String sql = "select C.CART_NO, U.USER_NO, P.PD_NO, P.PD_NAME, C.CART_ITEM_QUANTITY, P.PD_SALE_PRICE, floor((P.PD_SALE_PRICE * C.CART_ITEM_QUANTITY)*0.01) EarnPoint "
+				+ "from SUL_USERS U, SUL_PRODUCTS P, SUL_CARTS C "
+				+ "where C.CART_NO = ? "
+				+ "and U.USER_NO = C.USER_NO "
+				+ "and C.PD_NO = P.PD_NO "
+				+ "order by C.CART_ITEM_CREATED_DATE DESC ";
+		
+		return helper.selectOne(sql, rs -> {
+			CartItemDto cartItemDto = new CartItemDto();
+			cartItemDto.setCartNo(rs.getInt("CART_NO"));
+			cartItemDto.setUserNo(rs.getInt("USER_NO"));
+			cartItemDto.setPdNo(rs.getInt("PD_NO"));
+			cartItemDto.setPdName(rs.getString("PD_NAME"));
+			cartItemDto.setCartItemQuantity(rs.getInt("CART_ITEM_QUANTITY"));
+			cartItemDto.setPdPrice(rs.getInt("PD_SALE_PRICE"));
+			cartItemDto.setPdEarnPoint(rs.getInt("EARNPOINT"));
+			return cartItemDto;
+		}, cartNo);
+		
+	}
 
 	// 지정된 사용자 번호로 저장된 장바구니 아이템정보를 반환한다. - 유저가 자기 장바구니 보려고 할 떄
 	public List<CartItemDto> getCartItemByUser(int userNo) throws SQLException {
@@ -42,8 +63,10 @@ public class CartItemDao {
 		
 	}
 	
-	// helper = ?
+	// 선생님 이 메소드 봐 주세요!!
+	// userNo가 필요한가요 로그인을 했어도? (이 메소드는 반드시 로그인된 상태에서만 실행된다.)
 	// 지정된 장바구니 아이템 정보를 전달받아서 동일한 정보가 존재하면 수량을 증가시키고, 정보가 존재하지 않으면 추가한다. - add
+	// 여긴 userNo 필요
 	public void mergeCartItem(Cart cart) throws SQLException {
 		String sql = "merge "
 				+ "   into sul_carts c "
@@ -52,12 +75,13 @@ public class CartItemDao {
 				+ "when matched then "
 				+ "   update "
 				+ "       set "
-				+ "           c.CART_ITEM_QUANTITY = c.CART_ITEM_QUANTITY + 1, "
+				+ "           c.CART_ITEM_QUANTITY = c.CART_ITEM_QUANTITY + ?, "
 				+ "           c.CART_ITEM_UPDATED_DATE = sysdate "
 				+ "when not matched then "
 				+ "    insert (c.cart_no, c.user_no, c.pd_no, c.CART_ITEM_QUANTITY) "
-				+ "    values (SUL_CARTS_SEQ.nextval, ?, ?, 1) ";
+				+ "    values (SUL_CARTS_SEQ.nextval, ?, ?, ?) ";
 		// update
+		helper.update(sql, cart.getUserNo(), cart.getPdNo(), cart.getQuantity(), cart.getUserNo(), cart.getPdNo(), cart.getQuantity());
 
 	}
 	
@@ -75,7 +99,7 @@ public class CartItemDao {
 	// 지정된 장바구니 아이템번호와 일치하는 장바구니 아이템정보를 반환한다. - 장바구니에서 아이템 사진이나 이름 누르면 실행되는 거
 	public Cart getCartItemByPdNo(int pdNo) throws SQLException {
 		String sql = "select * "
-				+ "from SUL_CARTS SUL_CARTS "
+				+ "from SUL_CARTS "
 				+ "where pdNo = ? ";
 		
 		return helper.selectOne(sql, rs -> {

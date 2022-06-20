@@ -1,3 +1,4 @@
+<%@page import="vo.User"%>
 <%@page import="util.StringUtil"%>
 <%@page import="dto.CartItemDto"%>
 <%@page import="java.util.List"%>
@@ -18,7 +19,6 @@
 		color: #B8874D;
 		font-size: 12px;
 	}
-
 </style>
 </head>
 
@@ -31,10 +31,38 @@
 		<div class="col">
 		<!-- 로그인된 유저 정보 받아야 한다.
 		로그인되지 않은 채로 카트에 접근하려 하면 deny를 반환하고 로그인창으로 이동시킨다. -->
+		
+		<%
+			String fail = request.getParameter("fail");
+		
+			if ("invalid".equals(fail)) {
+		%>
+			<div class="alert alert-danger">
+				<strong>오류</strong>유효한 요청이 아닙니다. 
+			</div>	
+		<%
+			} else if("deny".equals(fail)) {
+		%>
+			<div class="alert alert-danger">
+				<strong>거부</strong>다른 사용자의 장바구니 아이템을 변경할 수 없습니다.
+			</div>
+		<%
+			}
+		%>
+		
+		<% 	
+			User user = (User) session.getAttribute("LOGINED_USER");
+			if (user==null) {
+				response.sendRedirect("../loginform.jsp?fail=deny"); 
+				return;
+			}
+		%>
+		
 		<hr />
+		
 		<%
 			CartItemDao cartItemDao = CartItemDao.getInstance();
-			List<CartItemDto> cartItems = cartItemDao.getCartItemByUser(1);
+			List<CartItemDto> cartItems = cartItemDao.getCartItemByUser(user.getNo());
 			
 			int totalPdsPrice = 0;				// 총상품금액(상품*수량*카트갯수)
 			int totalDeliveryCharge = 0;		// 배송비(총상품금액 3만원 이상 ? 0원 : 3000원)
@@ -50,7 +78,9 @@
 	</div>
 	<div class="row">
 		<div class="col">
-			<form id="cart-form">
+			<form id="cart-form" method="post">
+			<!-- 여기서 온 거구나! -->
+			<input type="hidden" name="from" value="cart" />
 			<table class="cart-list table">
 				<colgroup>
 					<col width="3%">
@@ -123,7 +153,9 @@
 								<em>적립 </em>
 								<strong id="order-point-<%=item.getCartNo()%>">+<%=StringUtil.numberToString(item.getPdEarnPoint()) %> 원</strong>
 							</td>
-							<td class="align-middle"><span><strong id="order-price-<%=item.getCartNo()%>"><%=StringUtil.numberToString(item.getPdPrice() * item.getCartItemQuantity()) %></strong> 원</span></td> 
+							<td class="align-middle">
+								<span><strong class="text-danger" id="order-price-<%=item.getCartNo()%>"><%=StringUtil.numberToString(item.getPdPrice() * item.getCartItemQuantity()) %></strong> 원</span>
+							</td> 
 						<% 
 							if (count == 1) {
 						%>
@@ -153,8 +185,8 @@
       		<a href="https://soolmarket.com:443/goods/goods_list.php?cateCd=014001" id="shop-go-link" class="btn btn-outline-secondary btn-sm">쇼핑 계속하기</a>
     	</div>
 		<div class="col-6 text-end">
-            <button type="button" class="btn btn-primary btn-sm" onclick="">선택 상품 주문</button>
-            <button type="button" class="btn btn-primary btn-sm" onclick="">전체 상품 주문</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="orderSelectedCartItems()">선택 상품 주문</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="orderAllCartItems()">전체 상품 주문</button>
        </div>
     </div>
     <div class="row mb-3 justify-content-end border">
@@ -188,6 +220,46 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
+
+	// 선택 주문 함수
+	function orderSelectedCartItems() {
+		// input 중 name이 cartNo인 것 중 체크된 것의 길이를 변수에 담는다. 
+		let checkedCheckboxCount = document.querySelectorAll('input[name="cartNo"]:checked').length;	
+		// 위의 변수가 0일 경우, 체크된 것이 없으므로 '체크된 장바구니 아이템이 없다'는 알림을 띄우고 종료시킨다.
+		if (checkedCheckboxCount === 0) {
+			alert("체크된 장바구니 아이템이 없습니다.");
+			return;
+		}
+		
+		// 위의 변수가 0이 아니라면, cart-form id를 찾아 form에 대입한다.
+		let form = document.getElementById("cart-form");
+		// action은 submit할 곳이다. submit을 orderForm으로 하겠다.
+		form.setAttribute("action", "orderForm.jsp");
+		// submit한다.
+		form.submit();
+	}
+	
+	// 전체 주문 함수
+	function orderAllCartItems() {
+		let checkedCheckboxCount = document.querySelectorAll('input[name="cartNo"]:checked').length;	
+		if (checkedCheckboxCount === 0) {
+			alert("체크된 장바구니 아이템이 없습니다.");
+			return;
+		}
+		
+		// input 중 name이 cartNo인 것을 골라 변수에 넣는다.
+		let cartCheckboxNodeList = document.querySelectorAll("input[name='cartNo']");
+		// 위의 변수에는 input cartNo배열이 들어 있다. 
+		// 배열 인덱스 < 배열 길이가 될 때까지 i번째 배열의 check값을 true로 바꾼다.
+	    for (let index = 0; index < cartCheckboxNodeList.length; index++) {
+	        let cartCheckbox = cartCheckboxNodeList[index];
+	        cartCheckbox.checked = true;
+	    }
+	    // cart-form id를 찾아 form에 대입하고, submit 되는 곳을 orderForm.jsp로 바꾼다.
+	    let form = document.getElementById("cart-form");
+		form.setAttribute("action", "orderForm.jsp");
+		form.submit();
+	}
 	
 	// 장바구니 아이템 수량 변경할 때 사용하는 함수이다.
 	function cartPdUpdown(cartNo) {
@@ -210,6 +282,11 @@
 	function cartPdDelete() {
 		//let deletePd = document.querySelectorAll('input[name="cartNo"]:checked');
 		//console.log(deletePd);
+		let checkedCheckboxCount = document.querySelectorAll('input[name="cartNo"]:checked').length;	
+		if (checkedCheckboxCount === 0) {
+			alert("체크된 장바구니 아이템이 없습니다.");
+			return;
+		}
 		
 		let form = document.getElementById("cart-form");
 		form.setAttribute("action", "cartItemDelete.jsp");
@@ -227,7 +304,7 @@
 	    updateCartPrice();
 	}
 	
-	//체크박스 상태 함수
+	// all-toggle-checkbox의 체크상태가 변경되면 input[name=book-checkbox]의 상태를 같이 변경한다.
 	function toggleCheckbox() {
 	    let allToggleChecboxCheckedStatus = document.getElementById("all-toggle-checkbox").checked;
 	    let cartCheckboxNodeList = document.querySelectorAll("input[name='cartNo']");

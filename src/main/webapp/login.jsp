@@ -34,5 +34,5 @@
 	session.setAttribute("LOGINED_USER", savedUser);
 	
 	response.sendRedirect("home.jsp");
-
+	
 %>

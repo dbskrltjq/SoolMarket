@@ -13,28 +13,30 @@
 	<jsp:param  name="menu" value="login" />
 </jsp:include>
 
-<div class="container" style="width: 40%">
-	<main class="form-signin w-100 m-auto border">
-	  <form method="post" action="login.jsp" onsubmit="return submitLoginForm()">
-	    <img class="mb-4" src="images/logo.png" alt="" width="200" height="200">
-	    <h1 class="h3 mb-3 fw-normal">로그인</h1>
-<%
-	String fail = request.getParameter("fail");
-
-	if ("invalid".equals(fail)) {
-%>
-		<div class="alert alert-danger">
-				<strong>로그인 실패</strong> 아이디 혹은 비밀번호가 올바르지 않습니다.
-		</div>
-<%
-	} else if ("deleted".equals(fail)) {
-%>
-		<div class="alert alert-danger">
-				<strong>로그인 실패</strong> 이미 탈퇴한 계정입니다.
-		</div>
-<%
-	}
-%>
+<div class="container">
+	<div class="row justify-content-center pt-5">
+		<div class="col-6">
+			<h3><strong>로그인 하기</strong></h3>
+	  		<form method="post" class="border p-5 mb-5" action="login.jsp"  onsubmit="return submitLoginForm()">
+	    		<img class="mb-4" src="images/logo.png" alt="" width="200" height="200">
+	    		<h1 class="h3 mb-3 fw-normal">회원 로그인</h1>
+		<%
+			String fail = request.getParameter("fail");
+		
+			if ("invalid".equals(fail)) {
+		%>
+				<div class="alert alert-danger">
+					<strong>로그인 실패</strong> 아이디 혹은 비밀번호가 올바르지 않습니다.
+				</div>
+		<%
+			} else if ("deleted".equals(fail)) {
+		%>
+				<div class="alert alert-danger">
+					<strong>로그인 실패</strong> 이미 탈퇴한 계정입니다.
+				</div>
+		<%
+			}
+		%>
 	
 	    <div class="form-floating">
 	      <input type="text" class="form-control" name="id" id="id" placeholder="아이디를 입력하세요">
@@ -45,9 +47,9 @@
 	      <input type="password" class="form-control" name="password" id="password" onkeydown="keydown(event);" placeholder="비밀번호를 입력하세요">
 	      <label for="floatingPassword">비밀번호를 입력하세요</label>
 	    </div>
-	    <button class="w-100 btn btn-lg btn-primary" type="submit">로그인</button>
+	    <button class="w-100 btn btn-lg btn-primary mt-3" type="submit">로그인</button>
 	
-	    <div class="checkbox mb-3">
+	    <div class="checkbox my-3">
 	      <label>
 	        <input type="checkbox" value="remember-me"> 아이디 저장
 	      </label>
@@ -58,7 +60,8 @@
 	   		<a class="btn btn-outline-secondary" href="findPassword.jsp">비밀번호찾기</a>
 	   	</div>
 	  </form>
-	</main>
+	  </div>
+	  </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">

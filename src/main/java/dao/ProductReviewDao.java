@@ -5,6 +5,7 @@ import java.util.List;
 
 import dto.ReviewDto;
 import helper.DaoHelper;
+import vo.Review;
 
 public class ProductReviewDao {
 
@@ -16,7 +17,18 @@ public class ProductReviewDao {
 	
 	private DaoHelper helper = DaoHelper.getInstance();
 	
+	public void insertReview(Review review) throws SQLException {
+		
+		String sql = "insert into sul_reviews "
+				   + "(review_no, user_no, pd_no, review_content, review_file_name, review_score) "
+				   + "values"
+				   + "(sul_reviews_seq.nextval, ?, ?, ?, ?, ?) ";
+		
+		helper.insert(sql, review.getUserNo(), review.getPdNo(), review.getContent(), review.getFileName(), review.getScore());
+	}
+	
 	public List<ReviewDto> getProductReviews(int productNo) throws SQLException {
+		
 		String sql = "select R.review_no, U.user_no, U.user_id, R.pd_no, R.review_content, R.review_file_name "
 					+ ", R.review_deleted,R.review_created_date, R.review_updated_date, R.review_score, R.review_like_count "
 			       + "from sul_reviews R, sul_users U "
@@ -42,7 +54,7 @@ public class ProductReviewDao {
 	}
 	
 	public int getReviewCount(int productNo, int userNo) throws SQLException {
-		String sql = "select count(*) cnt"
+		String sql = "select count(*) cnt "
 				+ "from sul_orders O, sul_order_items I "
 				+ "where O.order_no = I.order_no "
 				+ "and I.pd_no = ? "
@@ -52,5 +64,17 @@ public class ProductReviewDao {
 			return rs.getInt("cnt");
 			
 		},productNo,userNo);
+	}
+	
+	public int getReviewUserCount(int userNo) throws SQLException {
+		String sql = "select count(*) cnt "
+				+ "from sul_reviews R, sul_users U "
+				+ "where R.user_no = U.user_no "
+				+ "and U.user_no = ? ";
+		
+		return helper.selectOne(sql, rs-> {
+			return rs.getInt("cnt");
+			
+		},userNo);
 	}
 }

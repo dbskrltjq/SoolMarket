@@ -78,8 +78,7 @@
 			<div class="p-2">
 				<a href="../order.jsp?pdNo=<%=product.getNo() %>" class="me-3 btn btn-lg  <%=user == null ? "btn-outline-secondary disabled" : "btn-outline-primary" %>">바로구매</a>
 				<a href="../cartitemAdd.jsp?pdNo=<%=product.getNo() %>" class="btn btn-lg  <%=user == null ? "btn-outline-secondary disabled" : "btn-outline-primary" %>">장바구니</a>
-			</div>
-								
+			</div>			
 		</div>
 	</div>
 	

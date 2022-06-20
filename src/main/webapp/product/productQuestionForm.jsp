@@ -18,10 +18,19 @@
 		ProductDao productDao = ProductDao.getInstance();
 		Product product = productDao.getProductByNo(productNo);
 	%>
-		<div class="container mt-3">
+		<div class="container">
 			<h3>상품문의 글쓰기</h3>
 			<hr>
-			
+			<div class="row">
+				<div class="col-6 py-3 ">
+					<div>
+						<img alt="" src="../images/sample1.jpg" class="img-thumbnail" width="200">
+					</div>
+				</div>
+				<div class="col-6 p-3">
+					<h3 class="fs-5 text-bold"><%=product.getName() %></h3>
+				</div>
+			</div>
 		</div>
 </body>
 </html>

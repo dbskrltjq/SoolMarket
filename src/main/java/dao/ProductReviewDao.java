@@ -65,4 +65,16 @@ public class ProductReviewDao {
 			
 		},productNo,userNo);
 	}
+	
+	public int getReviewUserCount(int userNo) throws SQLException {
+		String sql = "select count(*) cnt "
+				+ "from sul_reviews R, sul_users U "
+				+ "where R.user_no = U.user_no "
+				+ "and U.user_no = ? ";
+		
+		return helper.selectOne(sql, rs-> {
+			return rs.getInt("cnt");
+			
+		},userNo);
+	}
 }

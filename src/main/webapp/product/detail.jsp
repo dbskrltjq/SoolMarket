@@ -42,6 +42,8 @@
 		
 		ProductQuestionDao productQuestionDao = ProductQuestionDao.getInstance();
 		List<QuestionDto> questions = productQuestionDao.getProductQuestions(productNo);
+		
+		int totalpdPrice = 0;
 	%>
 			<h3 class="ps-2 fs-2"><%=product.getName() %></h3>
 			<hr>
@@ -50,6 +52,10 @@
 					<tr>
 						<th class="p-2">상품명</th>
 						<td class="p-2"><%=product.getName() %></td>
+					</tr>
+					<tr>
+						<th class="p-2">상품번호</th>
+						<td class="p-2"><%=product.getNo() %></td>
 					</tr>
 					<tr>
 						<th class="p-2">정가</th>
@@ -65,11 +71,11 @@
 					</tr>
 					<tr>
 						<th class="p-2">수량</th>
-						<td><input class=" p-2" type="number" min="1" max="100" id="" value="1"></td>
+						<td><input class=" p-2" type="number" min="1" max="" id="productQuentity" value=""></td>
 					</tr>
 					<tr>
-						<th class="p-2">상품번호</th>
-						<td class="p-2"><%=product.getNo() %></td>
+						<th class="p-2">총상품금액</th>
+						<td class="p-2"></td>
 					</tr>
 					<tr>
 				</tbody>
@@ -156,7 +162,7 @@
 			<h3>상품 Q&A</h3>
 			<div>
 				<a href="productQuestionForm.jsp?pdNo=<%=product.getNo() %>" class="btn btn-primary btn-sm  " >상품문의 글쓰기</a>
-				<a href="question.jsp" class="btn btn-outline-secondary btn-sm  " >상품문의 전체보기</a>
+				<a href="productQuestionlist.jsp" class="btn btn-outline-secondary btn-sm  " >상품문의 전체보기</a>
 			</div>
 		</div>
 	</div>
@@ -243,6 +249,10 @@
 				let result = JSON.parse(jsonText);
 				if (!result.exist) {
 					alert("리뷰를 두개 이상 작성하실 수 없습니다.")
+					document.querySelector("textarea[name=reviewContent]").readOnly=true;
+					document.querySelector("button[name=reviewBotten]").disabled=true;
+					document.querySelector("input[name=reviewFileName]").disabled=true;
+					document.querySelector("select[name=reviewScore]").disabled=true;
 					return;
 				}
 			}

@@ -59,11 +59,11 @@
 					</tr>
 					<tr>
 						<th class="p-2">정가</th>
-						<td class="p-2 text-decoration-line-through"><%=product.getPrice() %></td>
+						<td class="p-2 text-decoration-line-through"><%=product.getPrice() %>원</td>
 					</tr>
 					<tr>
 						<th class="p-2">판매가</th>
-						<td class="p-2"><%=product.getSalePrice() %></td>
+						<td class="p-2"><span id="salePrice"><%=product.getSalePrice()%></span>원</td>
 					</tr>
 					<tr>
 						<th class="p-2">제조회사</th>
@@ -71,11 +71,11 @@
 					</tr>
 					<tr>
 						<th class="p-2">수량</th>
-						<td><input class=" p-2" type="number" min="1" max="30" id="productQuentity" value=""></td>
+						<td><input class=" p-2" type="number" min="1" max="30" id="productQuentity" value="1" onchange="checkOrderQuentity()"></td>
 					</tr>
 					<tr>
 						<th class="p-2">총상품금액</th>
-						<td class="p-2"></td>
+						<td class="p-2"><span id="totalPrice"></span></td>
 					</tr>
 					<tr>
 				</tbody>
@@ -210,25 +210,42 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
-
-	function reviewCheck(productNo) {
-		let islogin = document.querySelector("#is-login").value;
-		if (islogin === "no") {
-			alert("쇼핑몰 회원님만 글작성 가능합니다.")
-			document.querySelector("textarea[name=reviewContent]").readOnly=true;
-			document.querySelector("button[name=reviewBotten]").disabled=true;
-			document.querySelector("input[name=reviewFileName]").disabled=true;
-			document.querySelector("select[name=reviewScore]").disabled=true;
-			return;
-		}
+	function checkOrderQuentity() {
 		
+	}
+
+	function updateTotalPrice() {
+		let salePrice = document.querySelector("#salePrice").value;
+		let productQuentity = document.querySelector("#productQuentity").value;
+		document.querySelector("#totalPrice").value = salePrice*productQuentity;
+		
+	}
+	
+	function reviewCheck(productNo) {
+
 		let xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState === 4 && xhr.status === 200) {
 				let jsonText = xhr.responseText;
 				let result = JSON.parse(jsonText);
-				if (!result.exist) {
+				if (result.msg === "logout") {
+					alert("쇼핑몰 회원님만 글작성 가능합니다.")
+					document.querySelector("textarea[name=reviewContent]").readOnly=true;
+					document.querySelector("button[name=reviewBotten]").disabled=true;
+					document.querySelector("input[name=reviewFileName]").disabled=true;
+					document.querySelector("select[name=reviewScore]").disabled=true;
+					return;
+				}
+				if (result.msg === "deny") {
 					alert("해당 상품을 구매하신 회원님만 글작성이 가능합니다.")
+					document.querySelector("textarea[name=reviewContent]").readOnly=true;
+					document.querySelector("button[name=reviewBotten]").disabled=true;
+					document.querySelector("input[name=reviewFileName]").disabled=true;
+					document.querySelector("select[name=reviewScore]").disabled=true;
+					return;
+				}
+				if (result.msg === "exist") {
+					alert("두개 이상의 리뷰를 작성하실 수 없습니다.")
 					document.querySelector("textarea[name=reviewContent]").readOnly=true;
 					document.querySelector("button[name=reviewBotten]").disabled=true;
 					document.querySelector("input[name=reviewFileName]").disabled=true;
@@ -240,8 +257,6 @@
 		xhr.open("GET",'reviewCheck.jsp?productNo=' + productNo)
 		xhr.send();
 	}
-	
-	function review
 	
 </script>
 </body>

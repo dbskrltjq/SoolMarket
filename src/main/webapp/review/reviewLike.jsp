@@ -16,6 +16,7 @@
 	Review review = reviewDao.getReviewByNo(reviewNo);
 	
 	
+	review.setLikeCount(review.getLikeCount() + 1);
 	reviewDao.updateReviewLikeCount(review);
 	reviewDao.insertReviewLikeUser(reviewLikeUser);
 	

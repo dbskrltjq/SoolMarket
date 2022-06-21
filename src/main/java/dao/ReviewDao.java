@@ -20,12 +20,12 @@ public class ReviewDao {
 	
 	public List<ReviewDto> getReviewsUseCategoryNoOrderByDate(int beginIndex, int endIndex, int categoryNo) throws SQLException{
 		String sql = "select r.review_no, r.review_created_date, u.user_id, r.review_score, r.review_like_count, p.pd_name, r.review_content, r.review_file_name " 
-			     +"from (select row_number() over (order by r.review_no) row_number, r.review_no review_no, r.review_score review_score, r.review_content review_content, r.review_file_name review_file_name, r.review_like_count review_like_count, r.pd_no pd_no, r.user_no user_no, r.review_created_date review_created_date " 
+			     +"from (select row_number() over (order by r.review_created_date desc) row_number, r.review_no review_no, r.review_score review_score, r.review_content review_content, r.review_file_name review_file_name, r.review_like_count review_like_count, r.pd_no pd_no, r.user_no user_no, r.review_created_date review_created_date " 
 				 +"from sul_reviews r, sul_products p where r.pd_no = p.pd_no and p.category_no = ? ) r, sul_users u, sul_products p " 
 				 +"where r.user_no = u.user_no " 
 				 +"and r.pd_no = p.pd_no "
-				 +"and r.row_number >= ? and r.row_number <= ? "
-				 +"order by r.review_created_date desc ";
+				 +"and r.row_number >= ? and r.row_number <= ? ";
+				 
 					
 		return helper.selectList(sql, rs -> {
 			ReviewDto review = new ReviewDto();
@@ -44,12 +44,12 @@ public class ReviewDao {
 	
 	public List<ReviewDto> getReviewsUseCategoryNoOrderByScore(int beginIndex, int endIndex, int categoryNo) throws SQLException{
 		String sql = "select r.review_no, r.review_created_date, u.user_id, r.review_score, r.review_like_count, p.pd_name, r.review_content, r.review_file_name " 
-			     +"from (select row_number() over (order by r.review_no) row_number, r.review_no review_no, r.review_score review_score, r.review_content review_content, r.review_file_name review_file_name, r.review_like_count review_like_count, r.pd_no pd_no, r.user_no user_no, r.review_created_date review_created_date " 
+			     +"from (select row_number() over (order by r.review_score desc) row_number, r.review_no review_no, r.review_score review_score, r.review_content review_content, r.review_file_name review_file_name, r.review_like_count review_like_count, r.pd_no pd_no, r.user_no user_no, r.review_created_date review_created_date " 
 				 +"from sul_reviews r, sul_products p where r.pd_no = p.pd_no and p.category_no = ? ) r, sul_users u, sul_products p " 
 				 +"where r.user_no = u.user_no " 
 				 +"and r.pd_no = p.pd_no "
-				 +"and r.row_number >= ? and r.row_number <= ? "
-				 +"order by r.review_score desc ";
+				 +"and r.row_number >= ? and r.row_number <= ? ";
+				 
 				
 		return helper.selectList(sql, rs -> {
 			ReviewDto review = new ReviewDto();
@@ -68,12 +68,12 @@ public class ReviewDao {
 	
 	public List<ReviewDto> getReviewsUseCategoryNoOrderByLikeCount(int beginIndex, int endIndex, int categoryNo) throws SQLException{
 		String sql = "select r.review_no, r.review_created_date, u.user_id, r.review_score, r.review_like_count, p.pd_name, r.review_content, r.review_file_name " 
-			     +"from (select row_number() over (order by r.review_no) row_number, r.review_no review_no, r.review_score review_score, r.review_content review_content, r.review_file_name review_file_name, r.review_like_count review_like_count, r.pd_no pd_no, r.user_no user_no, r.review_created_date review_created_date " 
+			     +"from (select row_number() over (r.review_like_count desc) row_number, r.review_no review_no, r.review_score review_score, r.review_content review_content, r.review_file_name review_file_name, r.review_like_count review_like_count, r.pd_no pd_no, r.user_no user_no, r.review_created_date review_created_date " 
 				 +"from sul_reviews r, sul_products p where r.pd_no = p.pd_no and p.category_no = ? ) r, sul_users u, sul_products p " 
 				 +"where r.user_no = u.user_no " 
 				 +"and r.pd_no = p.pd_no "
-				 +"and r.row_number >= ? and r.row_number <= ? "
-				 +"order by r.review_like_count desc ";
+				 +"and r.row_number >= ? and r.row_number <= ? ";
+				 
 				
 		return helper.selectList(sql, rs -> {
 			ReviewDto review = new ReviewDto();
@@ -96,12 +96,12 @@ public class ReviewDao {
 	
 	public List<ReviewDto> getReviewsUseCategoryNoOrderByDate(int beginIndex, int endIndex, int categoryNo, String keyword) throws SQLException{
 		String sql = "select r.review_no, r.review_created_date, u.user_id, r.review_score, r.review_like_count, p.pd_name, r.review_content, r.review_file_name " 
-			     +"from (select row_number() over (order by r.review_no) row_number, r.review_no review_no, r.review_score review_score, r.review_content review_content, r.review_file_name review_file_name, r.review_like_count review_like_count, r.pd_no pd_no, r.user_no user_no, r.review_created_date review_created_date " 
+			     +"from (select row_number() over (order by r.review_created_date desc) row_number, r.review_no review_no, r.review_score review_score, r.review_content review_content, r.review_file_name review_file_name, r.review_like_count review_like_count, r.pd_no pd_no, r.user_no user_no, r.review_created_date review_created_date " 
 				 +"from sul_reviews r, sul_products p where r.pd_no = p.pd_no and p.category_no = ? and r.review_content like '%' || ? || '%') r, sul_users u, sul_products p " 
 				 +"where r.user_no = u.user_no " 
 				 +"and r.pd_no = p.pd_no "
-				 +"and r.row_number >= ? and r.row_number <= ? "
-				 +"order by r.review_created_date desc ";
+				 +"and r.row_number >= ? and r.row_number <= ? ";
+				
 				
 		return helper.selectList(sql, rs -> {
 			ReviewDto review = new ReviewDto();
@@ -120,12 +120,12 @@ public class ReviewDao {
 	
 	public List<ReviewDto> getReviewsUseCategoryNoOrderByScore(int beginIndex, int endIndex, int categoryNo, String keyword) throws SQLException{
 		String sql = "select r.review_no, r.review_created_date, u.user_id, r.review_score, r.review_like_count, p.pd_name, r.review_content, r.review_file_name " 
-			     +"from (select row_number() over (order by r.review_no) row_number, r.review_no review_no, r.review_score review_score, r.review_content review_content, r.review_file_name review_file_name, r.review_like_count review_like_count, r.pd_no pd_no, r.user_no user_no, r.review_created_date review_created_date " 
+			     +"from (select row_number() over (order by r.review_score desc) row_number, r.review_no review_no, r.review_score review_score, r.review_content review_content, r.review_file_name review_file_name, r.review_like_count review_like_count, r.pd_no pd_no, r.user_no user_no, r.review_created_date review_created_date " 
 				 +"from sul_reviews r, sul_products p where r.pd_no = p.pd_no and p.category_no = ? and r.review_content like '%' || ? || '%') r, sul_users u, sul_products p " 
 				 +"where r.user_no = u.user_no " 
 				 +"and r.pd_no = p.pd_no "
-				 +"and r.row_number >= ? and r.row_number <= ? "
-				 +"order by r.review_score desc ";
+				 +"and r.row_number >= ? and r.row_number <= ? ";
+				 
 				
 		return helper.selectList(sql, rs -> {
 			ReviewDto review = new ReviewDto();
@@ -144,12 +144,12 @@ public class ReviewDao {
 	
 	public List<ReviewDto> getReviewsUseCategoryNoOrderByLikeCount(int beginIndex, int endIndex, int categoryNo, String keyword) throws SQLException{
 		String sql = "select r.review_no, r.review_created_date, u.user_id, r.review_score, r.review_like_count, p.pd_name, r.review_content, r.review_file_name " 
-			     +"from (select row_number() over (order by r.review_no) row_number, r.review_no review_no, r.review_score review_score, r.review_content review_content, r.review_file_name review_file_name, r.review_like_count review_like_count, r.pd_no pd_no, r.user_no user_no, r.review_created_date review_created_date " 
+			     +"from (select row_number() over (order by r.review_like_count desc) row_number, r.review_no review_no, r.review_score review_score, r.review_content review_content, r.review_file_name review_file_name, r.review_like_count review_like_count, r.pd_no pd_no, r.user_no user_no, r.review_created_date review_created_date " 
 				 +"from sul_reviews r, sul_products p where r.pd_no = p.pd_no and p.category_no = ? and r.review_content like '%' || ? || '%') r, sul_users u, sul_products p " 
 				 +"where r.user_no = u.user_no " 
 				 +"and r.pd_no = p.pd_no "
-				 +"and r.row_number >= ? and r.row_number <= ? "
-				 +"order by r.review_like_count desc ";
+				 +"and r.row_number >= ? and r.row_number <= ? ";
+				 
 				
 		return helper.selectList(sql, rs -> {
 			ReviewDto review = new ReviewDto();
@@ -176,12 +176,12 @@ public class ReviewDao {
 	
 	public List<ReviewDto> getReviewsOrderByDate(int beginIndex, int endIndex) throws SQLException{
 		String sql = "select r.review_no, r.review_created_date, u.user_id, r.review_score, r.review_like_count, p.pd_name, r.review_content, r.review_file_name "
-				    +"from (select row_number() over (order by review_no) row_number, review_no, review_score, review_content, review_file_name, review_like_count, pd_no, user_no, review_created_date "
+				    +"from (select row_number() over (order by review_created_date desc) row_number, review_no, review_score, review_content, review_file_name, review_like_count, pd_no, user_no, review_created_date "
 					+"from sul_reviews) r, sul_users u, sul_products p "
 					+"where r.user_no = u.user_no "
 					+"and r.pd_no = p.pd_no "
-					+"and r.row_number >= ? and r.row_number <= ? "
-					+"order by r.review_created_date desc ";
+					+"and r.row_number >= ? and r.row_number <= ? ";
+					
 					
 		return helper.selectList(sql, rs -> {
 			ReviewDto review = new ReviewDto();
@@ -200,12 +200,12 @@ public class ReviewDao {
 	
 	public List<ReviewDto> getReviewsOrderByScore(int beginIndex, int endIndex) throws SQLException{
 		String sql = "select r.review_no, r.review_created_date, u.user_id, r.review_score, r.review_like_count, p.pd_name, r.review_content, r.review_file_name "
-				    +"from (select row_number() over (order by review_no) row_number, review_no, review_score, review_content, review_file_name, review_like_count, pd_no, user_no, review_created_date "
+				    +"from (select row_number() over (order by review_score desc) row_number, review_no, review_score, review_content, review_file_name, review_like_count, pd_no, user_no, review_created_date "
 					+"from sul_reviews) r, sul_users u, sul_products p "
 					+"where r.user_no = u.user_no "
 					+"and r.pd_no = p.pd_no "
-					+"and r.row_number >= ? and r.row_number <= ? "
-					+"order by r.review_score desc ";
+					+"and r.row_number >= ? and r.row_number <= ? ";
+				
 					
 		return helper.selectList(sql, rs -> {
 			ReviewDto review = new ReviewDto();
@@ -224,12 +224,12 @@ public class ReviewDao {
 	
 	public List<ReviewDto> getReviewsOrderByLikeCount(int beginIndex, int endIndex) throws SQLException{
 		String sql = "select  r.review_no, r.review_created_date, u.user_id, r.review_score, r.review_like_count, p.pd_name, r.review_content, r.review_file_name "
-				    +"from (select row_number() over (order by review_no) row_number, review_no, review_score, review_content, review_file_name, review_like_count, pd_no, user_no, review_created_date "
+				    +"from (select row_number() over (order by review_like_count desc) row_number, review_no, review_score, review_content, review_file_name, review_like_count, pd_no, user_no, review_created_date "
 					+"from sul_reviews) r, sul_users u, sul_products p "
 					+"where r.user_no = u.user_no "
 					+"and r.pd_no = p.pd_no "
-					+"and r.row_number >= ? and r.row_number <= ? "
-					+"order by r.review_like_count desc ";
+					+"and r.row_number >= ? and r.row_number <= ? ";
+					
 					
 		return helper.selectList(sql, rs -> {
 			ReviewDto review = new ReviewDto();
@@ -254,12 +254,12 @@ public class ReviewDao {
 	
 	public List<ReviewDto> getReviewsOrderByDate(int beginIndex, int endIndex, String keyword) throws SQLException{
 		String sql = "select  r.review_no, r.review_created_date, u.user_id, r.review_score, r.review_like_count, p.pd_name, r.review_content, r.review_file_name "
-				    +"from (select row_number() over (order by review_no) row_number, review_no, review_score, review_content, review_file_name, review_like_count, pd_no, user_no, review_created_date "
+				    +"from (select row_number() over (order by review_created_date desc) row_number, review_no, review_score, review_content, review_file_name, review_like_count, pd_no, user_no, review_created_date "
 					+"from sul_reviews where review_content like '%' || ? || '%') r, sul_users u, sul_products p "
 					+"where r.user_no = u.user_no "
 					+"and r.pd_no = p.pd_no "
-					+"and r.row_number >= ? and r.row_number <= ? "
-					+"order by r.review_created_date desc ";
+					+"and r.row_number >= ? and r.row_number <= ? ";
+					
 					
 		return helper.selectList(sql, rs -> {
 			ReviewDto review = new ReviewDto();
@@ -278,12 +278,12 @@ public class ReviewDao {
 	
 	public List<ReviewDto> getReviewsOrderByScore(int beginIndex, int endIndex, String keyword) throws SQLException{
 		String sql = "select  r.review_no, r.review_created_date, u.user_id, r.review_score, r.review_like_count, p.pd_name, r.review_content, r.review_file_name "
-				    +"from (select row_number() over (order by review_no) row_number, review_no, review_score, review_content, review_file_name, review_like_count, pd_no, user_no, review_created_date "
+				    +"from (select row_number() over (order by review_score desc) row_number, review_no, review_score, review_content, review_file_name, review_like_count, pd_no, user_no, review_created_date "
 					+"from sul_reviews where review_content like '%' || ? || '%') r, sul_users u, sul_products p "
 					+"where r.user_no = u.user_no "
 					+"and r.pd_no = p.pd_no "
-					+"and r.row_number >= ? and r.row_number <= ? "
-					+"order by r.review_score desc ";
+					+"and r.row_number >= ? and r.row_number <= ? ";
+					
 					
 		return helper.selectList(sql, rs -> {
 			ReviewDto review = new ReviewDto();
@@ -302,12 +302,12 @@ public class ReviewDao {
 	
 	public List<ReviewDto> getReviewsOrderByLikeCount(int beginIndex, int endIndex, String keyword) throws SQLException{
 		String sql = "select  r.review_no, r.review_created_date, u.user_id, r.review_score, r.review_like_count, p.pd_name, r.review_content, r.review_file_name "
-				    +"from (select row_number() over (order by review_no) row_number, review_no, review_score, review_content, review_file_name, review_like_count, pd_no, user_no, review_created_date "
+				    +"from (select row_number() over (order by review_like_count desc) row_number, review_no, review_score, review_content, review_file_name, review_like_count, pd_no, user_no, review_created_date "
 					+"from sul_reviews where review_content like '%' || ? || '%') r, sul_users u, sul_products p "
 					+"where r.user_no = u.user_no "
 					+"and r.pd_no = p.pd_no "
-					+"and r.row_number >= ? and r.row_number <= ? "
-					+"order by r.review_like_count desc ";
+					+"and r.row_number >= ? and r.row_number <= ? ";
+					
 					
 		return helper.selectList(sql, rs -> {
 			ReviewDto review = new ReviewDto();

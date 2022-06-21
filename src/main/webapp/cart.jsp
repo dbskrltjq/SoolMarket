@@ -267,6 +267,7 @@
 		let quantity = document.getElementById("cartPdNum-" + cartNo).value;
 		// 업다운 버튼이 있는 input에 id를 주고 그 값을 num에 넣었다.
 		if (quantity >= 1 && quantity <= 100) {
+			// location : 브라우저의 주소창을 표시한다. " " 주소로 요청하게 되는 것.
 			location.href="cartItemUpdateQuantity.jsp?cartNo="+cartNo + "&quantity=" + quantity; 
 			return;		
 		}

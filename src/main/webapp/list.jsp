@@ -38,17 +38,17 @@
 	Pagination pagination = new Pagination(rows, totalRows, currentPage);
 
 	String categoryName = categoryDao.getCategoryNameByNo(categoryNo);		// 카테고리 이름 
-	int pdQuantity = categoryDao.getTotalQunatity(categoryNo);				// 카테고리별 총상품수량
+	int pdQuantity = productDao.getTotalQunatity(categoryNo);				// 카테고리별 총상품수량
 	
 	List<Product> productList = null;
 	if ("sell".equals(sort)) {
-		productList = categoryDao.getItemBySaleQuantity(categoryNo, pagination.getBeginIndex(), pagination.getEndIndex());		
+		productList = productDao.getItemBySaleQuantity(categoryNo, pagination.getBeginIndex(), pagination.getEndIndex());		
 	} else if ("low".equals(sort)) {
-		productList = categoryDao.getItemByMinPrice(categoryNo, pagination.getBeginIndex(), pagination.getEndIndex());
+		productList = productDao.getItemByMinPrice(categoryNo, pagination.getBeginIndex(), pagination.getEndIndex());
 	} else if ("high".equals(sort)) {
-		productList = categoryDao.getItemByMaxPrice(categoryNo, pagination.getBeginIndex(), pagination.getEndIndex());
+		productList = productDao.getItemByMaxPrice(categoryNo, pagination.getBeginIndex(), pagination.getEndIndex());
 	} else {
-		productList = categoryDao.getItemByDate(categoryNo, pagination.getBeginIndex(), pagination.getEndIndex());
+		productList = productDao.getItemByDate(categoryNo, pagination.getBeginIndex(), pagination.getEndIndex());
 	}
 	
 %>

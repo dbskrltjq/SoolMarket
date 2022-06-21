@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.SQLException;
+
 import java.util.List;
 
 import helper.DaoHelper;
@@ -9,10 +10,12 @@ import vo.Product;
 public class OrderDao {
 
 	private static OrderDao instance = new OrderDao();
+
 	private OrderDao() {}
 	public static OrderDao getInstance() {
 		return instance;
 	}
+	
 	private DaoHelper helper = DaoHelper.getInstance();
 	
 	public int getOrderCount(int userNo) throws SQLException {
@@ -25,6 +28,7 @@ public class OrderDao {
 			return rs.getInt("cnt");
 		}, userNo);
 	}
+
 	
 	public List<Product> getOrderProductsByUserNo(int userNo) throws SQLException {
 		String sql = "select p.pd_no, p.category_no, p.pd_name "
@@ -44,4 +48,5 @@ public class OrderDao {
 			return product;
 		}, userNo);
 	}
+
 }

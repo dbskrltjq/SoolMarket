@@ -10,6 +10,9 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
 <style type="text/css">
 	 .list-group-item {font-size:small; }
+	 .border {border-color: #DADADA;}
+	 p {font-size: small;}
+	 h5 {font-weight: bold;}
 </style>
 	
 </head>
@@ -35,30 +38,33 @@
 	         		<a href="#" class="list-group-item list-group-item-action">- 나의 상품문의</a>
 				</div>
 	      </div>
-			<div class="col-10">
+			<div class="col-8 ms-5">
 				<div class="row mb-5 border-bottom">
 					<div class="col-12">
-						<h5>
-							<strong>회원탈퇴</strong>
-						</h5>
+						<h5>회원탈퇴</h5>
 					</div>
 				</div>
 				<div class="row mb-5">
-					<p>01. 회원탈퇴 안내</p>
-					<div class="col-12 p-5" style="border: solid;">
+					<h5>01. 회원탈퇴 안내</h5>
+					<div class="col-12 border">
 						<div>
-							<p>
-								탈퇴하지마<br>
-								탈퇴하지마탈퇴하지마탈퇴하지마탈퇴하지마탈퇴하지마탈퇴하지마탈퇴하지마탈퇴하지마탈퇴하지마탈퇴하지마탈퇴하지마탈퇴하지마탈퇴하지마탈퇴하지마탈퇴하지마
-							</p>
+							<p>술마켓 탈퇴안내</p>
+							<p></p>
+							<p>회원님께서 회원 탈퇴를 원하신다니 저희 쇼핑몰이 많이 부족하고 미흡했나 봅니다.<br>
+							   불편하셨던 점이나 불만사항을 알려주시면 적극 반영해서 고객님의 불편함을 해결해 드리도록 노력하겠습니다.</p>
+							<p>■ 아울러 회원 탈퇴시의 아래 사항을 숙지하시기 바랍니다.<br>
+							   1. 회원 탈퇴 시 회원님의 정보는 상품 반품 및 A/S를 위해 전자상거래 등에서의 소비자 보호에 관한 법률에 의거한<br>
+							   고객 정보 보호 정책에 따라 관리됩니다.<br>
+							   2. 탈퇴 시 회원님께서 보유하셨던 포인트는 삭제됩니다.
+							   </p>
 						</div>
 					</div>
 				</div>
 				<div class="row">
-					<p>02. 회원탈퇴 하기</p>
-					<div class="col-12" style="border: solid;">
-						<div class="row mb-5">
-							<div class="col-12 text-center">
+					<h5>02. 회원탈퇴 하기</h5>
+					<div class="col-12 border" >
+						<div class="row mb-3">
+							<div class="col-12 text-center pt-3">
 								<strong>회원님의 정보를 안전하게 보호하기 위해 비밀번호를 다시 한번 확인해 주세요.</strong>
 							</div>
 						</div>

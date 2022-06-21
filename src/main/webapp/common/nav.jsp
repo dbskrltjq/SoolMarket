@@ -93,7 +93,6 @@
 	}
 	
 	function searchKeyword() {
-		location.href="/semi/searchList.jsp?sort=sell&keyword=" + document.querySelector("input[name=keyword]").value
-		
+		location.href="/semi/searchList.jsp?sort=sell&keyword=" + document.querySelector("input[name=keyword]").value	
 	}
 </script>

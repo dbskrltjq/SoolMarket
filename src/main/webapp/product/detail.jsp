@@ -22,7 +22,7 @@
 	<jsp:param name="menu" value="product"/>
 </jsp:include>
 <div class="container mt-3">
-	<div class="row">
+	<div class="row" id="detail-row">
 		<div class="col-6">
 			<div>
 				<img alt="" src="../images/sample1.jpg" class="img-thumbnail" >
@@ -42,22 +42,29 @@
 		
 		ProductQuestionDao productQuestionDao = ProductQuestionDao.getInstance();
 		List<QuestionDto> questions = productQuestionDao.getProductQuestions(productNo);
+		
+		int totalpdPrice = 0;
 	%>
 			<h3 class="ps-2 fs-2"><%=product.getName() %></h3>
 			<hr>
-			<table class="table-boardless">
+			<table class="table-boardless" id="product-table">
 				<tbody>
 					<tr>
 						<th class="p-2">상품명</th>
 						<td class="p-2"><%=product.getName() %></td>
 					</tr>
 					<tr>
+						<th class="p-2">상품번호</th>
+						<td class="p-2"><%=product.getNo() %></td>
+					</tr>
+					<tr>
 						<th class="p-2">정가</th>
-						<td class="p-2 text-decoration-line-through"><%=product.getPrice() %></td>
+						<td class="p-2 text-decoration-line-through"><%=product.getPrice() %>원</td>
 					</tr>
 					<tr>
 						<th class="p-2">판매가</th>
-						<td class="p-2"><%=product.getSalePrice() %></td>
+						<td class="p-2"><span id="salePrice"><%=product.getSalePrice()%></span>원</td>
+						<%--총상품금을 수량에 따라서 변경하기 위해 판매가에 id값을 붙인다. --%>
 					</tr>
 					<tr>
 						<th class="p-2">제조회사</th>
@@ -65,11 +72,13 @@
 					</tr>
 					<tr>
 						<th class="p-2">수량</th>
-						<td><input class=" p-2" type="number" min="1" max="100" id="" value="1"></td>
+						<td><input class=" p-2" type="number" min="1" max="30" id="productQuentity" value="1" onchange="updateTotalPrice()"></td>
+						<%--총상품금을 수량에 따라서 변경하기 위해 수량에 id값을 붙인다. --%>
 					</tr>
 					<tr>
-						<th class="p-2">상품번호</th>
-						<td class="p-2"><%=product.getNo() %></td>
+						<th class="p-2">총상품금액</th>
+						<td class="p-2"><span id="totalPrice"><%=product.getSalePrice()%></span>원</td>
+						<%--총상품금을 수량에 따라서 변경하기 위해 id값을 붙인다. --%>
 					</tr>
 					<tr>
 				</tbody>
@@ -78,42 +87,45 @@
 			<div class="p-2">
 				<a href="../order.jsp?pdNo=<%=product.getNo() %>" class="me-3 btn btn-lg  <%=user == null ? "btn-outline-secondary disabled" : "btn-outline-primary" %>">바로구매</a>
 				<a href="../cartitemAdd.jsp?pdNo=<%=product.getNo() %>" class="btn btn-lg  <%=user == null ? "btn-outline-secondary disabled" : "btn-outline-primary" %>">장바구니</a>
-			</div>
-								
+			</div>			
 		</div>
 	</div>
 	
 	<div class="row mt-5 mb-3 text-center">
 		<div class="col-12">
 			<nav class="nav nav-pills flex-column flex-sm-row  g-2">
-			  <a class="border flex-sm-fill text-sm-center nav-link active rounded-0" aria-current="page" href="#">상세정보</a>
-			  <a class="border flex-sm-fill text-sm-center nav-link rounded-0" href="#">구매평</a>
-			  <a class="border flex-sm-fill text-sm-center nav-link rounded-0" href="#">Q&A</a>
+			  <a class="border flex-sm-fill text-sm-center nav-link active rounded-0" aria-current="page" href="#detail-row">상세정보</a>
+			  <a class="border flex-sm-fill text-sm-center nav-link rounded-0" href="#review-row">구매평</a>
+			  <a class="border flex-sm-fill text-sm-center nav-link rounded-0" href="#qna-row">Q&A</a>
 			</nav>
 		</div>
 	</div>
 
-	<div class="row mb-3">
+	<div class="row mb-3" id="review-row">
 		<div class="col-12">
 			<div class="card-body">
 				<h3>구매평</h3>
 
-				<form class="row g-3" method="post" action="reviewRegister.jsp">
-				<select class="form-select form-select-sm" name="reviewScore" aria-label=".form-select-sm example">
-  					<option selected>평점을 입력해주세요</option>
- 					<option value="5">★★★★★</option>
- 					<option value="4">★★★★</option>
-  					<option value="3">★★★</option>
-  					<option value="2">★★</option>
-  					<option value="1">★</option>
-				</select>
+				<form class="row g-3" method="post" action="reviewRegister.jsp" enctype="multipart/form-data">
+					<input type="hidden" name="productNo" value="<%=product.getNo() %>" />
+					<select class="form-select form-select-sm" name="reviewScore" aria-label=".form-select-sm example">
+	  					<option selected>평점을 입력해주세요</option>
+	 					<option value="5">★★★★★</option>
+	 					<option value="4">★★★★</option>
+	  					<option value="3">★★★</option>
+	  					<option value="2">★★</option>
+	  					<option value="1">★</option>
+					</select>
+					
 					<input type="hidden" id="is-login" value="<%=user == null ? "no" : "yes"%>">
 					<div class="col-11">
-						<textarea rows="2" class="form-control" name="reviewContent" placeholder="전통주와 함께한 좋은 기억을 다른 분들과 나눠주세요♥" onclick="reviewCheck(<%=product.getNo() %>)"></textarea>
+						<textarea rows="2" class="form-control" name="reviewContent" placeholder="전통주와 함께한 좋은 기억을 다른 분들과 나눠주세요♥" onclick="reviewCheck(<%=product.getNo() %>);" ></textarea>
 					</div>
 					<div class="col-1">
-						<button type="submit" class="btn btn-outline-secondary w-100 h-100">리뷰등록</button>
+						<button type="submit" name="reviewBotten" class="btn btn-outline-secondary w-100 h-100">리뷰등록</button>
 					</div>
+					<div class="form-label"></div>
+					<input type=file class="form-control" name="reviewFileName" />
 				</form>
 			</div>
 		</div>
@@ -138,7 +150,7 @@
 				</div>
       			<div class="col-10 p-3">
          			<p class="small"><%=review.getContent() %> </p>
-         			<p><a href="">1</a>개의 댓글이 있습니다. <span class="text-info">추천 </span> : <span class="test-info">1</span> <a href="" class="btn btn-info btn-sm">추천하기</a></p>
+         			<p><a href="">1</a>개의 댓글이 있습니다. <span class="text-info">추천 </span> : <span class="test-info"><%=review.getLikeCount() %></span> <a href="" class="btn btn-info btn-sm">추천하기</a></p>
      		 	</div>
    			</div>
 		<%
@@ -148,12 +160,12 @@
 		</div>
 	</div>
 	<hr/>
-	<div class="row mb-3">
+	<div class="row mb-3" id="qna-row">
 		<div class="col-12 d-flex justify-content-between">
 			<h3>상품 Q&A</h3>
 			<div>
-				<a href="questionform.jsp" class="btn btn-primary btn-sm  " >상품문의 글쓰기</a>
-				<a href="question.jsp" class="btn btn-outline-secondary btn-sm  " >상품문의 전체보기</a>
+				<a href="productQuestionForm.jsp?pdNo=<%=product.getNo() %>" class="btn btn-primary btn-sm  " >상품문의 글쓰기</a>
+				<a href="productQuestionlist.jsp" class="btn btn-outline-secondary btn-sm  " >상품문의 전체보기</a>
 			</div>
 		</div>
 	</div>
@@ -189,7 +201,6 @@
 						<td><%=question.getTitle() %></td>
 						<td><%=question.getUserName() %></td>
 						<td><%=question.getCreatedDate() %></td>
-						
 					<%
 							}
 						}
@@ -202,27 +213,63 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
-
-	function reviewCheck(productNo) {
-		let islogin = document.querySelector("#is-login").value;
-		if (islogin === "no") {
-			alert("쇼핑몰 회원님만 글작성 가능합니다.")
-			return;
-		}
+	function checkOrderQuentity() {
 		
+	}
+
+	function updateTotalPrice() {
+		let span1 = document.getElementById("salePrice");
+		let input = document.getElementById("productQuentity");
+		let span2 = document.getElementById("totalPrice");
+		
+		let price = parseInt(span1.textContent);
+		// 태그 사이의 값은 textContent로 뽑아온다.
+		let quantity = parseInt(input.value);
+		// input안의 값은 value로 뽑아온다.
+		let totalPrice = price * quantity;
+		
+		span2.textContent = totalPrice;
+	}
+	
+	function reviewCheck(productNo) {
+		// 리뷰체크 기능입니다.
 		let xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState === 4 && xhr.status === 200) {
 				let jsonText = xhr.responseText;
 				let result = JSON.parse(jsonText);
-				if (!result.exist) {
-					alert("해당 상품을 구매하신(구매확정 이후) 회원님만 글작성이 가능합니다.")
+				if (result.msg === "logout") {
+					// 비로그인시
+					alert("쇼핑몰 회원님만 글작성 가능합니다.")
+					//리뷰관련된 모든 기능을 중단합니다.
+					document.querySelector("textarea[name=reviewContent]").readOnly=true;
+					document.querySelector("button[name=reviewBotten]").disabled=true;
+					document.querySelector("input[name=reviewFileName]").disabled=true;
+					document.querySelector("select[name=reviewScore]").disabled=true;
+					return;
+				}
+				if (result.msg === "deny") {
+					alert("해당 상품을 구매하신 회원님만 글작성이 가능합니다.")
+					document.querySelector("textarea[name=reviewContent]").readOnly=true;
+					document.querySelector("button[name=reviewBotten]").disabled=true;
+					document.querySelector("input[name=reviewFileName]").disabled=true;
+					document.querySelector("select[name=reviewScore]").disabled=true;
+					return;
+				}
+				if (result.msg === "exist") {
+					alert("두개 이상의 리뷰를 작성하실 수 없습니다.")
+					document.querySelector("textarea[name=reviewContent]").readOnly=true;
+					document.querySelector("button[name=reviewBotten]").disabled=true;
+					document.querySelector("input[name=reviewFileName]").disabled=true;
+					document.querySelector("select[name=reviewScore]").disabled=true;
+					return;
 				}
 			}
 		}
 		xhr.open("GET",'reviewCheck.jsp?productNo=' + productNo)
 		xhr.send();
 	}
+	
 </script>
 </body>
 </html>

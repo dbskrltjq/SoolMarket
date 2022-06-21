@@ -1,6 +1,7 @@
 <%@page import="vo.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" errorPage="error/500.jsp"%>
+    
 <%
 	//세션에서 로그인된 사용자정보를 조회한다.
 	User user = (User) session.getAttribute("LOGINED_USER");
@@ -17,6 +18,8 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
 <style type="text/css">
 	.list-group-item {font-size:small; }
+	span {font-size: small; }
+	label {font-size: large; font-weight: bold; color: #189FDB;}
 </style>
 </head>
 <body>
@@ -39,7 +42,60 @@
          		<a href="#" class="list-group-item list-group-item-action">- 나의 상품문의</a>
 			</div>
 		</div>
-		<div class="col-10">
+		<div class="col-8 ms-5 mt-3">
+			<div class="row border">
+				<div class="col-3">
+				
+					<%=user.getName() %>님의 마이페이지입니다.
+				</div>
+				<div class="col-3">
+					<h6><strong>쿠폰</strong></h6>
+					<label>0</label>장
+				</div>
+				<div class="col-3">
+					<h6><strong>포인트</strong></h6>
+					<label><%=user.getPoint() %></label>원
+				</div>
+				<div class="col-3">
+					<h6><strong>예치금</strong></h6>
+					<label>0</label>원
+				</div>
+			</div>
+			<div class="row mt-5">
+				<div class="col-12">
+					<h6><strong>최근 주문 정보</strong><span> 최근 30일 내에 주문하신 내역입니다.</span></h6>
+				</div>
+				<table class="border">
+					<colgroup>
+						<col width="25%">
+						<col width="*">
+						<col width="20%%">
+						<col width="15%">
+						<col width="15%">
+					</colgroup>
+					<thead>
+						<tr class="bg-light">
+							<th>날짜/주문번호</th>
+							<th>상품명/옵션</th>
+							<th>상품금액/수량</th>
+							<th>주문상태</th>
+							<th>확인/리뷰</th>
+						</tr>
+					</thead>
+					<tbody class="table-group-divider">
+						<tr>
+							<td>2022년07월09일</td>
+							<td>맑은 막걸리</td>
+							<td>23000원/5개</td>
+							<td>배송중</td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="row mt-5">
+				<h6><strong>최근 본 상품</strong> <span><%=user.getName()%>님께서 본 최근 상품입니다.</span></h6>
+			</div>
 		</div>
 	</div>
 </div>

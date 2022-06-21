@@ -22,7 +22,7 @@
 	<jsp:param name="menu" value="product"/>
 </jsp:include>
 <div class="container mt-3">
-	<div class="row">
+	<div class="row" id="detail-row">
 		<div class="col-6">
 			<div>
 				<img alt="" src="../images/sample1.jpg" class="img-thumbnail" >
@@ -47,7 +47,7 @@
 	%>
 			<h3 class="ps-2 fs-2"><%=product.getName() %></h3>
 			<hr>
-			<table class="table-boardless">
+			<table class="table-boardless" id="product-table">
 				<tbody>
 					<tr>
 						<th class="p-2">상품명</th>
@@ -64,6 +64,7 @@
 					<tr>
 						<th class="p-2">판매가</th>
 						<td class="p-2"><span id="salePrice"><%=product.getSalePrice()%></span>원</td>
+						<%--총상품금을 수량에 따라서 변경하기 위해 판매가에 id값을 붙인다. --%>
 					</tr>
 					<tr>
 						<th class="p-2">제조회사</th>
@@ -71,11 +72,13 @@
 					</tr>
 					<tr>
 						<th class="p-2">수량</th>
-						<td><input class=" p-2" type="number" min="1" max="30" id="productQuentity" value="1" onchange="checkOrderQuentity()"></td>
+						<td><input class=" p-2" type="number" min="1" max="30" id="productQuentity" value="1" onchange="updateTotalPrice()"></td>
+						<%--총상품금을 수량에 따라서 변경하기 위해 수량에 id값을 붙인다. --%>
 					</tr>
 					<tr>
 						<th class="p-2">총상품금액</th>
-						<td class="p-2"><span id="totalPrice"></span></td>
+						<td class="p-2"><span id="totalPrice"><%=product.getSalePrice()%></span>원</td>
+						<%--총상품금을 수량에 따라서 변경하기 위해 id값을 붙인다. --%>
 					</tr>
 					<tr>
 				</tbody>
@@ -91,14 +94,14 @@
 	<div class="row mt-5 mb-3 text-center">
 		<div class="col-12">
 			<nav class="nav nav-pills flex-column flex-sm-row  g-2">
-			  <a class="border flex-sm-fill text-sm-center nav-link active rounded-0" aria-current="page" href="#">상세정보</a>
-			  <a class="border flex-sm-fill text-sm-center nav-link rounded-0" href="#">구매평</a>
-			  <a class="border flex-sm-fill text-sm-center nav-link rounded-0" href="#">Q&A</a>
+			  <a class="border flex-sm-fill text-sm-center nav-link active rounded-0" aria-current="page" href="#detail-row">상세정보</a>
+			  <a class="border flex-sm-fill text-sm-center nav-link rounded-0" href="#review-row">구매평</a>
+			  <a class="border flex-sm-fill text-sm-center nav-link rounded-0" href="#qna-row">Q&A</a>
 			</nav>
 		</div>
 	</div>
 
-	<div class="row mb-3">
+	<div class="row mb-3" id="review-row">
 		<div class="col-12">
 			<div class="card-body">
 				<h3>구매평</h3>
@@ -157,7 +160,7 @@
 		</div>
 	</div>
 	<hr/>
-	<div class="row mb-3">
+	<div class="row mb-3" id="qna-row">
 		<div class="col-12 d-flex justify-content-between">
 			<h3>상품 Q&A</h3>
 			<div>
@@ -215,21 +218,30 @@
 	}
 
 	function updateTotalPrice() {
-		let salePrice = document.querySelector("#salePrice").value;
-		let productQuentity = document.querySelector("#productQuentity").value;
-		document.querySelector("#totalPrice").value = salePrice*productQuentity;
+		let span1 = document.getElementById("salePrice");
+		let input = document.getElementById("productQuentity");
+		let span2 = document.getElementById("totalPrice");
 		
+		let price = parseInt(span1.textContent);
+		// 태그 사이의 값은 textContent로 뽑아온다.
+		let quantity = parseInt(input.value);
+		// input안의 값은 value로 뽑아온다.
+		let totalPrice = price * quantity;
+		
+		span2.textContent = totalPrice;
 	}
 	
 	function reviewCheck(productNo) {
-
+		// 리뷰체크 기능입니다.
 		let xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState === 4 && xhr.status === 200) {
 				let jsonText = xhr.responseText;
 				let result = JSON.parse(jsonText);
 				if (result.msg === "logout") {
+					// 비로그인시
 					alert("쇼핑몰 회원님만 글작성 가능합니다.")
+					//리뷰관련된 모든 기능을 중단합니다.
 					document.querySelector("textarea[name=reviewContent]").readOnly=true;
 					document.querySelector("button[name=reviewBotten]").disabled=true;
 					document.querySelector("input[name=reviewFileName]").disabled=true;

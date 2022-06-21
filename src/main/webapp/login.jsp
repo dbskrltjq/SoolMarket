@@ -1,3 +1,4 @@
+<%@page import="java.net.URLEncoder"%>
 <%@page import="util.PasswordUtil"%>
 <%@page import="vo.User"%>
 <%@page import="dao.UserDao"%>
@@ -19,8 +20,9 @@
 		
 		if(admin != null && secretPassword.equals(admin.getPassword())) {
 			session.setAttribute("ADMIN", admin);
-			response.sendRedirect("admin.jsp");
+			response.sendRedirect("admin/main.jsp?name=" + URLEncoder.encode(admin.getName(), "utf-8"));			// 사용자는 home.jsp, 관리자는 main.jsp
 			return;
+			
 		} else {
 			response.sendRedirect("loginform.jsp?fail=invalid");
 			return;

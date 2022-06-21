@@ -1,3 +1,6 @@
+<%@page import="vo.User"%>
+<%@page import="java.util.List"%>
+<%@page import="dao.UserDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -14,7 +17,8 @@
 	<script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
 </head>
 <%
-	String userList = request.getParameter("userList");
+	String userList = request.getParameter("userList");				// (탈퇴x)전체회원조회일 경우 userList에는 "all", 탈퇴회원조회는 "deleted"
+	UserDao userDao = UserDao.getInstance();
 %>
 <body>
 	<jsp:include page="admintop.jsp"></jsp:include>
@@ -28,95 +32,83 @@
 					<main>
 						<div class="container-fluid px-4">
 							<h1 class="mt-4">회원 목록</h1>
-							<div class="card mb-4">
+							<div class="card my-4 ">
 								<div class="card-header">
 									<i class="fas fa-table me-1"></i> 
 							<%
 								if ("all".equals(userList)) {
 							%>
-									전체 회원 목록
+									<strong>전체 회원 목록</strong>
 							<%
 								} else {
 							%>
-									탈퇴한 회원 목록
+									<strong>탈퇴한 회원 목록</strong>
 							<%
 								}
 							%>
 								</div>
 								<div class="card-body">
-									<table id="datatablesSimple">
+									<table class="table" id="datatablesSimple">
+									<colgroup>
+										<col width="5%">
+										<col width="15%">
+										<col width="15%">
+										<col width="17%">
+										<col width="15%">
+										<col width="*">
+										<col width="7%">
+									</colgroup>
 										<thead>
 											<tr>
-												<th>Name</th>
-												<th>Position</th>
-												<th>Office</th>
-												<th>Age</th>
-												<th>Start date</th>
-												<th>Salary</th>
+												<th>번호</th>
+												<th>아이디</th>
+												<th>이름</th>
+												<th>이메일</th>
+												<th>전화번호</th>
+												<th>주소</th>
+												<th>포인트</th>
 											</tr>
 										</thead>
+										<tbody>
+									<%
+										if("all".equals(userList)) {
+											List<User> users = userDao.getAllCurrentUsers();
+											for(User user : users) {
+									%>
+												<tr>
+													<td><%=user.getNo() %></td>
+													<td><%=user.getId() %></td>
+													<td><%=user.getName() %></td>
+													<td><%=user.getEmail() %></td>
+													<td><%=user.getTel() %></td>
+													<td><%=user.getAddress() %></td>
+													<td><%=user.getPoint() %></td>
+												</tr>
+									<%
+											}
+										} else {
+											List<User> users = userDao.getAllDeletedUsers();
+											for(User user : users) {
+									%>
+												<tr>
+													<td><%=user.getNo() %></td>
+													<td><%=user.getId() %></td>
+													<td><%=user.getName() %></td>
+													<td><%=user.getEmail() %></td>
+													<td><%=user.getTel() %></td>
+													<td><%=user.getAddress() %></td>
+													<td><%=user.getPoint() %></td>
+												</tr>
+									<%
+											}
+										}
+									%>
+										</tbody>
 										<tfoot>
 											<tr>
-												<th>Name</th>
-												<th>Position</th>
-												<th>Office</th>
-												<th>Age</th>
-												<th>Start date</th>
-												<th>Salary</th>
+												
 											</tr>
 										</tfoot>
-										<tbody>
-
-
-											<tr>
-												<td>Jena Gaines</td>
-												<td>Office Manager</td>
-												<td>London</td>
-												<td>30</td>
-												<td>2008/12/19</td>
-												<td>$90,560</td>
-											</tr>
-											<tr>
-												<td>Quinn Flynn</td>
-												<td>Support Lead</td>
-												<td>Edinburgh</td>
-												<td>22</td>
-												<td>2013/03/03</td>
-												<td>$342,000</td>
-											</tr>
-											<tr>
-												<td>Charde Marshall</td>
-												<td>Regional Director</td>
-												<td>San Francisco</td>
-												<td>36</td>
-												<td>2008/10/16</td>
-												<td>$470,600</td>
-											</tr>
-											<tr>
-												<td>Haley Kennedy</td>
-												<td>Senior Marketing Designer</td>
-												<td>London</td>
-												<td>43</td>
-												<td>2012/12/18</td>
-												<td>$313,500</td>
-											</tr>
-											<tr>
-												<td>Tatyana Fitzpatrick</td>
-												<td>Regional Director</td>
-												<td>London</td>
-												<td>19</td>
-												<td>2010/03/17</td>
-												<td>$385,750</td>
-											</tr>
-											<tr>
-												<td>Michael Silva</td>
-												<td>Marketing Designer</td>
-												<td>London</td>
-												<td>66</td>
-												<td>2012/11/27</td>
-												<td>$198,500</td>
-											</tr>
-										</tbody>
 									</table>
 								</div>
 							</div>

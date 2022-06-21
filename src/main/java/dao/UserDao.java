@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import helper.DaoHelper;
 import vo.User;
@@ -146,5 +147,53 @@ public class UserDao {
 		}, tel);
 	}
 	
+	public List<User> getAllCurrentUsers() throws SQLException {
+		
+		String sql = "select * from sul_users where user_deleted = 'N' ";
+		
+		return helper.selectList(sql, rs -> {
+			User user = new User();
+			user.setNo(rs.getInt("user_no"));
+			user.setId(rs.getString("user_id"));
+			user.setPassword(rs.getString("user_pw"));
+			user.setName(rs.getString("user_name"));
+			user.setEmail(rs.getString("user_email"));
+			user.setTel(rs.getString("user_tel"));
+			user.setPostCode(rs.getString("user_post_code"));
+			user.setAddress(rs.getString("user_address"));
+			user.setDetailAddress(rs.getString("user_detail_address"));
+			user.setPoint(rs.getInt("user_point"));
+			user.setDeleted(rs.getString("user_deleted"));
+			user.setCreatedDate(rs.getDate("user_created_date"));
+			user.setUpdatedDate(rs.getDate("user_updated_date"));
+			user.setIsAdmin(rs.getString("is_admin"));
+			
+			return user;
+		});
+	}
+	
+	public List<User> getAllDeletedUsers() throws SQLException {
+		String sql = "select * from sul_users where user_deleted = 'Y' ";
+		
+		return helper.selectList(sql, rs -> {
+			User user = new User();
+			user.setNo(rs.getInt("user_no"));
+			user.setId(rs.getString("user_id"));
+			user.setPassword(rs.getString("user_pw"));
+			user.setName(rs.getString("user_name"));
+			user.setEmail(rs.getString("user_email"));
+			user.setTel(rs.getString("user_tel"));
+			user.setPostCode(rs.getString("user_post_code"));
+			user.setAddress(rs.getString("user_address"));
+			user.setDetailAddress(rs.getString("user_detail_address"));
+			user.setPoint(rs.getInt("user_point"));
+			user.setDeleted(rs.getString("user_deleted"));
+			user.setCreatedDate(rs.getDate("user_created_date"));
+			user.setUpdatedDate(rs.getDate("user_updated_date"));
+			user.setIsAdmin(rs.getString("is_admin"));
+			
+			return user;
+		});
+	}
 	
 }

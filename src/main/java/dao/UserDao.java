@@ -34,7 +34,8 @@ public class UserDao {
 				   + "      user_post_code = ?, "
 				   + "      user_address = ?,"
 				   + " 		user_detail_address = ?, "
-				   + "		user_deleted = ? "
+				   + "		user_deleted = ?, "
+				   + "		user_updated_date = sysdate "	
 				   + "where user_no =? ";
 		helper.update(sql, user.getPassword(), user.getName(), user.getEmail(), user.getTel(), user.getPostCode(), user.getAddress(), user.getDetailAddress(), user.getDeleted(), user.getNo());
 	}
@@ -58,10 +59,38 @@ public class UserDao {
 			user.setDeleted(rs.getString("user_deleted"));
 			user.setCreatedDate(rs.getDate("user_created_date"));
 			user.setUpdatedDate(rs.getDate("user_updated_date"));
+			user.setIsAdmin(rs.getString("is_admin"));
 			
 			return user;
 		}, id);
 	}
+	
+	public User getAdminById(String id) throws SQLException {
+		
+		String sql = "select * from sul_users where is_admin = 'Y' and user_id = ? ";
+		
+		return helper.selectOne(sql, rs -> {
+			
+			User user = new User();
+			user.setNo(rs.getInt("user_no"));
+			user.setId(rs.getString("user_id"));
+			user.setPassword(rs.getString("user_pw"));
+			user.setName(rs.getString("user_name"));
+			user.setEmail(rs.getString("user_email"));
+			user.setTel(rs.getString("user_tel"));
+			user.setPostCode(rs.getString("user_post_code"));
+			user.setAddress(rs.getString("user_address"));
+			user.setDetailAddress(rs.getString("user_detail_address"));
+			user.setPoint(rs.getInt("user_point"));
+			user.setDeleted(rs.getString("user_deleted"));
+			user.setCreatedDate(rs.getDate("user_created_date"));
+			user.setUpdatedDate(rs.getDate("user_updated_date"));
+			user.setIsAdmin(rs.getString("is_admin"));
+			
+			return user;
+		}, id);
+	}
+	
 	
 	public User getUserByEmail(String email) throws SQLException {
 		
@@ -84,6 +113,7 @@ public class UserDao {
 			user.setDeleted(rs.getString("user_deleted"));
 			user.setCreatedDate(rs.getDate("user_created_date"));
 			user.setUpdatedDate(rs.getDate("user_updated_date"));
+			user.setIsAdmin(rs.getString("is_admin"));
 			
 			return user;
 		}, email);
@@ -110,6 +140,7 @@ public class UserDao {
 			user.setDeleted(rs.getString("user_deleted"));
 			user.setCreatedDate(rs.getDate("user_created_date"));
 			user.setUpdatedDate(rs.getDate("user_updated_date"));
+			user.setIsAdmin(rs.getString("is_admin"));
 			
 			return user;
 		}, tel);

@@ -1,3 +1,4 @@
+<%@page import="vo.User"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="util.StringUtil"%>
 <%@page import="java.util.List"%>
@@ -26,6 +27,39 @@
 	<!-- 주문한 상품 목록 -->
 	<div class="row">
 		<div class="col">
+		
+		<!--
+			로그인된 유저 정보 받아야 한다.
+			로그인되지 않은 채로 카트에 접근하려 하면 deny를 반환하고 로그인창으로 이동시킨다. 
+		-->
+		
+		<%
+			String fail = request.getParameter("fail");
+		
+			if ("invalid".equals(fail)) {
+		%>
+			<div class="alert alert-danger">
+				<strong>오류</strong>유효한 요청이 아닙니다. 
+			</div>	
+		<%
+			} else if("deny".equals(fail)) {
+		%>
+			<div class="alert alert-danger">
+				<strong>거부</strong>다른 사용자의 장바구니 아이템을 변경할 수 없습니다.
+			</div>
+		<%
+			}
+		%>
+		
+		<% 	
+			User user = (User) session.getAttribute("LOGINED_USER");
+			if (user==null) {
+				response.sendRedirect("../loginform.jsp?fail=deny"); 
+				return;
+			}
+		%>
+		
+		<!-- 주문상세내역 -->
 		<%
 			// 선택 주문 / 전체 주문 전부 가능한 로직
 			CartItemDao cartItemDao = CartItemDao.getInstance();		
@@ -45,6 +79,7 @@
 		%>
 			
 			<form method="post" action="" onsubmit="">
+			<input type="hidden" name="from" value="cart" />
 			<table class="order-list table">
 				<colgroup>
 					<!-- 사진 파일 넣어야 한다. 클릭하면 datail.jsp로 이동해야 한다. -->
@@ -82,8 +117,7 @@
 								</a>
 							</td>
 							<td class="align-middle">
-								<!-- 이 quantity는 ... hidden으로 하면 보이지 않아요 ... 해결책을 강구합시다 ...  -->
-								<input type=text class="w-25" name="quantity" value="<%=item.getCartItemQuantity() %>" disabled />
+								<input type=text class="w-25" name="quantity" value="<%=item.getCartItemQuantity() %>" readonly />
 							</td>
 							<td class="align-middle">
 								<strong><%=StringUtil.numberToString(item.getPdPrice()) %> 원</strong>
@@ -108,13 +142,41 @@
 						</tr>
 				<%
 						}
+						
+						totalDeliveryCharge = totalPdsPrice > 30000 ? 0 : 3000;
 				%>
 
 				</tbody>
 			</table>
-			</form>
 		</div>
 	</div>
+	
+	<!-- 주문상세내역 하단 -->
+	<div class="row mb-3 justify-content-end border">
+    	<div class="col-5 p-3">
+    		<table class="table table-borderless">
+    			<tbody>
+    				<tr>
+    					<th class="text-end">총 <strong id="totalPdsCnt"><%=cartItems.size() %></strong>개의 상품금액</th>
+    					<td rowspan="2" class="align-middle text-center"><img src="images/order_price_plus.png" alt="더하기"></td>
+    					<th class="text-end">배송비</th>
+    					<td rowspan="2" class="align-middle text-center"><img src="images/order_price_total.png" alt="합계"></td>
+    					<th class="text-end">합계</th>
+    				</tr>
+    				<tr>
+    					<td class="text-end"><strong id="totalPdsPrice"><%=StringUtil.numberToString(totalPdsPrice) %></strong>원</td>
+    					<td class="text-end"><strong id="totalDeliveryCharge"><%=StringUtil.numberToString(totalDeliveryCharge) %></strong>원</td>
+    					<td class="text-end"><strong id="totalCartPrice"><%=StringUtil.numberToString(totalPdsPrice + totalDeliveryCharge) %></strong>원</td>
+    				</tr>
+    				<tr>
+    					<td colspan="5" class="text-end">
+    						적립예정 포인트 : <span id="totalPdsMileage"><%=StringUtil.numberToString(totalPdsPoint) %></span> 원
+    					</td>
+    				</tr>
+    			</tbody>
+    		</table>
+    	</div>
+    </div>
 				
 		<!-- 주문자 정보 (로그인한 유저와 동일) -->
 		<h4 class="mt-5">주문자 정보</h4>
@@ -122,19 +184,23 @@
 			<tbody>
 				<tr>
 					<th class="bg-light">주문하시는 분</th>
-					<td><input type="text" value="김민지" disabled /></td>
+					<td><input type="text" value="<%=user.getName() %>" id="orderUserName" readonly /></td>
 				</tr>
 				<tr>
 					<th class="bg-light">주소</th>
-					<td><input type="text" value="[53053] 경상남도 통영시 강구안길 29-1(충청도 회초장) 1층 304호" disabled /></td>
+					<td>
+						<input type="text" value="<%=user.getPostCode() %>" class="w-25" id="orderPostcode" readonly />
+						<input type="text" value="<%=user.getAddress() %>" class="w-50" id="orderAddr" readonly />
+						<input type="text" value="<%=user.getDetailAddress() %>" class="w-75" id="orderDetailAddr" readonly />
+					</td>
 				</tr>
 				<tr>
 					<th class="bg-light">휴대폰 번호</th>
-					<td><input type="text" value="010-1111-1111" disabled /></td>
+					<td><input type="text" value="<%=user.getTel() %>" id="orderTel" readonly /></td>
 				</tr>
 				<tr>
 					<th class="bg-light">이메일</th>
-					<td><input type="text" value="aaa123@gmail.com" disabled /></td>
+					<td><input type="text" value="<%=user.getEmail() %>" id="orderEmail" readonly /></td>
 				</tr>
 			</tbody>
 		</table>
@@ -142,48 +208,55 @@
 		<!-- 배송 정보 (입력 가능) -->
 		<h4>배송정보</h4>
 		<table class="table mb-5 ">
-			<tbody>
+			<tbody class="orderReceiveForm">
 				<tr>
+					<!-- 기본 체크된 것은 주문자와 동일. 주문자의 정보가 들어간다.
+						 직접입력을 누를 경우, 배송정보 form이 모두 초기화된다. 
+						 value 사용하기!!! 주문자와 동일한 경우는 위 order-n value 뽑아서 넣자.
+						 직접 입력이면 "" <-- 이거 넣으면 빈칸 되니까 ... 이거 넣기 ... reset은 안 쓰는구만
+					-->
 					<th>배송지 확인</th>
-					<td><input type="radio" name="order-receive-select" value="order-receive-user" checked /> 주문자와 동일</td>
-					<td><input type="radio" name="order-receive-select" value="order-receive-input" /> 직접 입력</td>
+					<td><input type="radio" name="order-receive-select" id="receivePlaceSame" value="order-receive-user" onchange="orderReceiveFormSame();" checked /> 주문자와 동일</td>
+					<td><input type="radio" name="order-receive-select" id="receivePlaceInput" value="order-receive-input" onchange="orderReceiveFormInput();" /> 직접 입력</td>
 				</tr>
 				<tr>
 					<th><span class="red">*</span> 받으실 분</th>
-					<td><input type="text" value="김민지" /></td>
+					<td><input class="receiveForm" type="text" value="<%=user.getName() %>" id="receiveName" readonly/></td>
 				</tr>
 				<tr>
-					<th><span class="red">*</span> 받으실 곳</th>
-					<td>
-						<input type="text" name="postcode" id="postcode" placeholder="우편번호">
-						<input type="button" onclick="findAddr()" value="우편번호 찾기"><br>
-						<input type="text" name="addr" id="addr" placeholder="주소"><br>
-						<input type="text" name="detailAddr" id="detailAddr" placeholder="상세주소">	
-						<input type="text" name="extraAddr" id="extraAddr" placeholder="참고항목">
-					</td>
+					<th><span class="red">*</span> 주소</th>
+						<td class="d-grid gap-3">
+							<div class="w-75">
+								<input type="text" class="receiveForm" name="postcode" id="receivePostcode" value="<%=user.getPostCode() %>" readonly >
+								<button type="button" disabled="disabled" id="postCodeButton" class="btn btn-outline-secondary btn-sm" onclick="findAddr();" >우편번호 찾기</button>
+							</div> 
+							<input type="text" class="receiveForm" name="addr" id="receiveAddr" value="<%=user.getAddress() %>" readonly />
+							<input type="text" class="receiveForm" name="detailAddr" id="receiveDetailAddr" value="<%=user.getDetailAddress() %>" readonly />
+						</td>
 				</tr>
 				<tr>
 					<th><span class="red">*</span> 휴대폰 번호</th>
-					<td><input type="text" value="010-1111-1111" /></td>
+					<td><input type="text" class="receiveForm" value="<%=user.getTel() %>" id="receiveTel" readonly /></td>
 				</tr>
 				<tr>
 					<th>남기실 말씀</th>
-					<td><textarea name="memo" rows="1" cols="50" placeholder="요청사항을 입력해 주세요. (최대 30자)" value=""></textarea></td>
+					<td>
+						<textarea name="delivery-memo" rows="1" cols="50" placeholder="요청사항을 입력해 주세요. (최대 30자)" id="deliveryMemo"></textarea>
+					</td>
 				</tr>
 			</tbody>
 		</table>
-		
 		<!-- 국세청 필수 체크사항 -->
 		<table class="table mb-5 ">
 			<tbody>
 				<tr>
-					<span class="red">* 필수</span> 국세청 고시에 따른 분기별 명세 세무서 정보제공
+					<th><span class="red">* 필수</span> 국세청 고시에 따른 분기별 명세 세무서 정보제공</th>
+					<td>
+						<label class="form-label">
+							<input type="checkbox" name="mustCheckBox" value="mustCheck1" /> 동의합니다.
+						</label>
+					</td>
 				</tr>
-				<td>
-					<label class="form-label">
-						<input type="checkbox" class="" name="mustCheckBox" value="mustCheck1" onkeyup=""/> 동의합니다.
-					</label>
-				</td>
 			</tbody>
 		</table>
 		
@@ -193,26 +266,33 @@
 			<tbody>
 				<tr>
 					<th>상품합계금액</th>
-					<td>750,305원</td>
+					<td><strong id="totalCartPrice"><%=StringUtil.numberToString(totalPdsPrice + totalDeliveryCharge) %></strong>원</td>
 				</tr>		
 				<tr>
 					<th>배송비</th>
-					<td>0원</td>
+					<td><strong id="totalDeliveryCharge"><%=StringUtil.numberToString(totalDeliveryCharge) %></strong>원</td>
 				</tr>		
 				<tr>
-					<th>할인 및 적립</th>
-					<td>750,305원</td>
+					<th>포인트 적립</th>
+					<td><strong id="totalPdsMileage"><%=StringUtil.numberToString(totalPdsPoint) %></strong></td>
 				</tr>		
 				<tr>
 					<th>포인트 사용</th>
 					<td>
-						<span>[ ] 원</span>
-						<span>전액 사용하기</span>
-						<span>보유 포인트 : 0원</span></td>
+						<span>
+							<input type="number" min="0" max="<%=user.getPoint() %>" id="orderUsePoint" 
+								onkeyup="totalPriceChange();" 
+								onclick="totalPriceChange();" />
+						</span>
+						<small>
+							<span><input type="checkbox" id="orderPointCheckBox" onchange="useAllPoint();" />전액 사용하기</span>
+							<span>(보유 포인트 : <strong id="userPoint"><%=StringUtil.numberToString(user.getPoint()) %></strong>원)</span>
+						</small>
+					</td>
 				</tr>		
 				<tr>
 					<th>최종결제금액</th>
-					<td>750,305원</td>
+					<td><strong id="totalOrderCharge"><%=StringUtil.numberToString(totalPdsPrice + totalDeliveryCharge) %></strong>원</td>
 				</tr>		
 			</tbody>
 		</table>
@@ -225,9 +305,9 @@
 				<tr>
 					<th>일반결제</th>
 					<td>
-						<input type="radio" name="order-receive-select" value="order-pay-credit" checked /> 신용카드
-						<input type="radio" name="order-receive-select" value="order-pay-bank" /> 계좌이체
-						<input type="radio" name="order-receive-select" value="order-pay-virtual" /> 가상계좌
+						<input type="radio" name="order-pay-select" value="order-pay-credit" checked /> 신용카드
+						<input type="radio" name="order-pay-select" value="order-pay-bank" /> 계좌이체
+						<input type="radio" name="order-pay-select" value="order-pay-virtual" /> 가상계좌
 					</td>
 				</tr>
 			</tbody>
@@ -237,8 +317,8 @@
 		<table class="table mb-5">
 			<tbody>
 				<tr>
-					<th>최종 결제 금액</th>
-					<td>740,305원</td>
+					<th>최종결제금액</th>
+					<td><strong id="totalOrderCharge2"><%=StringUtil.numberToString(totalPdsPrice + totalDeliveryCharge) %></strong>원</td>
 				</tr>
 			</tbody>
 		</table>
@@ -250,11 +330,147 @@
 		<!-- 결제하기 버튼 -->	
 		<div class="mb-5">
 			<a href="home.jsp" class="btn btn-light btn-outline-dark">취소</a>
-			<button type="" class="btn btn-primary">결제하기</button>	
+			<button type="button" class="btn btn-primary" onclick="mustCheckBoxFunction();">결제하기</button>	
 		</div>	
 	</form>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+
+	// 체크박스를 체크하면 모든 포인트를 사용한다.
+	function useAllPoint() {
+		// 로직 : 해당 아이디의 체크박스 선택 -> 체크되었는지 확인 -> 만약 체크되었다면 int로 형변환한 포인트를 number의 value에 넣는다.
+		// 	     넣은 다음, StringUtil을 사용해 다시 ,을 붙여준다.
+		//		 이 함수는 체크박스의 상태가 바뀔 때마다 시행된다.
+		if (document.getElementById("orderPointCheckBox").checked) {
+			let strong = document.getElementById("userPoint");			// <strong id="userPoint">0</strong>
+			let commaPrice = strong.textContent;						// 2,000 (예시)
+			let pointText = commaPrice.replaceAll(",", "");				// 2,000 -> 2000
+			let point = parseInt(pointText);							// int로 형변환
+			document.getElementById("orderUsePoint").value = point;		// 다시 2,000으로 변경된다.
+		
+		} else {
+			document.getElementById("orderUsePoint").value = 0;
+		}
+		
+		totalPriceChange();
+		
+	}
+	
+	// 포인트가 바뀌면 최종결제금액이 바뀌는 함수이다.
+	function totalPriceChange() {
+		let strong = document.getElementById("totalCartPrice");			
+		let commaPrice = strong.textContent;						
+		let totalCartText = commaPrice.replaceAll(",", "");				
+		let price = parseInt(totalCartText);							
+		let totalPrice = price - document.getElementById("orderUsePoint").value;
+		
+		document.getElementById("totalOrderCharge").textContent = new Number(totalPrice).toLocaleString();	
+		document.getElementById("totalOrderCharge2").textContent = new Number(totalPrice).toLocaleString();	
+	}
+
+	// 만약 주문자와 동일을 선택한다면 주문자 정보의 value를 들고 와서 넣으면 된다.
+	function orderReceiveFormSame() {
+
+		document.querySelector('input[id="receiveName"]').value  = document.querySelector('input[id="orderUserName"]').value;
+		document.querySelector('input[id="receiveAddr"]').value = document.querySelector('input[id="orderAddr"]').value;
+		document.querySelector('input[id="receiveDetailAddr"]').value = document.querySelector('input[id="orderDetailAddr"]').value;
+		document.querySelector('input[id="receiveTel"]').value = document.querySelector('input[id="orderTel"]').value;
+		document.querySelector('input[id="receivePostcode"]').value = document.querySelector('input[id="orderEmail"]').value;
+		
+		document.querySelector('input[id="receiveName"]').readOnly = true;
+		document.querySelector('input[id="receiveAddr"]').readOnly = true;
+		document.querySelector('input[id="receiveDetailAddr"]').readOnly = true;
+		document.querySelector('input[id="receivePostcode"]').readOnly = true;
+		document.querySelector('input[id="receiveTel"]').readOnly = true;
+		document.querySelector('#postCodeButton').disabled = true;
+		
+		}
+	
+	// 배송지정보 직접 입력 선택하면 폼 지워진다.
+	function orderReceiveFormInput() {
+		
+		document.querySelector('input[id="receiveName"]').value = '';
+		document.querySelector('input[id="receiveAddr"]').value = '';
+		document.querySelector('input[id="receiveDetailAddr"]').value= '';
+		document.querySelector('input[id="receiveTel"]').value = '';
+		document.querySelector('input[id="receivePostcode"]').value = '';
+		
+		document.querySelector('input[id="receiveName"]').readOnly = false;
+		document.querySelector('input[id="receiveAddr"]').readOnly = false;
+		document.querySelector('input[id="receiveDetailAddr"]').readOnly = false;
+		document.querySelector('input[id="receivePostcode"]').readOnly = false;
+		document.querySelector('input[id="receiveTel"]').readOnly = false;
+		document.querySelector('#postCodeButton').disabled = false;
+		}
+
+	
+	// 필수 체크박스 체크 안 하면 결제 못 하게 하는 함수
+	function mustCheckBoxFunction() {
+		let checkedMustCheckboxCount = document.querySelectorAll('input[name="mustCheckBox"]:checked').length;	
+		if (checkedMustCheckboxCount < 2) {
+			alert("필수 체크박스에 모두 체크하셔야 구매하실 수 있습니다.");
+			// 체크하지 않은 곳으로 보내는 법
+			return;
+		}
+		
+		let form = document.getElementById("cart-form");
+		form.setAttribute("action", "orderComplete.jsp");
+		form.submit(); 
+	}
+	
+	// 다음api를 사용한 주소찾기 기능 구현 부분
+	function findAddr() {
+		new daum.Postcode({
+			oncomplete : function(data) {
+				// 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+				// 각 주소의 노출 규칙에 따라 주소를 조합한다.
+				// 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+				var addr = ''; // 주소 변수
+				var extraAddr = ''; // 참고항목 변수
+
+				//사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+				if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+					addr = data.roadAddress;
+				} else { // 사용자가 지번 주소를 선택했을 경우(J)
+					addr = data.jibunAddress;
+				}
+
+				// 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+				if (data.userSelectedType === 'R') {
+					// 법정동명이 있을 경우 추가한다. (법정리는 제외)
+					// 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+					if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+						extraAddr += data.bname;
+					}
+					// 건물명이 있고, 공동주택일 경우 추가한다.
+					if (data.buildingName !== '' && data.apartment === 'Y') {
+						extraAddr += (extraAddr !== '' ? ', '
+								+ data.buildingName : data.buildingName);
+					}
+					// 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+					if (extraAddr !== '') {
+						extraAddr = ' (' + extraAddr + ')';
+					}
+					// 조합된 참고항목을 해당 필드에 넣는다.
+					document.getElementById("receiveDetailAddr").value = extraAddr;
+
+				} else {
+					document.getElementById("receiveDetailAddr").value = '';
+				}
+
+				// 우편번호와 주소 정보를 해당 필드에 넣는다.
+				document.getElementById('receivePostcode').value = data.zonecode;
+				document.getElementById("receiveAddr").value = addr;
+				// 커서를 상세주소 필드로 이동한다.
+				document.getElementById("receiveDetailAddr").focus();
+			}
+		}).open();
+	}
+	
+
 </script>
 </body>
 </html>

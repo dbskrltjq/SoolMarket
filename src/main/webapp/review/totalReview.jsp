@@ -21,16 +21,29 @@
 	<jsp:param name="menu" value="login"/>
 </jsp:include>
 <div class="container">
-	<div class="row border-bottom p-5">
-	<%
-		User user = (User) session.getAttribute("LOGINED_USER");
-	%>
-		<div class="col-11 text-start"><h4><strong>전체후기</strong></h4></div>
-		<div class="col-1">
-			<a href="" class="btn btn-primary btn-sm  <%=user == null ? "disabled" : "" %>" onclick=""> 리뷰등록</a>
+
+<%
+	User user = (User) session.getAttribute("LOGINED_USER");
+%>
+	<form id="review-form">
+		<div class="row border-bottom p-5">
+			
+			<div class="col-11 text-start"><h4><strong>전체후기</strong></h4></div>
+			<div class="col-1">
+			<%
+				if(user == null) {
+			%>
+				<button type="button" class="btn btn-primary btn-sm"  onclick="reviewCheck()"> 리뷰등록</button>
+			<%
+				} else {
+			%>
+				<button type="button" class="btn btn-primary btn-sm"  onclick="reviewCheckByNo(<%=user.getNo()%>)"> 리뷰등록</button>
+			<%
+				}
+			%>
+			</div>
 		</div>
-	</div>
-	
+	</form>	
 	<%
 		CategoryDao categoryDao = CategoryDao.getInstance();
 		List<Category> categories = categoryDao.getCategories();
@@ -130,7 +143,7 @@
 				<input class="form-control form-control-sm" type="text" name="keyword" value="<%=keyword %>" placeholder="검색어를 입력하세요."/>
 			</div>
 			<div class="col-1">
-				<button type="submit" class="btn btn-secondary btn-sm" onclick="serch()">검색</button>
+				<button type="submit" class="btn btn-secondary btn-sm" onclick="search()">검색</button>
 			</div>
 		</div>
 	</form>
@@ -139,7 +152,7 @@
 	<%
 		for(ReviewDto review : reviews) {
 	%>
-	
+	<form id="review-detail" >
 	<div class="row border-bottom mb-3">
 		<div class="col-2 py-2 ">
 			<div>
@@ -155,9 +168,22 @@
 			<div>
 				<img alt="" src="../images/sample1.jpg" class="img-thumbnail" width="100">
 			</div>
-			<p><a href="">1</a>개의 댓글이 있습니다. <span class="text-info">추천 </span> : <span class="test-info"><%=review.getLikeCount() %></span> <a href="" class="btn btn-info btn-sm">추천하기</a></p>
+			<%
+				if (user == null) {
+			%>
+				<p><a href="">1</a>개의 댓글이 있습니다. <span class="text-info">추천 </span> : <span class="test-info"><%=review.getLikeCount() %></span> <button type="button" class="btn btn-info btn-sm" onclick="likeReviewNoUser()">추천하기</button> </p>
+			<% 
+				} else {
+			%>
+				<p><a href="">1</a>개의 댓글이 있습니다. <span class="text-info">추천 </span> : <span class="test-info"><%=review.getLikeCount() %></span> <button type="button" class="btn btn-info btn-sm" onclick="likeReview(<%=review.getNo() %>)">추천하기</button> </p>
+			<%
+				}
+			%>
+			
 		</div>
 	</div>
+	</form>
+
 	<%
 		}
 	%>
@@ -189,6 +215,65 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
 	
+	function likeReviewNoUser() {
+		alert("쇼핑몰 회원님만 글작성 가능합니다.");
+		return;
+	}
+	
+	function likeReview(reviewNo) {
+		
+		let xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState === 4 && xhr.status === 200) {
+				let jsonText = xhr.responseText;
+				let result = JSON.parse(jsonText);
+
+				if(result.same) {
+					alert("자신이 작성한 글은 추천할수 없습니다.");
+				} 
+				if(result.alreay) {
+					alert("이미 추천한 리뷰입니다");
+				}
+				let form  = document.getElementById("review-detail");
+				form.setAttribute("action", 'reviewLike.jsp?reviewNo='+ reviewNo)
+				alert("추천이 완료되었습니다");
+				form.submit();
+			}
+
+		}
+		xhr.open("GET", 'reviewLikeCheck.jsp?reviewNo=' + reviewNo);
+		xhr.send();
+	}
+	
+	function reviewCheck() {
+		alert("쇼핑몰 회원님만 글작성 가능합니다.");
+		return;
+	
+	}
+	
+	function reviewCheckByNo(userNo) {
+		let xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState === 4 && xhr.status === 200) {
+				let jsonText = xhr.responseText;
+				let result = JSON.parse(jsonText);
+				if (!result.exist) {
+					alert("해당 상품을 구매하신(구매확정 이후) 회원님만 글작성이 가능합니다.")
+				} else {
+					let form = document.getElementById("review-form");
+					form.setAttribute("action", "reivewForm.jsp");
+					form.submit(); 
+				}
+			}
+		}
+		xhr.open("GET", 'reviewCheck.jsp?userNo=' + userNo)
+		xhr.send();
+		
+		
+	}
+		
+	
+		
 	
 	
 </script>

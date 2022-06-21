@@ -17,6 +17,7 @@ public class User {
 	private String deleted;
 	private Date createdDate;
 	private Date updatedDate;
+	private String isAdmin;
 	
 	public User() {}
 
@@ -132,6 +133,15 @@ public class User {
 
 	public void setUpdatedDate(Date updatedDate) {
 		this.updatedDate = updatedDate;
+	}
+
+	public String getIsAdmin() {
+		return isAdmin;
+	}
+
+	public void setIsAdmin(String isAdmin) {
+		this.isAdmin = isAdmin;
 	};
+	
 	
 }

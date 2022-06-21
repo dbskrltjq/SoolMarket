@@ -111,8 +111,8 @@
 			</ul>
 	</nav>
 		<form id="search-form" class="row g-3" method="get" action="list.jsp">
-			<input type="hidden" name="categoryNo" value=<%=categoryNo %> />
-			<input type="hidden" name="sort" value=<%=sort %> />	
+			<input type="hidden" name="categoryNo" value="<%=categoryNo %>" />
+			<input type="hidden" name="sort" value="<%=sort %>" />	
 			<input type="hidden" name="page" />
 			<input type="hidden" name="rows" />	
 		</form>

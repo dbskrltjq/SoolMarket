@@ -134,7 +134,7 @@
 			</div>
 			<div class="col">
 				<select class="form-select form-select-sm" name="arrangement" onchange="">
-					<option value="date" selected="selected" >최신순</option>
+					<option value="date" selected >최신순</option>
 					<option value="score">평점</option> 
 					<option value="likeCount">추천</option> 
 				</select>
@@ -159,7 +159,30 @@
 				<img alt="" src="../images/sample1.jpg" class="img-thumbnail">
 			</div>
 			<p class="text-muted mb-1"><%=review.getCreatedDate() %></p>
-			<p class="text-muted mb-1">평점 : <span><%=review.getScore() %></span></p>
+			<p class="text-muted mb-1">평점 : 
+		<%
+			if(review.getScore() == 5){
+		%>
+			<span>★★★★★</span></p>
+		<%
+			} else if(review.getScore() ==4 ) {
+		%>
+			<span>★★★★</span></p>
+		<%
+			} else if(review.getScore() == 3) {
+		%>
+			<span>★★★</span></p>
+		<%
+			} else if (review.getScore() == 2) {
+		%>
+			<span>★★</span></p>
+		<%
+			} else if (review.getScore() ==1 ) {
+		%>
+			<span>★</span></p>
+		<%
+			}
+		%>
 			<p class="text-muted"><%=review.getUserId() %></p>
 		</div>
 		<div class="col-10 p-3">
@@ -193,19 +216,20 @@
 				<ul class="pagination justify-content-center">
 					<li class="page-item"><a class="page-link <%=pagination.getCurrentPage() == 1 ?"disabled" : "" %>" href="list.jsp?page=<%=pagination.getCurrentPage() -1 %>">이전</a></li>
 					
-					<%
-						for(int num = pagination.getBeginPage(); num <= pagination.getEndPage(); num++) {
-					%>
+				<%
+					for(int num = pagination.getBeginPage(); num <= pagination.getEndPage(); num++) {
+				%>
 					<li class="page-item <%=pagination.getCurrentPage() == num ? "active" : "" %>">
 						<a class="page-link" href="totalReview.jsp?page=<%=num%>&keyword=<%=keyword%>&category=<%=categoryNo%>&arrangement=<%=arrangement%>"><%=num%></a></li>
-					<%
-						}
-					%>
+				<%
+					}
+				%>
 					
 					<li class="page-item">
 						<a class="page-link <%=pagination.getCurrentPage() >= pagination.getTotalPages() ? "disabled" : "" %>" href="list.jsp?page=<%=pagination.getCurrentPage() +1 %>">다음</a></li>
 				</ul>
 			</nav>
+			
 		</div>
 	</div>
 	
@@ -230,14 +254,17 @@
 
 				if(result.same) {
 					alert("자신이 작성한 글은 추천할수 없습니다.");
+					return;
 				} 
-				if(result.alreay) {
+				if(result.already) {
 					alert("이미 추천한 리뷰입니다");
+					return;
 				}
-				let form  = document.getElementById("review-detail");
-				form.setAttribute("action", 'reviewLike.jsp?reviewNo='+ reviewNo)
+				
+				location.href="reviewLike.jsp?reviewNo="+ reviewNo;
 				alert("추천이 완료되었습니다");
-				form.submit();
+				return;
+				
 			}
 
 		}
@@ -261,12 +288,12 @@
 					alert("해당 상품을 구매하신(구매확정 이후) 회원님만 글작성이 가능합니다.")
 				} else {
 					let form = document.getElementById("review-form");
-					form.setAttribute("action", "reivewForm.jsp");
-					form.submit(); 
+					form.setAttribute("action", 'review.jsp');
+					form.submit();
 				}
 			}
 		}
-		xhr.open("GET", 'reviewCheck.jsp?userNo=' + userNo)
+		xhr.open("GET", 'reviewCheck.jsp')
 		xhr.send();
 		
 		

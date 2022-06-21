@@ -57,7 +57,7 @@
 		          			</ul>
 		        		</li>
 				      </ul>
-				      <form class="d-flex" role="search" >
+				      <form class="d-flex" role="search" action="/semi/searchList.jsp">
 				      	<div class="input-group">
 					        <input class="form-control border-warning" type="search" name="keyword" placeholder="제품검색 ex)소주" aria-label="Search">
 					        <button class="btn btn-outline-warning" type="button" onclick="searchKeyword();"><i class="fa-solid fa-magnifying-glass"></i></button>

@@ -27,34 +27,41 @@
 	if (keyword == null || keyword.isEmpty()) {
 		keyword = "안동소주";
 	}
-	
-	List<Product> productCompanyByKeyword = productDao.getCompanyByKeyword(keyword);			// 매개변수 개수 수정
-	List<Category> categoryNameByKeyword = categoryDao.getCategoryNameByKeyword(keyword);		// 매개변수 개수 수정
-	String sort = request.getParameter("sort");
-
 	int currentPage = StringUtil.stringToInt(request.getParameter("page"), 1);			// 현재페이지 지정
 	int rows = StringUtil.stringToInt(request.getParameter("rows"), 5);					// 페이지에 표시될 행 개수
 	
+	String sort = request.getParameter("sort");
 	String categoryName = request.getParameter("categoryName");
 	String company = request.getParameter("company");
 	
+	if (categoryName == null) {
+		categoryName = "";
+	} 
+	
+	if (company == null) {
+		company = "";
+	} 
+	
+	List<Product> productCompanyByKeyword = productDao.getCompanyByKeyword(keyword);			// 매개변수 개수 수정
+	List<Category> categoryNameByKeyword = categoryDao.getCategoryNameByKeyword(keyword);		// 매개변수 개수 수정
+
 	int totalQuantity = productDao.getTotalQunatity(keyword);
 	
-	int totalRows;
-	if (categoryName == null && company == null) {
-			totalRows = productDao.getTotalRows(keyword);									// 전체 행 개수(keyword 있을 경우)
-	} else if (categoryName != null && company == null) {
+	int totalRows = 0;						
+	if (!categoryName.isEmpty() && company.isEmpty()) {
 			totalRows = productDao.getTotalRowsByCategory(keyword, categoryName);
-	} else if (categoryName == null && company != null) {
+	} else if (categoryName.isEmpty() && !company.isEmpty()) {
 			totalRows = productDao.getTotalRowsByCompany(keyword, company);
-	} else {
+	} else if (!categoryName.isEmpty() && !company.isEmpty()){
 			totalRows = productDao.getTotalRows(keyword, categoryName, company);
+	} else {
+			totalRows = productDao.getTotalRows(keyword);
 	}
 	
 	Pagination pagination = new Pagination(rows, totalRows, currentPage);
 
 	List<Product> productList = null;
-	if (categoryName == null && company == null) {
+	if (categoryName.isEmpty() && company.isEmpty()) {
 		if ("low".equals(sort)) {
 			productList = productDao.getItemByMinPrice(keyword, pagination.getBeginIndex(), pagination.getEndIndex());
 		} else if ("high".equals(sort)) {
@@ -64,13 +71,15 @@
 		} else {
 			productList = productDao.getItemBySaleQuantity(keyword, pagination.getBeginIndex(), pagination.getEndIndex());
 		}		
-	} else if (categoryName != null && company == null) {
+	} else if (!categoryName.isEmpty() && company.isEmpty()) {
 		productList = productDao.getItemByOptionCategory(keyword, categoryName, pagination.getBeginIndex(), pagination.getEndIndex());
-	} else if (categoryName == null && company != null) {
+	} else if (categoryName.isEmpty() && !company.isEmpty()) {
 		productList = productDao.getItemByOptionCompany(keyword, company, pagination.getBeginIndex(), pagination.getEndIndex());
 	} else {
 		productList = productDao.getItemByOption(keyword, categoryName, company, pagination.getBeginIndex(), pagination.getEndIndex());
 	}
+
+	
 %>
 <div class="container">
 	<div class="row">
@@ -83,7 +92,7 @@
 						for (Category category : categoryNameByKeyword) {
 					%>
 					<div class="form-check">
-					  <input class="form-check-input" type="checkbox" name="categoryName" value="<%=category.getName() %>" id="flexCheckDefault">
+					  <input class="form-check-input" type="checkbox" name="categoryName" value="<%=category.getName() %>" id="flexCheckDefault" />
 					  <label class="form-check-label" for="flexCheckDefault"><%=category.getName() %></label>
 					</div>
 					<%
@@ -96,7 +105,7 @@
 						for (Product product : productCompanyByKeyword) {
 					%>
 					<div class="form-check">
-					  <input class="form-check-input" type="checkbox" name="company" value="<%=product.getCompany() %>" id="flexCheckDefault">
+					  <input class="form-check-input" type="checkbox" name="company" value="<%=product.getCompany() %>" id="flexCheckDefault" />
 					  <label class="form-check-label" for="flexCheckDefault"><%=product.getCompany() %></label>
 					</div>
 					<%
@@ -139,7 +148,7 @@
 	%>
             <div class="col-lg-3 col-md-6 mb-4">
                <div class="card h-100">
-                   <a href="product/detail.jsp?no=<%=product.getNo() %>" class="text-dark text-decoration-none"><img class="card-img-top" src="images/cate_01.jpg" alt="..." />
+                   <a href="product/detail.jsp?productNo=<%=product.getNo() %>" class="text-dark text-decoration-none"><img class="card-img-top" src="images/cate_01.jpg" alt="..." />
                    	 <div class="card-body">
                        <h5 class="card-title fs-6 text-bold"><%=product.getName() %></h5>
                        <p class="mb-1"><del><%=product.getPrice() %></del> 원</p>
@@ -173,12 +182,12 @@
 			</ul>
 	</nav>
 		<form id="search-form" class="row g-3" method="get">
-			<input type="hidden" name="keyword" value=<%=keyword %> />
-			<input type="hidden" name="sort" value=<%=sort %> />	
+			<input type="hidden" name="keyword" value="<%=keyword== null ? "" : keyword %>" />
+			<input type="hidden" name="sort" value="<%=sort == null ? "" : sort %>" />	
 			<input type="hidden" name="page" />
 			<input type="hidden" name="rows" />
-			<input type="hidden" name="categoryName" value=<%=categoryName %> />
-			<input type="hidden" name="company" value=<%=company %> />	
+			<input type="hidden" name="categoryName" value="<%=categoryName == null ? "" : categoryName %>" />
+			<input type="hidden" name="company" value="<%=company == null ? ""  : company %>" />	
 		</form>
   </div>
 </div>

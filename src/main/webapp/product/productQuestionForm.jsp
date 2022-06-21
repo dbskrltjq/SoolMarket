@@ -53,7 +53,11 @@
 					</tr>
 					<tr>
 						<th class="p-2">제목</th>
-						<td class="p-2"></td>					
+						<td><input type="text" name="title"/></td>	
+					</tr>
+					<tr>
+						<th class="p-2">내용</th>
+						
 					</tr>
 				</tbody>
 			</table>

@@ -71,7 +71,7 @@
 					</tr>
 					<tr>
 						<th class="p-2">수량</th>
-						<td><input class=" p-2" type="number" min="1" max="" id="productQuentity" value=""></td>
+						<td><input class=" p-2" type="number" min="1" max="30" id="productQuentity" value=""></td>
 					</tr>
 					<tr>
 						<th class="p-2">총상품금액</th>
@@ -116,7 +116,7 @@
 					
 					<input type="hidden" id="is-login" value="<%=user == null ? "no" : "yes"%>">
 					<div class="col-11">
-						<textarea rows="2" class="form-control" name="reviewContent" placeholder="전통주와 함께한 좋은 기억을 다른 분들과 나눠주세요♥" onclick="reviewCheck(<%=product.getNo() %>)" ></textarea>
+						<textarea rows="2" class="form-control" name="reviewContent" placeholder="전통주와 함께한 좋은 기억을 다른 분들과 나눠주세요♥" onclick="reviewCheck(<%=product.getNo() %>);" ></textarea>
 					</div>
 					<div class="col-1">
 						<button type="submit" name="reviewBotten" class="btn btn-outline-secondary w-100 h-100">리뷰등록</button>
@@ -241,25 +241,7 @@
 		xhr.send();
 	}
 	
-	function reviewUserCheck(userNo) {
-		let xhr = new XMLHttpRequest();
-		xhr.onreadystatechange = function() {
-			if (xhr.readyState === 4 && xhr.status === 200) {
-				let jsonText = xhr.responseText;
-				let result = JSON.parse(jsonText);
-				if (!result.exist) {
-					alert("리뷰를 두개 이상 작성하실 수 없습니다.")
-					document.querySelector("textarea[name=reviewContent]").readOnly=true;
-					document.querySelector("button[name=reviewBotten]").disabled=true;
-					document.querySelector("input[name=reviewFileName]").disabled=true;
-					document.querySelector("select[name=reviewScore]").disabled=true;
-					return;
-				}
-			}
-		}
-		xhr.open("GET",'reviewUserCheck.jsp?userNo=' + userNo)
-		xhr.send();
-	}
+	function review
 	
 </script>
 </body>

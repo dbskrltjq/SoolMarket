@@ -24,10 +24,18 @@
     	ProductReviewDao productReviewDao = ProductReviewDao.getInstance();
     	int reviewCount = productReviewDao.getReviewCount(productNo, user.getNo());
     	
+    	int reviewUsercount = productReviewDao.getReviewUserCount("productNo");
+    	
     	if(reviewCount >= 1) {
     		result.put("exist", true);
     	} else {
     		result.put("exist", false);
+    	}
+    	
+    	if (reviewUsercount >=1) {
+    		result.put("exist",true);
+    	} else {
+    		result.put("exist",false);
     	}
     	
     	String jsonText = gson.toJson(result);

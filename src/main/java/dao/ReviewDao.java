@@ -5,6 +5,8 @@ import java.util.List;
 
 import dto.ReviewDto;
 import helper.DaoHelper;
+import vo.Review;
+import vo.ReviewLikeUser;
 
 public class ReviewDao {
 
@@ -347,4 +349,51 @@ public class ReviewDao {
 			return rs.getInt("cnt");
 		}, keyword);
 	}
+	
+	
+	
+	public ReviewLikeUser getReviewLikeUser(int reviewNo, int userNo) throws SQLException {
+		String sql = "select review_no, user_no "
+				   + "from sul_review_like_users "
+				   + "where review_no = ? and user_no = ? ";
+		
+		return helper.selectOne(sql, rs -> {
+			return new ReviewLikeUser(reviewNo, userNo);
+		}, reviewNo, userNo);
+	}
+	
+	public void insertReviewLikeUser(ReviewLikeUser reviewLikeUser) throws SQLException {
+		String sql = "insert into sul_review_like_users(review_no, user_no) values(?, ?)";
+		
+		helper.insert(sql, reviewLikeUser.getReview().getNo(), reviewLikeUser.getUser().getNo());
+		
+	}
+	
+	public Review getReviewByNo(int reviewNo) throws SQLException {
+		String sql = "select review_no, user_no, pd_no, review_content, review_created_date, review_like_count, review_score "
+				   + "from sul_reviews "
+				   + "where review_no = ?" ;
+		
+		return helper.selectOne(sql, rs -> {
+			Review review = new Review();
+			review.setNo(rs.getInt("review_no"));
+			review.setUserNo(rs.getInt("user_no"));
+			review.setPdNo(rs.getInt("pd_no"));
+			review.setContent(rs.getString("review_content"));
+			review.setCreatedDate(rs.getDate("review_created_date"));
+			review.setLikeCount(rs.getInt("review_like_count"));
+			review.setScore(rs.getInt("review_score"));
+			return review;
+		}, reviewNo);
+	}
+	
+	public void updateReviewLikeCount(Review review) throws SQLException {
+		String sql = "update sul_reviews "
+				   + "set "
+				   + "		review_like_count = ?  "
+				   + "where review_no = ? ";
+		
+		helper.update(sql, review.getLikeCount(), review.getNo());
+	}
+	
 }

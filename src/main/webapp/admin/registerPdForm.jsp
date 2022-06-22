@@ -7,7 +7,7 @@
 <%@page import="dao.CategoryDao"%>
 <%@page import="vo.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" errorPage="../error/500.jsp"%>
+    pageEncoding="UTF-8" %>
     
 <!DOCTYPE html>
 <html lang="ko">
@@ -25,21 +25,22 @@
 </head>
 <%
 	//세션에서 로그인된 관리자정보를 조회한다.
-	User admin = (User) session.getAttribute("ADMIN");
+	/* User admin = (User) session.getAttribute("ADMIN");
 	if (admin == null) {
 		throw new RuntimeException("해당 서비스는 관리자만 이용할 수 있습니다.");
-	}
+	} errorPage="../error/500.jsp" */
+	ProductDao productDao = ProductDao.getInstance();
+	CategoryDao categoryDao = CategoryDao.getInstance();
 	
+	int categoryNo = StringUtil.stringToInt(request.getParameter("categoryNo"));
 	int currentPage = StringUtil.stringToInt(request.getParameter("page"), 1);
 	int rows = StringUtil.stringToInt(request.getParameter("rows"), 5);
-	int totalRows = 0;    // 상황에 맞게 다시 수정하기
-	Pagination pagination = new Pagination(rows, totalRows, currentPage);
+	int totalRows = productDao.getTotalRows(categoryNo);   
 	
-	CategoryDao categoryDao = CategoryDao.getInstance();
+	Pagination pagination = new Pagination(rows, totalRows, currentPage);
 	List<Category> categories = categoryDao.getCategories();
 	
-	ProductDao productDao = ProductDao.getInstance();
-	List<Product> products = productDao.getAllProducts(pagination.getBeginIndex(), pagination.getEndIndex());
+	List<Product> products = productDao.getProductsByCategoryNo(categoryNo, pagination.getBeginIndex(), pagination.getEndIndex());
 	
 	
 %>
@@ -64,7 +65,7 @@
 									<div class="form-div">
 										<form id="register-form" class="row g-3" method="post" action="">
 											<input type="hidden" name="page" /> <input type="hidden" name="search" value="" />
-											<select class="form-select" name="category">
+											<select class="form-select" name="category" onchange="changeCategory();">
 												<option disabled selected >카테고리 선택</option>
 										<%
 											for(Category category : categories) {
@@ -88,8 +89,7 @@
 									</div>
 								</div>
 								<div class="card-body">
-									<table class="table table-hover text-center"
-										id="datatablesSimple">
+									<table class="table table-hover text-center" id="product-table">
 										<colgroup>
 											<col width="8%">
 											<col width="15%">
@@ -263,6 +263,44 @@
 		
 		document.getElementById("newProduct-form").submit();
 	}  
+		
+	function changeCategory() {
+		let categoryNo = document.querySelector("select[name=category]").value;
+		let tbody = document.querySelector("#product-table tbody");
+		// location.href = "registerPdForm.jsp?categoryNo=" + categoryNo; 오류이유?
+		let xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if(xhr.readyState === 4 && xhr.status === 200) {
+				let jsonText = xhr.responseText;
+				let result = JSON.parse(jsonText);
+				let products = result.productList;
+				
+				let rows ="";
+				for(let index = 0; index < products.length; index++) {
+					let category = products.categoryNo;
+					let name = products.name;
+					let company = products.company;
+					let price = products.price;
+					let salePrice = products.salePrice;
+					let quantity = products.stock;
+					let recommended = products.recommended;
+					
+					rows += "<tr>";
+					rows += "<td>" + category + "</td>";
+					rows += "<td>" + name + "</td>";
+					rows += "<td>" + company + "</td>";
+					rows += "<td>" + price + "</td>";
+					rows += "<td>" + salePrice + "</td>";
+					rows += "<td>" + quantity + "</td>";
+					rows += "<td>" + recommended + "</td>";
+					rows += "</tr>";
+				}
+				tbody.innerHTML = rows;
+			}
+		}
+		xhr.open("GET", "productList.jsp?categoryNo=" + categoryNo);
+		xhr.send();
+	}
 	
 	
 </script>

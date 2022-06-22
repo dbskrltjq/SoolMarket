@@ -48,7 +48,23 @@
 	ProductDao productDao = ProductDao.getInstance();
 	productDao.insertNewProduct(newProduct);
 	
-	response.sendRedirect("registerPdForm.jsp");
+	switch (categoryNo) {
+	case 100 :
+		response.sendRedirect("registerPdForm.jsp?categoryNo=100");
+		break;
+	case 200 :
+		response.sendRedirect("registerPdForm.jsp?categoryNo=200");
+		break;
+	case 300 :
+		response.sendRedirect("registerPdForm.jsp?categoryNo=300");
+		break;
+	case 400 :
+		response.sendRedirect("registerPdForm.jsp?categoryNo=400");
+		break;
+	case 500 :
+		response.sendRedirect("registerPdForm.jsp?categoryNo=500");
+		break;
+	}
 	
 
 

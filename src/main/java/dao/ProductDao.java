@@ -372,4 +372,18 @@ public class ProductDao {
 		}, keyword, categoryName, company, beginIndex, endIndex);
 	}
 	
+	
+	
+	/**	시퀀스부분 수정해야합니다!!!!
+	 * 신규상품등록하기, DB에 상품STOCK 디폴트값이 30이므로, 신규상품등록은 PD_STOCK에 입고수량을 넣는다.
+	 * @param product
+	 * @throws SQLException
+	 */
+	public void insertNewProduct(Product product) throws SQLException {
+		String sql = "insert into sul_products (PD_NO, CATEGORY_NO, PD_NAME, PD_COMPANY, PD_PRICE, PD_SALE_PRICE, PD_STOCK, PD_RECOMMENDED, PD_FILE_NAME)"
+				   + "values(sul_products_seq.nextval, ?, ?, ?, ?, ?, ?, ?, ?) ";
+		
+		helper.insert(sql, product.getCategoryNo(), product.getName(), product.getCompany(), product.getPrice(), product.getSalePrice(), product.getStock(), product.getRecommended(),product.getFileName());
+	}
+	
 }

@@ -138,11 +138,11 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-      <form name="newProduct" class="form-horizontal border bg-light p-3" method="post" enctype="multipart/form-data" action="AddProduct.jsp">
+      <form id="newProduct-form" class="form-horizontal border bg-light p-3" method="post" enctype="multipart/form-data" action="addProduct.jsp">
 				<div class="row mb-3">
 					<label for="category" class="col-sm-2 col-form-label">상품 분류</label>
 					<div class="col-sm-10">
-						<select class="form-select" name="category">
+						<select class="form-select" name="categoryNo">
 							<option value="" disabled selected >카테고리 선택</option>
 					<%
 						for(Category category : categories) {
@@ -181,7 +181,7 @@
 				<div class="row mb-3">
 					<label for="quantity" class="col-sm-2 col-form-label">입고량</label>
 					<div class="col-sm-10">
-						<input type="text" name="quantity" id="quantity" class="form-control">
+						<input type="number" name="quantity" id="quantity" class="form-control" min="1">
 					</div>
 				</div>
 				<fieldset class="row mb-3">
@@ -195,7 +195,7 @@
 				<div class="row mb-3">
 					<label for="quantity" class="col-sm-2 col-form-label">이미지</label>
 					<div class="col-sm-10">
-						<input type="file" name="productImage" class="form-control">
+						<input type="file" name="upfile" class="form-control">
 					</div>
 				</div>
 		</form>
@@ -213,12 +213,10 @@
 
 		// 체크된 것이 없으면 value는 null
 	 function submitForm() {
-		let selectField = document.querySelector("select[name=category]");
+		let selectField = document.querySelector("select[name=categoryNo]");
 		let selectValue = selectField.value;
-		alert(selectValue);
-		
 		if(selectValue === "") {					// select는 false / true 값으로 x, value의 값으로 value값은 항상 문자열
-			alert("카테고리를 선택해주세요");
+			alert("카테고리를 선택해주세요");		// option 태그에 value 값을 주지 않으면 텍스트 자체가 들어간다.
 			selectField.focus();
 			return false;
 		}
@@ -263,12 +261,7 @@
 			return false;
 		}
 		
-		
-		
-		
-		
-		
-		
+		document.getElementById("newProduct-form").submit();
 	}  
 	
 	

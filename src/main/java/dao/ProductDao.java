@@ -43,6 +43,65 @@ public class ProductDao {
 		},productNo);
 	}
 	
+	public List<Product> getCompanyByKeyword(String keyword) throws SQLException {
+		String sql = "select distinct pd_company "
+				   + "from sul_products "
+				   + "where pd_name like '%' || ? || '%' ";
+		
+		return helper.selectList(sql, rs -> {
+			Product product = new Product();
+			product.setCompany(rs.getString("pd_company"));
+			return product;
+			
+		}, keyword);
+	}
+	
+	public List<Product> getCompanyByKeywordCategory(String keyword, String categoryName) throws SQLException {
+		String sql = "select distinct P.pd_company "
+				   + "from sul_products P, sul_category C "
+				   + "where pd_name like '%' || ? || '%' "
+				   + "and P.category_no = C.category_no "
+				   + "and C.category_name = ? ";
+		
+		return helper.selectList(sql, rs -> {
+			Product product = new Product();
+			product.setCompany(rs.getString("pd_company"));
+			return product;
+			
+		}, keyword, categoryName);
+	}
+	
+	public List<Product> getCompanyByKeywordCompany(String keyword, String company) throws SQLException {
+		String sql = "select distinct P.pd_company "
+				   + "from sul_products P, sul_category C "
+				   + "where pd_name like '%' || ? || '%' "
+				   + "and P.category_no = C.category_no "
+				   + "and P.pd_company = ? ";
+		
+		return helper.selectList(sql, rs -> {
+			Product product = new Product();
+			product.setCompany(rs.getString("pd_company"));
+			return product;
+			
+		}, keyword, company);
+	}
+	
+	public List<Product> getCompanyByKeyword(String keyword, String categoryName, String company) throws SQLException {
+		String sql = "select distinct P.pd_company "
+				   + "from sul_products P, sul_category C "
+				   + "where pd_name like '%' || ? || '%' "
+				   + "and P.category_no = C.category_no "
+				   + "and C.category_name = ? "
+				   + "and P.pd_company = ? ";
+		
+		return helper.selectList(sql, rs -> {
+			Product product = new Product();
+			product.setCompany(rs.getString("pd_company"));
+			return product;
+			
+		}, keyword, categoryName, company);
+	}
+	
 	public int getTotalRows() throws SQLException {
 		String sql = "select count(*) cnt from sul_products ";
 		
@@ -141,6 +200,7 @@ public class ProductDao {
 		}, beginIndex, endIndex);
 	}
 	
+	
 	public List<Product> getItemBySaleQuantity(int categoryNo, int beginIndex, int endIndex) throws SQLException {
 		
 		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
@@ -175,6 +235,70 @@ public class ProductDao {
 			
 			return product;
 		}, keyword, beginIndex, endIndex);
+	}
+	
+	public List<Product> getItemBySaleQuantityCategory(String keyword, String categoryName, int beginIndex, int endIndex) throws SQLException {
+		
+		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
+				   + "from(select row_number() over (order by pd_sale_quantity desc) row_number, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
+				   + "     from sul_products P, sul_category C "
+			   	   + "     where pd_name like '%' || ? || '%' "
+				   + "     and P.category_no = C.category_no "
+				   + "     and C.category_name = ?) "
+				   + "where row_number >= ? and row_number <= ? ";
+		
+		return helper.selectList(sql, rs -> {
+			Product product = new Product();
+			product.setName(rs.getString("pd_name"));
+			product.setPrice(rs.getInt("pd_price"));
+			product.setSalePrice(rs.getInt("pd_sale_price"));
+			product.setReviewScore(rs.getInt("pd_review_score"));
+			
+			return product;
+		}, keyword, categoryName, beginIndex, endIndex);
+	}
+	
+	public List<Product> getItemBySaleQuantityCompany(String keyword, String company, int beginIndex, int endIndex) throws SQLException {
+		
+		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
+				   + "from(select row_number() over (order by pd_sale_quantity desc) row_number, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
+				   + "     from sul_products P, sul_category C "
+			   	   + "     where pd_name like '%' || ? || '%' "
+				   + "     and P.category_no = C.category_no "
+				   + "	   and P.pd_company = ?) "
+				   + "where row_number >= ? and row_number <= ? ";
+		
+		return helper.selectList(sql, rs -> {
+			Product product = new Product();
+			product.setName(rs.getString("pd_name"));
+			product.setPrice(rs.getInt("pd_price"));
+			product.setSalePrice(rs.getInt("pd_sale_price"));
+			product.setReviewScore(rs.getInt("pd_review_score"));
+			
+			return product;
+		}, keyword, company, beginIndex, endIndex);
+	}
+	
+	public List<Product> getItemBySaleQuantity(String keyword, String categoryName, String company, int beginIndex, int endIndex) throws SQLException {
+		
+		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
+				   + "from(select row_number() over (order by pd_sale_quantity desc) row_number, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
+				   + "     from sul_products P, sul_category C "
+			   	   + "     where pd_name like '%' || ? || '%' "
+				   + "     and P.category_no = C.category_no "
+				   + "     and C.category_name = ? "
+				   + "	   and P.pd_company = ?) "
+				   + "where row_number >= ? and row_number <= ? ";
+		
+		return helper.selectList(sql, rs -> {
+			Product product = new Product();
+			product.setName(rs.getString("pd_name"));
+			product.setPrice(rs.getInt("pd_price"));
+			product.setSalePrice(rs.getInt("pd_sale_price"));
+			product.setReviewScore(rs.getInt("pd_review_score"));
+			
+			return product;
+		}, keyword, categoryName, company, beginIndex, endIndex);
 	}
 	
 	public List<Product> getItemByMinPrice(int categoryNo, int beginIndex, int endIndex) throws SQLException {
@@ -213,6 +337,71 @@ public class ProductDao {
 		}, keyword, beginIndex, endIndex);
 	}
 	
+	public List<Product> getItemByMinPriceCategory(String keyword, String categoryName, int beginIndex, int endIndex) throws SQLException {
+		
+		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
+				   + "from(select row_number() over (order by pd_sale_price asc) row_number, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
+				   + "     from sul_products P, sul_category C "
+			   	   + "     where pd_name like '%' || ? || '%' "
+				   + "     and P.category_no = C.category_no "
+				   + "     and C.category_name = ?) "
+
+				   + "where row_number >= ? and row_number <= ? ";
+		
+		return helper.selectList(sql, rs -> {
+			Product product = new Product();
+			product.setName(rs.getString("pd_name"));
+			product.setPrice(rs.getInt("pd_price"));
+			product.setSalePrice(rs.getInt("pd_sale_price"));
+			product.setReviewScore(rs.getInt("pd_review_score"));
+			
+			return product;
+		}, keyword, categoryName, beginIndex, endIndex);
+	}
+	
+	public List<Product> getItemByMinPriceCompany(String keyword, String company, int beginIndex, int endIndex) throws SQLException {
+		
+		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
+				   + "from(select row_number() over (order by pd_sale_price asc) row_number, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
+				   + "     from sul_products P, sul_category C "
+			   	   + "     where pd_name like '%' || ? || '%' "
+				   + "     and P.category_no = C.category_no "
+				   + "	   and P.pd_company = ?) "
+				   + "where row_number >= ? and row_number <= ? ";
+		
+		return helper.selectList(sql, rs -> {
+			Product product = new Product();
+			product.setName(rs.getString("pd_name"));
+			product.setPrice(rs.getInt("pd_price"));
+			product.setSalePrice(rs.getInt("pd_sale_price"));
+			product.setReviewScore(rs.getInt("pd_review_score"));
+			
+			return product;
+		}, keyword, company, beginIndex, endIndex);
+	}
+	
+	public List<Product> getItemByMinPrice(String keyword, String categoryName, String company, int beginIndex, int endIndex) throws SQLException {
+		
+		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
+				   + "from(select row_number() over (order by pd_sale_price asc) row_number, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
+				   + "     from sul_products P, sul_category C "
+			   	   + "     where pd_name like '%' || ? || '%' "
+				   + "     and P.category_no = C.category_no "
+				   + "     and C.category_name = ? "
+				   + "	   and P.pd_company = ?) "
+				   + "where row_number >= ? and row_number <= ? ";
+		
+		return helper.selectList(sql, rs -> {
+			Product product = new Product();
+			product.setName(rs.getString("pd_name"));
+			product.setPrice(rs.getInt("pd_price"));
+			product.setSalePrice(rs.getInt("pd_sale_price"));
+			product.setReviewScore(rs.getInt("pd_review_score"));
+			
+			return product;
+		}, keyword, categoryName, company, beginIndex, endIndex);
+	}
+	
 	public List<Product> getItemByMaxPrice(int categoryNo, int beginIndex, int endIndex) throws SQLException {
 		
 		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
@@ -247,6 +436,70 @@ public class ProductDao {
 			
 			return product;
 		}, keyword, beginIndex, endIndex);
+	}
+	
+	public List<Product> getItemByMaxPriceCategory(String keyword, String categoryName, int beginIndex, int endIndex) throws SQLException {
+		
+		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
+				   + "from(select row_number() over (order by pd_sale_price desc) row_number, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
+				   + "     from sul_products P, sul_category C "
+			   	   + "     where pd_name like '%' || ? || '%' "
+				   + "     and P.category_no = C.category_no "
+				   + "     and C.category_name = ?) "
+				   + "where row_number >= ? and row_number <= ? ";
+		
+		return helper.selectList(sql, rs -> {
+			Product product = new Product();
+			product.setName(rs.getString("pd_name"));
+			product.setPrice(rs.getInt("pd_price"));
+			product.setSalePrice(rs.getInt("pd_sale_price"));
+			product.setReviewScore(rs.getInt("pd_review_score"));
+			
+			return product;
+		}, keyword, categoryName, beginIndex, endIndex);
+	}
+	
+	public List<Product> getItemByMaxPriceCompany(String keyword, String company, int beginIndex, int endIndex) throws SQLException {
+		
+		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
+				   + "from(select row_number() over (order by pd_sale_price desc) row_number, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
+				   + "     from sul_products P, sul_category C "
+			   	   + "     where pd_name like '%' || ? || '%' "
+				   + "     and P.category_no = C.category_no "
+				   + "	   and P.pd_company = ?) "
+				   + "where row_number >= ? and row_number <= ? ";
+		
+		return helper.selectList(sql, rs -> {
+			Product product = new Product();
+			product.setName(rs.getString("pd_name"));
+			product.setPrice(rs.getInt("pd_price"));
+			product.setSalePrice(rs.getInt("pd_sale_price"));
+			product.setReviewScore(rs.getInt("pd_review_score"));
+			
+			return product;
+		}, keyword, company, beginIndex, endIndex);
+	}
+	
+	public List<Product> getItemByMaxPrice(String keyword, String categoryName, String company, int beginIndex, int endIndex) throws SQLException {
+		
+		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
+				   + "from(select row_number() over (order by pd_sale_price desc) row_number, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
+				   + "     from sul_products P, sul_category C "
+			   	   + "     where pd_name like '%' || ? || '%' "
+				   + "     and P.category_no = C.category_no "
+				   + "     and C.category_name = ? "
+				   + "	   and P.pd_company = ?) "
+				   + "where row_number >= ? and row_number <= ? ";
+		
+		return helper.selectList(sql, rs -> {
+			Product product = new Product();
+			product.setName(rs.getString("pd_name"));
+			product.setPrice(rs.getInt("pd_price"));
+			product.setSalePrice(rs.getInt("pd_sale_price"));
+			product.setReviewScore(rs.getInt("pd_review_score"));
+			
+			return product;
+		}, keyword, categoryName, company, beginIndex, endIndex);
 	}
 	
 	public List<Product> getItemByDate(int categoryNo, int beginIndex, int endIndex) throws SQLException {
@@ -285,17 +538,69 @@ public class ProductDao {
 		}, keyword, beginIndex, endIndex);
 	}
 	
-	public List<Product> getCompanyByKeyword(String keyword) throws SQLException {
-		String sql = "select distinct pd_company "
-				   + "from sul_products "
-				   + "where pd_name like '%' || ? || '%' ";
+	public List<Product> getItemByDateCategory(String keyword, String categoryName, int beginIndex, int endIndex) throws SQLException {
+		
+		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
+				   + "from(select row_number() over (order by pd_created_date desc) row_number, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
+				   + "     from sul_products P, sul_category C "
+			   	   + "     where pd_name like '%' || ? || '%' "
+				   + "     and P.category_no = C.category_no "
+				   + "     and C.category_name = ?) "
+
+				   + "where row_number >= ? and row_number <= ? ";
 		
 		return helper.selectList(sql, rs -> {
 			Product product = new Product();
-			product.setCompany(rs.getString("pd_company"));
-			return product;
+			product.setName(rs.getString("pd_name"));
+			product.setPrice(rs.getInt("pd_price"));
+			product.setSalePrice(rs.getInt("pd_sale_price"));
+			product.setReviewScore(rs.getInt("pd_review_score"));
 			
-		}, keyword);
+			return product;
+		}, keyword, categoryName, beginIndex, endIndex);
+	}
+	
+	public List<Product> getItemByDateCompany(String keyword, String company, int beginIndex, int endIndex) throws SQLException {
+		
+		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
+				   + "from(select row_number() over (order by pd_created_date desc) row_number, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
+				   + "     from sul_products P, sul_category C "
+			   	   + "     where pd_name like '%' || ? || '%' "
+				   + "     and P.category_no = C.category_no "
+				   + "	   and P.pd_company = ?) "
+				   + "where row_number >= ? and row_number <= ? ";
+		
+		return helper.selectList(sql, rs -> {
+			Product product = new Product();
+			product.setName(rs.getString("pd_name"));
+			product.setPrice(rs.getInt("pd_price"));
+			product.setSalePrice(rs.getInt("pd_sale_price"));
+			product.setReviewScore(rs.getInt("pd_review_score"));
+			
+			return product;
+		}, keyword, company, beginIndex, endIndex);
+	}
+	
+	public List<Product> getItemByDate(String keyword, String categoryName, String company, int beginIndex, int endIndex) throws SQLException {
+		
+		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
+				   + "from(select row_number() over (order by pd_created_date desc) row_number, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
+				   + "     from sul_products P, sul_category C "
+			   	   + "     where pd_name like '%' || ? || '%' "
+				   + "     and P.category_no = C.category_no "
+				   + "     and C.category_name = ? "
+				   + "	   and P.pd_company = ?) "
+				   + "where row_number >= ? and row_number <= ? ";
+		
+		return helper.selectList(sql, rs -> {
+			Product product = new Product();
+			product.setName(rs.getString("pd_name"));
+			product.setPrice(rs.getInt("pd_price"));
+			product.setSalePrice(rs.getInt("pd_sale_price"));
+			product.setReviewScore(rs.getInt("pd_review_score"));
+			
+			return product;
+		}, keyword, categoryName, company, beginIndex, endIndex);
 	}
 	
 	public List<Product> getItemByOptionCategory(String keyword, String categoryName, int beginIndex, int endIndex) throws SQLException {

@@ -58,5 +58,51 @@ public class CategoryDao {
 			return category;
 		}, keyword);
 	}
+	
+	public List<Category> getCategoryNameByKeywordCategory(String keyword, String categoryName) throws SQLException {
+		String sql = "select distinct C.category_name "
+				   + "from sul_products P, sul_category C "
+				   + "where pd_name like '%' || ? || '%' "
+				   + "and P.category_no = C.category_no "
+				   + "and C.category_name = ? ";
+		
+		return helper.selectList(sql, rs -> {
+			Category category = new Category();
+			category.setName(rs.getString("category_name"));
+			
+			return category;
+		}, keyword, categoryName);
+	}
+	
+	public List<Category> getCategoryNameByKeywordCompany(String keyword, String company) throws SQLException {
+		String sql = "select distinct C.category_name "
+				   + "from sul_products P, sul_category C "
+				   + "where pd_name like '%' || ? || '%' "
+				   + "and P.category_no = C.category_no "
+				   + "and P.pd_company = ? ";
+		
+		return helper.selectList(sql, rs -> {
+			Category category = new Category();
+			category.setName(rs.getString("category_name"));
+			
+			return category;
+		}, keyword, company);
+	}
+	
+	public List<Category> getCategoryNameByKeyword(String keyword, String categoryName, String company) throws SQLException {
+		String sql = "select distinct C.category_name "
+				   + "from sul_products P, sul_category C "
+				   + "where pd_name like '%' || ? || '%' "
+				   + "and P.category_no = C.category_no "
+				   + "and C.category_name = ? "
+				   + "and P.pd_company = ? ";
+		
+		return helper.selectList(sql, rs -> {
+			Category category = new Category();
+			category.setName(rs.getString("category_name"));
+			
+			return category;
+		}, keyword, categoryName, company);
+	}
 }
 

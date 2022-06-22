@@ -257,23 +257,23 @@
 			<%-- form에 id를 입력해줍니다.
 				button에 이벤트 걸고 값을 확인합니다. 제목이나 내용의 값이 하나라도 없을땐 alert창 뜨게하고
 				둘다 이상 없으면 submit();을 통해 값을 저장시킨다. --%>
-        <form class="border bg-light p-3" method="post" action="questionadd.jsp" >
+        <form class="border bg-light p-3" id="question-form" method="post" action="questionadd.jsp" >
 				<input type="hidden" name="pdNo" value="<%=product.getNo() %>" />
 				<div class="mb-3">
 					<label class="form-label">제목</label>
-					<input type="text" class="form-control" name="title" />
+					<input type="text" class="form-control" id="title-form" name="title" />
 				</div>
 				
 				<div class="mb-3">
 					<label class="form-label">내용</label>
-					<textarea rows="5" class="form-control" name="content"></textarea>
+					<textarea rows="5" class="form-control" id="content-form" name="content"></textarea>
 				</div>
 		</form>
 		
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-        <button type="button" class="btn btn-primary">등록</button>
+        <button type="button" class="btn btn-primary" onclick="questionCheckForm()">등록</button>
       </div>
     </div>
   </div>
@@ -281,24 +281,29 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
-	
-	// 상품 문의시 
-	function submitQuestionForm() {
-		let titleField = document.querySelector("input[name=title]");
-		if (titleField.value === '') {
-			alert("제목은 필수입력값입니다.");
-			titleField.focus();
-			return false;
-		}
-		let contentField = document.querySelector("textarea[name=content]");
-		if (contentField.value === '') {
-			alert("내용은 필수입력값입니다.");
-			contentField.focus();
-			return false;
-		}
-		return true;
-	}
 
+	function questionCheckForm() {
+		let form = document.getElementById("question-form");
+		let titleInput = document.getElementById("title-form");
+		let content = document.getElementById("content-form");
+		
+		if(titleInput.value === '') {
+			alert("제목은 필수입력값입니다.");
+			titleInput.focus();
+			return false;
+			
+		} else if (content.value === '') {
+			alert("내용은 필수입력값입니다.");
+			content.focus();
+			return false;
+		} else {
+			form.setAttribute("action","questionadd.jsp");
+			form.submit();
+		}
+			
+	}
+	// 상품 문의시 
+	
 	function questionUserCheck(productNo) {
 		let islogin = document.quertSelector("#is-login").value
 		if (islogin === "no") {

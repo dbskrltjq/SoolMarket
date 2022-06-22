@@ -5,7 +5,8 @@ import java.util.Date;
 public class OrderItem {
 
 	private int no;
-	private Order order;				// order_no 대신에 Order 객체 사용?
+	private int orderNo;
+	//private Order order;				// order_no 대신에 Order 객체 사용?
 	private int pdNo;
 	private int price;
 	private int quantity;
@@ -23,16 +24,26 @@ public class OrderItem {
 		this.no = no;
 	}
 
-	public Order getOrder() {
-		return order;
-	}
-
-	public void setOrder(Order order) {
-		this.order = order;
-	}
+//	public Order getOrder() {
+//		return order;
+//	}
+//
+//	public void setOrder(Order order) {
+//		this.order = order;
+//	}
+	
+	
 
 	public int getPdNo() {
 		return pdNo;
+	}
+
+	public int getOrderNo() {
+		return orderNo;
+	}
+
+	public void setOrderNo(int orderNo) {
+		this.orderNo = orderNo;
 	}
 
 	public void setPdNo(int pdNo) {

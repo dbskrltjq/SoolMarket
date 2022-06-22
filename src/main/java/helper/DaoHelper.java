@@ -25,8 +25,8 @@ public class DaoHelper {
 	public static DaoHelper getInstance() {
 		return instance;
 	}
-	
-	  /**
+
+	   /**
 	    * CLOB 타입의 값을 읽어서 문자열로 반환합니다.
 	    * <pre>
 	    *    public List<Blog> getAllBlogs() throws SQLException {
@@ -47,6 +47,10 @@ public class DaoHelper {
 	    * @return 문자열
 	    * @throws SQLException
 	    */
+
+
+	
+
 	   public static String clobToString(Clob clob) throws SQLException {
 	      if (clob == null) {
 	         return null;

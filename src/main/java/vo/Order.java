@@ -10,12 +10,18 @@ public class Order {
 	private int totalPrice;
 	private int usedPoint;
 	private int paymentPrice;
-	private int depositePoint;
+	private int depositPoint;
 	private int totalQuantity;
 	private Date createdDate;
 	private Date updatedDate;
 	private String status;					// 결재완료, 배송중, 배송완료
 	private String deleted;					
+	private String receiveName;					
+	private String receiveAddress;					
+	private String receiveDetailAddress;
+	private int receivePostCode;
+	private String payment;					
+	private String deliveryMemo;					
 	
 	
 	public Order() {}
@@ -81,13 +87,13 @@ public class Order {
 	}
 
 
-	public int getDepositePoint() {
-		return depositePoint;
+	public int getDepositPoint() {
+		return depositPoint;
 	}
 
 
-	public void setDepositePoint(int depositePoint) {
-		this.depositePoint = depositePoint;
+	public void setDepositPoint(int depositPoint) {
+		this.depositPoint = depositPoint;
 	}
 
 
@@ -138,6 +144,66 @@ public class Order {
 
 	public void setDeleted(String deleted) {
 		this.deleted = deleted;
+	}
+
+
+	public String getReceiveName() {
+		return receiveName;
+	}
+
+
+	public void setReceiveName(String receiveName) {
+		this.receiveName = receiveName;
+	}
+
+
+	public String getReceiveAddress() {
+		return receiveAddress;
+	}
+
+
+	public void setReceiveAddress(String receiveAddress) {
+		this.receiveAddress = receiveAddress;
+	}
+
+
+	public String getReceiveDetailAddress() {
+		return receiveDetailAddress;
+	}
+
+
+	public void setReceiveDetailAddress(String receiveDetailAddress) {
+		this.receiveDetailAddress = receiveDetailAddress;
+	}
+
+
+	public String getPayment() {
+		return payment;
+	}
+
+
+	public void setPayment(String payment) {
+		this.payment = payment;
+	}
+
+
+	public String getDeliveryMemo() {
+		return deliveryMemo;
+	}
+
+
+	public void setDeliveryMemo(String deliveryMemo) {
+		this.deliveryMemo = deliveryMemo;
+	}
+
+
+	public int getReceivePostCode() {
+		return receivePostCode;
+	}
+
+
+	public void setReceivePostCode(int receivePostCode) {
+		this.receivePostCode = receivePostCode;
 	};
 	
 	

@@ -57,10 +57,18 @@
 		          			</ul>
 		        		</li>
 				      </ul>
-				      <form class="d-flex" role="search" action="/semi/searchList.jsp">
+				      <form class="d-flex" role="search" action="/semi/searchList.jsp?sort=sell" onsubmit="savedKeyword();" >
 				      	<div class="input-group">
-					        <input class="form-control border-warning" type="search" name="keyword" placeholder="제품검색 ex)소주" aria-label="Search">
-					        <button class="btn btn-outline-warning" type="button" onclick="searchKeyword();"><i class="fa-solid fa-magnifying-glass"></i></button>
+					        <input class="form-control border-warning" type="search" name="keyword" placeholder="제품검색 ex)소주" aria-label="Search" >
+					        <button class="btn btn-outline-warning" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>	
+					        <!--  <div class="todo-inner">
+					        	<div class="allDelete off">
+						        	<p class="tit">최근 검색어</p>
+						        	<span class="btn">모두 지우기 ❌</span>
+					        	</div>
+					        </div>
+					        <p class="txt"></p>
+					        <ul id="keyword-list"></ul>	-->	
 					    </div>
 				      </form>
 				</div>     
@@ -92,7 +100,25 @@
 		return;
 	}
 	
-	function searchKeyword() {
-		location.href="/semi/searchList.jsp?sort=sell&keyword=" + document.querySelector("input[name=keyword]").value	
+	//function searchKeyword() {
+	//	location.href="/semi/searchList.jsp?sort=sell&keyword=" + document.querySelector("input[name=keyword]").value	
+	//}
+	const keywordList = document.querySelector("keyword-list");
+	const keyword_key = "keyword";
+	
+	let searchKeyword = new Array();
+	
+	function savedKeyword() {
+		localStorage.setItem(keyword_key, JSON.stringify(searchKeyword));
 	}
+	
+	function allDeleteKeyword() {
+		localStorage.clear(searchKeyword);
+		keywordList.innerText = '최근검색어 내역이 없습니다.';
+	}
+	
+	function deleteKeyword() {
+		
+	}
+	
 </script>

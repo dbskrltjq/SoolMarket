@@ -42,8 +42,22 @@
 		company = "";
 	} 
 	
-	List<Product> productCompanyByKeyword = productDao.getCompanyByKeyword(keyword);			// 매개변수 개수 수정
-	List<Category> categoryNameByKeyword = categoryDao.getCategoryNameByKeyword(keyword);		// 매개변수 개수 수정
+	List<Product> productCompany = null;
+	List<Category> categoryNameByKeyword = null;
+	if (!categoryName.isEmpty() && company.isEmpty()) {
+		productCompany = productDao.getCompanyByKeywordCategory(keyword, categoryName);			// 매개변수 개수 수정
+		categoryNameByKeyword = categoryDao.getCategoryNameByKeywordCategory(keyword, categoryName);
+	} else if (categoryName.isEmpty() && !company.isEmpty()) {
+		productCompany = productDao.getCompanyByKeywordCompany(keyword, company);			// 매개변수 개수 수정
+		categoryNameByKeyword = categoryDao.getCategoryNameByKeywordCompany(keyword, company);
+	} else if (!categoryName.isEmpty() && !company.isEmpty()){
+		productCompany = productDao.getCompanyByKeyword(keyword, categoryName, company);			// 매개변수 개수 수정
+		categoryNameByKeyword = categoryDao.getCategoryNameByKeyword(keyword, categoryName, company);
+	} else {
+		productCompany = productDao.getCompanyByKeyword(keyword);			// 매개변수 개수 수정
+		categoryNameByKeyword = categoryDao.getCategoryNameByKeyword(keyword);	
+	}
+		
 
 	int totalQuantity = productDao.getTotalQunatity(keyword);
 	
@@ -61,7 +75,41 @@
 	Pagination pagination = new Pagination(rows, totalRows, currentPage);
 
 	List<Product> productList = null;
-	if (categoryName.isEmpty() && company.isEmpty()) {
+		
+	if (!categoryName.isEmpty() && company.isEmpty()) {
+		if ("low".equals(sort)) {
+			productList = productDao.getItemByMinPriceCategory(keyword, categoryName, pagination.getBeginIndex(), pagination.getEndIndex());
+		} else if ("high".equals(sort)) {
+			productList = productDao.getItemByMaxPriceCategory(keyword, categoryName, pagination.getBeginIndex(), pagination.getEndIndex());
+		} else if ("date".equals(sort)) {
+			productList = productDao.getItemByDateCategory(keyword, categoryName, pagination.getBeginIndex(), pagination.getEndIndex());
+		} else {
+			productList = productDao.getItemBySaleQuantityCategory(keyword, categoryName, pagination.getBeginIndex(), pagination.getEndIndex());
+		}
+		//productList = productDao.getItemByOptionCategory(keyword, categoryName, pagination.getBeginIndex(), pagination.getEndIndex());
+	} else if (categoryName.isEmpty() && !company.isEmpty()) {
+		if ("low".equals(sort)) {
+			productList = productDao.getItemByMinPriceCompany(keyword, company, pagination.getBeginIndex(), pagination.getEndIndex());
+		} else if ("high".equals(sort)) {
+			productList = productDao.getItemByMaxPriceCompany(keyword, company, pagination.getBeginIndex(), pagination.getEndIndex());
+		} else if ("date".equals(sort)) {
+			productList = productDao.getItemByDateCompany(keyword, company, pagination.getBeginIndex(), pagination.getEndIndex());
+		} else {
+			productList = productDao.getItemBySaleQuantityCompany(keyword, company, pagination.getBeginIndex(), pagination.getEndIndex());
+		}
+		//productList = productDao.getItemByOptionCompany(keyword, company, pagination.getBeginIndex(), pagination.getEndIndex());
+	} else if (!categoryName.isEmpty() && !company.isEmpty()){
+		if ("low".equals(sort)) {
+			productList = productDao.getItemByMinPrice(keyword, categoryName, company, pagination.getBeginIndex(), pagination.getEndIndex());
+		} else if ("high".equals(sort)) {
+			productList = productDao.getItemByMaxPrice(keyword, categoryName, company, pagination.getBeginIndex(), pagination.getEndIndex());
+		} else if ("date".equals(sort)) {
+			productList = productDao.getItemByDate(keyword, categoryName, company, pagination.getBeginIndex(), pagination.getEndIndex());
+		} else {
+			productList = productDao.getItemBySaleQuantity(keyword, categoryName, company, pagination.getBeginIndex(), pagination.getEndIndex());
+		}
+		//productList = productDao.getItemByOption(keyword, categoryName, company, pagination.getBeginIndex(), pagination.getEndIndex());
+	} else {
 		if ("low".equals(sort)) {
 			productList = productDao.getItemByMinPrice(keyword, pagination.getBeginIndex(), pagination.getEndIndex());
 		} else if ("high".equals(sort)) {
@@ -71,12 +119,6 @@
 		} else {
 			productList = productDao.getItemBySaleQuantity(keyword, pagination.getBeginIndex(), pagination.getEndIndex());
 		}		
-	} else if (!categoryName.isEmpty() && company.isEmpty()) {
-		productList = productDao.getItemByOptionCategory(keyword, categoryName, pagination.getBeginIndex(), pagination.getEndIndex());
-	} else if (categoryName.isEmpty() && !company.isEmpty()) {
-		productList = productDao.getItemByOptionCompany(keyword, company, pagination.getBeginIndex(), pagination.getEndIndex());
-	} else {
-		productList = productDao.getItemByOption(keyword, categoryName, company, pagination.getBeginIndex(), pagination.getEndIndex());
 	}
 
 	
@@ -102,7 +144,7 @@
 				<div class="border-bottom pb-2 mb-2">
 					<div class="border-bottom pb-1 mb-1 mt-3"><strong><p>브랜드</p></strong></div>
 					<%
-						for (Product product : productCompanyByKeyword) {
+						for (Product product : productCompany) {
 					%>
 					<div class="form-check">
 					  <input class="form-check-input" type="checkbox" name="company" value="<%=product.getCompany() %>" id="flexCheckDefault" />
@@ -128,10 +170,10 @@
 		<form>
 		 <div class="row mb-3 border-top border-bottom border-1 p3">
 	 		<div class="col p-2">
-	 			<a href="searchList.jsp?sort=sell&rows=<%=rows %>&keyword=<%=keyword %>" class="btn btn-outline-primary">판매량순</a>	 
-	 			<a href="searchList.jsp?sort=low&rows=<%=rows %>&keyword=<%=keyword %>" class="btn btn-outline-primary">낮은가격순</a>	 	
-	 			<a href="searchList.jsp?sort=high&rows=<%=rows %>&keyword=<%=keyword %>" class="btn btn-outline-primary">높은가격순</a>	 	
-	 			<a href="searchList.jsp?sort=date&rows=<%=rows %>&keyword=<%=keyword %>" class="btn btn-outline-primary">등록일순</a>
+	 			<a href="searchList.jsp?sort=sell&rows=<%=rows %>&keyword=<%=keyword %>&categoryName=<%=categoryName %>&company=<%=company %>" class="btn btn-outline-primary">판매량순</a>	 
+	 			<a href="searchList.jsp?sort=low&rows=<%=rows %>&keyword=<%=keyword %>&categoryName=<%=categoryName %>&company=<%=company %>" class="btn btn-outline-primary">낮은가격순</a>	 	
+	 			<a href="searchList.jsp?sort=high&rows=<%=rows %>&keyword=<%=keyword %>&categoryName=<%=categoryName %>&company=<%=company %>" class="btn btn-outline-primary">높은가격순</a>	 	
+	 			<a href="searchList.jsp?sort=date&rows=<%=rows %>&keyword=<%=keyword %>&categoryName=<%=categoryName %>&company=<%=company %>" class="btn btn-outline-primary">등록일순</a>
 				
 				<select class="form-control form-control-sm w-25 float-end" name="rows" onchange="changeRows();">
 					<option value="5" <%=rows == 5 ? "selected" : "" %>> 5개씩 보기</option>

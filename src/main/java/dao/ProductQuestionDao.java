@@ -5,6 +5,7 @@ import java.util.List;
 
 import dto.QuestionDto;
 import helper.DaoHelper;
+import vo.Question;
 
 public class ProductQuestionDao {
 
@@ -15,6 +16,15 @@ public class ProductQuestionDao {
 	}
 	
 	private DaoHelper helper = DaoHelper.getInstance();
+	
+	public void insertQuestion(Question question) throws SQLException {
+		String sql = "insert into questions "
+			     + "(q_no, user_no, pd_no, q_title, q_content) "
+			     + "values "
+			     + "(sul_questions_seq.nextval, ?, ?, ?, ?) ";
+		
+		helper.insert(sql, question.getUserNo(), question.getPdNo(), question.getTitle(), question.getContent());
+	}
 	
 	public List<QuestionDto> getProductQuestions(int productNo) throws SQLException {
 		String sql = "select Q.q_no, U.user_no, U.user_name, Q.pd_no, Q.q_title, Q.q_content, "

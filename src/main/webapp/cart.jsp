@@ -53,7 +53,7 @@
 		<% 	
 			User user = (User) session.getAttribute("LOGINED_USER");
 			if (user==null) {
-				response.sendRedirect("../loginform.jsp?fail=deny"); 
+				response.sendRedirect("loginform.jsp?fail=deny"); 
 				return;
 			}
 		%>

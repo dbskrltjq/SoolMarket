@@ -4,10 +4,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>상품문의 글쓰기</title>
 </head>
 <body>
 	<%
@@ -32,36 +32,48 @@
 					<p><%=product.getName() %></p>
 				</div>
 			</div>
-			<form class="row" method="post" action="questionRegister.jsp" enctype="multipart/form-data">
-			<table >
-				<tbody>
-					<tr>
-						<th class="p-2">말머리</th>
-						<td class="p-2">
-							<select class="form-select" aria-label="Default select example">
-								  <option value="1">상품</option>
-								  <option value="2">배송</option>
-								  <option value="3">반품/환불</option>
-								  <option value="4">교환/변경</option>
-								  <option value="5">기타</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<th class="p-2">작성자</th>
-						<td class="p-2"><%=user.getName() %></td>
-					</tr>
-					<tr>
-						<th class="p-2">제목</th>
-						<td><input type="text" name="title"/></td>	
-					</tr>
-					<tr>
-						<th class="p-2">내용</th>
-						
-					</tr>
-				</tbody>
-			</table>
+			<div class="row">
+				<div class="col">
+			
+			<form class="border bg-light p-3" method="post" action="questionadd.jsp" onsubmit="return submitQuestionForm()">
+				<input type="hidden" name="pdNo" value="<%=product.getNo() %>" />
+				<div class="mb-3 p-2">
+					<label class="form-label p-2">제목</label>
+					<input type="text" class="form-control p-2" name="title" />
+				</div>
+				
+				<div class="mb-3 p-2">
+					<label class="form-label p-2">내용</label>
+					<textarea rows="20" class="form-control p-2" name="content"></textarea>
+				</div>
+				
+				<div class="text-end p-2 ">
+					<button class="btn btn-secondary" onclick="window.close()">취소</button>
+					<button type="submit" class="btn btn-primary p-2">등록</button>
+				</div>
 			</form>
+				</div>
+			</div>
 		</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript">
+
+	function submitQuestionForm() {
+		let titleField = document.querySelector("input[name=title]");
+		if (titleField.value === '') {
+			alert("제목은 필수입력값입니다.");
+			titleField.focus();
+			return false;
+		}
+		let contentField = document.querySelector("textarea[name=content]");
+		if (contentField.value === '') {
+			alert("내용은 필수입력값입니다.");
+			contentField.focus();
+			return false;
+		}
+		return true;
+	}
+
+</script>
 </body>
 </html>

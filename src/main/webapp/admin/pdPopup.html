@@ -4,7 +4,94 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
+	<!-- 상품 분류,  상품명, 제조사, 정가, 판매가, 추천상품유무, 입고량, 사진첨부-->
 <body>
-	<h5>상품등록하세요</h5>
+	<div class="container">
+		<div>
+			<a href="logout.jsp">logout</a>
+		</div>
+
+		<form name="newProduct" action="./processAddProduct.jsp"
+			class="form-horizontal" method="post" enctype="multipart/form-data">
+
+
+			<div class="form-group row">
+				<label class="col-sm-2">상품 목록</label>
+				<div class="com-sm-3">
+					<input type="text" id="productId" name="productId"
+						class="form-control">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-2">상품 이름</label>
+				<div class="com-sm-3">
+					<input type="text" id="name" name="name" class="form-control">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-2">가격</label>
+				<div class="com-sm-3">
+					<input type="text" id="unitPrice" name="unitPrice"
+						class="form-control">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-2">상세 내용</label>
+				<div class="com-sm-5">
+					<textarea name="description" cols="50" rows="2"
+						class="form-control"></textarea>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-2">제조사</label>
+				<div class="com-sm-3">
+					<input type="text" name="manufacturer" class="form-control">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-2">분류</label>
+				<div class="com-sm-3">
+					<input type="text" name="category" class="form-control">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-2">재고 수</label>
+				<div class="com-sm-3">
+					<input type="text" id="unitsInStock" name="unitsInStock"
+						class="form-control">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-2">상태</label>
+				<div class="com-sm-5">
+					<input type="radio" name="condition" value="New"> 신규 제품 <input
+						type="radio" name="condition" value="Old"> 중고 제품 <input
+						type="radio" name="condition" value="Refurbished"> 재생 제품
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-2">상품 이미지</label>
+				<div>
+					<input type="file" name="productImage" class="form-control">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<div class="col-sm-offset-2 col-sm-10">
+					<input type="button" class="btn btn-primary" value="등록"
+						onclick="CheckAddProduct()">
+				</div>
+			</div>
+
+		</form>
+	</div>
 </body>
 </html>

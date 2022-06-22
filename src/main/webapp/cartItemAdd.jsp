@@ -24,7 +24,7 @@
 		response.sendRedirect("list.jsp?fail=deny");
 		return; 
 	}
-*/	
+*/
 	
 	int userNo = Integer.parseInt(request.getParameter("userNo"));
 	int pdNo = Integer.parseInt(request.getParameter("pdNo"));

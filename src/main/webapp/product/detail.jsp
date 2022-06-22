@@ -21,7 +21,7 @@
 <jsp:include page="../common/nav.jsp">
 	<jsp:param name="menu" value="product"/>
 </jsp:include>
-<div class="container mt-3">
+<div class="container mt-3 mb-5">
 	<div class="row" id="detail-row">
 		<div class="col-6">
 			<div>
@@ -30,9 +30,10 @@
 		</div>
 		<div class="col-6">
 	<%
+		//로그인된 유저 객체 확인
 		User user = (User) session.getAttribute("LOGINED_USER");
 		
-		int productNo = Integer.parseInt(request.getParameter("productNo"));
+		int productNo = Integer.parseInt(request.getParameter("pdNo"));
 	
 		ProductDao productDao = ProductDao.getInstance();
 		Product product = productDao.getProductByNo(productNo);
@@ -58,36 +59,44 @@
 						<td class="p-2"><%=product.getNo() %></td>
 					</tr>
 					<tr>
+						<th class="p-2">제조회사</th>
+						<td class="p-2"><%=product.getCompany() %></td>
+					</tr>
+					<tr>
 						<th class="p-2">정가</th>
 						<td class="p-2 text-decoration-line-through"><%=product.getPrice() %>원</td>
 					</tr>
 					<tr>
 						<th class="p-2">판매가</th>
-						<td class="p-2"><span id="salePrice"><%=product.getSalePrice()%></span>원</td>
+						<td class="p-2"><span id="sale-price"><%=product.getSalePrice()%></span>원</td>
 						<%--총상품금을 수량에 따라서 변경하기 위해 판매가에 id값을 붙인다. --%>
 					</tr>
 					<tr>
-						<th class="p-2">제조회사</th>
-						<td class="p-2"><%=product.getCompany() %></td>
-					</tr>
-					<tr>
 						<th class="p-2">수량</th>
-						<td><input class=" p-2" type="number" min="1" max="30" id="productQuentity" value="1" onchange="updateTotalPrice()"></td>
-						<%--총상품금을 수량에 따라서 변경하기 위해 수량에 id값을 붙인다. --%>
+						<td>
+							<%-- productNo와 수량값을 전달해주기 위해 form을 만들고 id 값을 줍니다.
+									*form은 티가 나지 않기 때문에 상품 설명란쪽에 넣어도 상관없습니다.
+								form문안에 hidden으로 productNo을 뽑아낼 수 있는 input을 넣고
+								고객이 입력한 상품 수량 값을 가져오는 quantity input을 넣습니다.--%>
+							<form id="product-form">
+							<input type="hidden" name="productNo" value="<%=product.getNo() %>" />
+							<%--총상품금을 수량에 따라서 변경하기 위해 수량 input박스에 id값을 붙인다. --%>
+							<input class=" p-2" name="quantity" type="number" min="1" max="100" id="product-quantity" value="1" onchange="updateTotalPrice()">
+							</form>
+						</td>
 					</tr>
 					<tr>
 						<th class="p-2">총상품금액</th>
-						<td class="p-2"><span id="totalPrice"><%=product.getSalePrice()%></span>원</td>
+						<td class="p-2"><span id="total-price"><%=product.getSalePrice()%></span>원</td>
 						<%--총상품금을 수량에 따라서 변경하기 위해 id값을 붙인다. --%>
 					</tr>
 					<tr>
 				</tbody>
 			</table>
 			<hr />
-			<div class="p-2">
-				<a href="../order.jsp?pdNo=<%=product.getNo() %>" class="me-3 btn btn-lg  <%=user == null ? "btn-outline-secondary disabled" : "btn-outline-primary" %>">바로구매</a>
-				<a href="../cartitemAdd.jsp?pdNo=<%=product.getNo() %>" class="btn btn-lg  <%=user == null ? "btn-outline-secondary disabled" : "btn-outline-primary" %>">장바구니</a>
-			</div>			
+			<%-- 버튼 형식으로 만들고 onclick기능을 넣어 클릭시 function-cart(),buy()가 실행되게 합니다. 비 로그인시 버튼이 활성화 되지 않게 했습니다. --%>
+			<button type="button" onclick="cart()" class="btn btn-lg  <%=user == null ? "btn-outline-secondary disabled" : "btn-outline-primary" %>">장바구니</button>
+			<button type="button" onclick="buy()" class="me-3 btn btn-lg  <%=user == null ? "btn-outline-secondary disabled" : "btn-outline-primary" %>">바로구매</button>
 		</div>
 	</div>
 	
@@ -108,16 +117,16 @@
 
 				<form class="row g-3" method="post" action="reviewRegister.jsp" enctype="multipart/form-data">
 					<input type="hidden" name="productNo" value="<%=product.getNo() %>" />
-					<select class="form-select form-select-sm" name="reviewScore" aria-label=".form-select-sm example">
-	  					<option selected>평점을 입력해주세요</option>
-	 					<option value="5">★★★★★</option>
-	 					<option value="4">★★★★</option>
-	  					<option value="3">★★★</option>
-	  					<option value="2">★★</option>
-	  					<option value="1">★</option>
-					</select>
 					
-					<input type="hidden" id="is-login" value="<%=user == null ? "no" : "yes"%>">
+						<select class="form-select form-select-sm" name="reviewScore" aria-label=".form-select-sm example">
+		  					<option selected>평점을 입력해주세요</option>
+		 					<option value="5">★★★★★</option>
+		 					<option value="4">★★★★</option>
+		  					<option value="3">★★★</option>
+		  					<option value="2">★★</option>
+		  					<option value="1">★</option>
+						</select>
+					
 					<div class="col-11">
 						<textarea rows="2" class="form-control" name="reviewContent" placeholder="전통주와 함께한 좋은 기억을 다른 분들과 나눠주세요♥" onclick="reviewCheck(<%=product.getNo() %>);" ></textarea>
 					</div>
@@ -163,64 +172,169 @@
 	<div class="row mb-3" id="qna-row">
 		<div class="col-12 d-flex justify-content-between">
 			<h3>상품 Q&A</h3>
+				
+				<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#product-question-write" onclick="">
+	 				 상품문의 글쓰기
+				</button>
+				
 			<div>
 				<a href="productQuestionForm.jsp?pdNo=<%=product.getNo() %>" class="btn btn-primary btn-sm  " >상품문의 글쓰기</a>
 				<a href="productQuestionlist.jsp" class="btn btn-outline-secondary btn-sm  " >상품문의 전체보기</a>
 			</div>
+			
 		</div>
 	</div>
 	<div class="row mb-5">
 		<div class="col-12">
-			<table class="table">
-				<colgroup>
-					<col width="5%">
-					<col width="%">
-					<col width="10%">
-					<col width="10%">
-				</colgroup>
-				<thead>
-					<tr>
-						<th>번호</th>
-						<th>제목</th>
-						<th>이름</th>
-						<th>등록일</th>
-					</tr>
-				</thead>
-				<tbody class="table-group-divider">
-					<tr>
-					<%
-						if (questions.isEmpty()) {					
-					%>
-						<td colspan="4" class="text-center">등록된 상품 문의가 없습니다.</td>
-					<%
-						} else {
-							for (QuestionDto question : questions) {
-						
-					%>
-						<td><%=question.getNo() %></td>
-						<td><%=question.getTitle() %></td>
-						<td><%=question.getUserName() %></td>
-						<td><%=question.getCreatedDate() %></td>
-					<%
-							}
-						}
-					%>
-					</tr>
-				</tbody>
-			</table>
+		<%
+			if(questions.isEmpty()) {
+				
+		%>
+			<div class="text-center">
+				<span class="text-center">작성된 문의가 없습니다.</span>
+			</div>
+		<%
+			} else {
+		%>
+			<div class="accordion" id="accordionExample">
+		<%	
+				 for (QuestionDto question : questions) {
+					
+		%>
+				<div class="accordion-item">
+			    	<h2 class="accordion-header" id="heading-<%=question.getNo() %>">
+			      		<button class="accordion-button  collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-<%=question.getNo() %>" aria-expanded="true" aria-controls="collapse-<%=question.getNo() %>">
+			         		<span class="me-3"><%=question.getNo() %></span>
+					 		<strong class="me-5"><%=question.getTitle() %></strong>
+					 		<span class="me-5"><%=question.getUserName() %></span>
+					 		<span><%=question.getCreatedDate() %></span>
+			      		</button>
+			    	</h2>
+			    	<div id="collapse-<%=question.getNo() %>" class="accordion-collapse collapse" aria-labelledby="heading-<%=question.getNo() %>" data-bs-parent="#accordionExample">
+			      		<div class="accordion-body">
+			        		<strong>Q.<%=question.getTitle() %></strong>
+			        		<p><%=question.getContent() %></p>
+							<strong>A.답변드립니다.</strong>
+							<P><%=question.getAnswerContent() %></P>
+			      		</div>
+			    	</div>
+			  	</div>
+		<%
+				 }
+		%>
+			</div>		
+		<%
+			}
+		%>
 		</div>
 	</div>
 </div>
+
+<!-- Button trigger modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="product-question-write" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">상품문의 글쓰기</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      
+      <div class="row">
+				<div class="col-6 py-3 ">
+					<div>
+						<img alt="" src="../images/sample1.jpg" class="img-thumbnail" width="200">
+					</div>
+				</div>
+				<div class="col-6 p-3">
+					<h3 class="fs-5 text-bold"><%=product.getName() %></h3>
+					<p><%=product.getName() %></p>
+				</div>
+			</div>
+			
+			<%-- form에 id를 입력해줍니다.
+				button에 이벤트 걸고 값을 확인합니다. 제목이나 내용의 값이 하나라도 없을땐 alert창 뜨게하고
+				둘다 이상 없으면 submit();을 통해 값을 저장시킨다. --%>
+        <form class="border bg-light p-3" id="question-form" method="post" action="questionadd.jsp" >
+				<input type="hidden" name="pdNo" value="<%=product.getNo() %>" />
+				<div class="mb-3">
+					<label class="form-label">제목</label>
+					<input type="text" class="form-control" id="title-form" name="title" />
+				</div>
+				
+				<div class="mb-3">
+					<label class="form-label">내용</label>
+					<textarea rows="5" class="form-control" id="content-form" name="content"></textarea>
+				</div>
+		</form>
+		
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        <button type="button" class="btn btn-primary" onclick="questionCheckForm()">등록</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
-	function checkOrderQuentity() {
-		
-	}
 
+	function questionCheckForm() {
+		let form = document.getElementById("question-form");
+		let titleInput = document.getElementById("title-form");
+		let content = document.getElementById("content-form");
+		
+		if(titleInput.value === '') {
+			alert("제목은 필수입력값입니다.");
+			titleInput.focus();
+			return false;
+			
+		} else if (content.value === '') {
+			alert("내용은 필수입력값입니다.");
+			content.focus();
+			return false;
+		} else {
+			form.setAttribute("action","questionadd.jsp");
+			form.submit();
+		}
+			
+	}
+	// 상품 문의시 
+	
+	function questionUserCheck(productNo) {
+		let islogin = document.quertSelector("#is-login").value
+		if (islogin === "no") {
+			alert("쇼핑몰 회원님만 글작성 가능합니다.")
+			return;
+		}
+	}
+	
+	// 바로구매 클릭시 활성화되는 기능입니다. 꼭 기억하기
+	function buy() {
+		let form = document.getElementById("product-form");
+		// form에서 id를 통해 값을 가져옵니다.
+		form.setAttribute("action","orderForm.jsp");
+		// setAttribute를 통해 action 기능을 넣고 orderForm.jsp 페이지로 넘어가게 만들었습니다.
+		form.submit();
+		// 제출
+	}
+	// 장바구니 클릭시 활성화되는 기능입니다.
+	function cart() {
+		let form = document.getElementById("product-form");
+		// form에서 id를 통해 값을 가져옵니다.
+		form.setAttribute("action","cartItemAdd.jsp");
+		// setAttribute를 통해 action 기능을 넣고 orderForm.jsp 페이지로 넘어가게 만들었습니다.
+		form.submit();
+		// 제출
+	}
+	// 수량을 조절할 경우 활성화되는 기능입니다.
 	function updateTotalPrice() {
-		let span1 = document.getElementById("salePrice");
-		let input = document.getElementById("productQuentity");
-		let span2 = document.getElementById("totalPrice");
+		let span1 = document.getElementById("sale-price");
+		let input = document.getElementById("product-quantity");
+		let span2 = document.getElementById("total-price");
 		
 		let price = parseInt(span1.textContent);
 		// 태그 사이의 값은 textContent로 뽑아온다.

@@ -57,9 +57,14 @@
 					<strong>로그인 실패</strong> 관리자용으로 로그인해주세요.
 				</div>
 		<%
+			} else if ("deny".equals(fail)) {
+		%>
+				<div class="alert alert-danger">
+					<strong>서비스 거부</strong> 로그인이 필요한 서비스 입니다.
+				</div>
+		<%
 			}
 		%>
-	
 	    <div class="form-floating">
 	      <input type="text" class="form-control" name="id" id="id" placeholder="아이디를 입력하세요">
 	      <label for="floatingInput">아이디를 입력하세요</label>

@@ -4,7 +4,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
 <meta charset="UTF-8">
 <title>상품문의 글쓰기</title>
@@ -35,8 +35,8 @@
 			<div class="row">
 				<div class="col">
 			
-			<form class="border bg-light p-3" method="post" action="questionadd.jsp" onsubmit="return submitBoardForm()">
-			
+			<form class="border bg-light p-3" method="post" action="questionadd.jsp" onsubmit="return submitQuestionForm()">
+				<input type="hidden" name="pdNo" value="<%=product.getNo() %>" />
 				<div class="mb-3 p-2">
 					<label class="form-label p-2">제목</label>
 					<input type="text" class="form-control p-2" name="title" />
@@ -55,5 +55,25 @@
 				</div>
 			</div>
 		</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript">
+
+	function submitQuestionForm() {
+		let titleField = document.querySelector("input[name=title]");
+		if (titleField.value === '') {
+			alert("제목은 필수입력값입니다.");
+			titleField.focus();
+			return false;
+		}
+		let contentField = document.querySelector("textarea[name=content]");
+		if (contentField.value === '') {
+			alert("내용은 필수입력값입니다.");
+			contentField.focus();
+			return false;
+		}
+		return true;
+	}
+
+</script>
 </body>
 </html>

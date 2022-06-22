@@ -40,7 +40,6 @@
 	
 	// 페이징처리에 필요한 정보를 제공하는 객체 생성
 	Pagination pagination = new Pagination(rows, totalRows, currentPage);
-	System.out.println(pagination.getCurrentPage());
 	
 	
 	

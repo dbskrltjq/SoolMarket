@@ -18,6 +18,7 @@ public class Product {
 	private String recommended;
 	private String fileName;
 	private Date createdDate;
+	private Date updatedDate;
 	
 	public Product() {}
 
@@ -130,6 +131,18 @@ public class Product {
 	}
 	
 	public void setCreatedDate() {
+		this.createdDate = createdDate;
+	}
+
+	public Date getUpdatedDate() {
+		return updatedDate;
+	}
+
+	public void setUpdatedDate(Date updatedDate) {
+		this.updatedDate = updatedDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
 	

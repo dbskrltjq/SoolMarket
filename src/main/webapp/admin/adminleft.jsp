@@ -22,8 +22,8 @@
                   </a>
                   <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                       <nav class="sb-sidenav-menu-nested nav">
-                          <a class="nav-link" href="/semi/admin/userListForm.jsp?userList=all">전체 회원 조회</a>
-                          <a class="nav-link" href="/semi/admin/userListForm.jsp?userList=deleted">탈퇴한 회원 조회</a>
+                          <a class="nav-link" href="/semi/admin/userListForm.jsp?search=all&page=1">전체 회원 조회</a>
+                          <a class="nav-link" href="/semi/admin/userListForm.jsp?search=deleted&page=1">탈퇴한 회원 조회</a>
                       </nav>
                   </div>
                  <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">

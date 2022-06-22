@@ -268,6 +268,7 @@ public class DaoHelper {
 		T mapRow(ResultSet rs) throws SQLException;
 	}
 	
+
 	   /**
 	    * CLOB 타입의 값을 읽어서 문자열로 반환합니다.
 	    * <pre>
@@ -302,4 +303,5 @@ public class DaoHelper {
 	         return null;
 	      }
 	   } 
+
 }

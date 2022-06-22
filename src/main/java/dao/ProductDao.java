@@ -184,22 +184,93 @@ public class ProductDao {
 	} 
 	
 	public List<Product> getAllProducts(int beginIndex, int endIndex) throws SQLException {
-		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
-				   + "from(select row_number() over (order by pd_sale_quantity desc) row_number, pd_name, pd_price, pd_sale_price, pd_review_score "
-				   + "from sul_products) "
-			   	   + "where row_number >= ? and row_number <= ? ";
+		String sql = "select * "
+				   + "from(select row_number() over (order by pd_sale_quantity desc) row_number, P.* "
+				   + "     from sul_products P) " 
+				   + "where row_number >= ?  and row_number <= ? ";
 				
 		return helper.selectList(sql, rs -> {
 			Product product = new Product();
+			product.setNo(rs.getInt("pd_no"));
+			product.setCategoryNo(rs.getInt("category_no"));
 			product.setName(rs.getString("pd_name"));
 			product.setPrice(rs.getInt("pd_price"));
 			product.setSalePrice(rs.getInt("pd_sale_price"));
+			product.setStock(rs.getInt("pd_stock"));
 			product.setReviewScore(rs.getInt("pd_review_score"));
+			product.setReviewCount(rs.getInt("pd_review_count"));
+			product.setCompany(rs.getString("pd_company"));
+			product.setSaleQuantity(rs.getInt("pd_sale_quantity"));
+			product.setRecommended(rs.getString("pd_recommended"));
+			product.setFileName(rs.getString("pd_file_name"));
+			product.setCreatedDate(rs.getDate("pd_created_date"));
+			product.setUpdatedDate(rs.getDate("pd_updated_date"));
 			
 			return product;
 		}, beginIndex, endIndex);
 	}
 	
+
+	/** 2022.06.22 유나
+	 * 카테고리별 상품조회
+	 * @param CategoryNo
+	 * @param beginIndex
+	 * @param endIndex
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Product> getProductsByCategoryNo(int categoryNo, int beginIndex, int endIndex) throws SQLException {
+		String sql = "select * "
+				   + "from (select ROW_NUMBER() OVER (PARTITION BY category_no ORDER BY pd_no) row_number, P.* "
+				   + "from sul_products P) "
+				   + "where category_no = ? "
+				   + "and row_number >= ? and row_number <= ? ";
+		
+		return helper.selectList(sql, rs -> {
+			Product product = new Product();
+			product.setNo(rs.getInt("pd_no"));
+			product.setCategoryNo(rs.getInt("category_no"));
+			product.setName(rs.getString("pd_name"));
+			product.setPrice(rs.getInt("pd_price"));
+			product.setSalePrice(rs.getInt("pd_sale_price"));
+			product.setStock(rs.getInt("pd_stock"));
+			product.setReviewScore(rs.getInt("pd_review_score"));
+			product.setReviewCount(rs.getInt("pd_review_count"));
+			product.setCompany(rs.getString("pd_company"));
+			product.setSaleQuantity(rs.getInt("pd_sale_quantity"));
+			product.setRecommended(rs.getString("pd_recommended"));
+			product.setFileName(rs.getString("pd_file_name"));
+			product.setCreatedDate(rs.getDate("pd_created_date"));
+			product.setUpdatedDate(rs.getDate("pd_updated_date"));
+			
+			return product;
+		}, categoryNo, beginIndex, endIndex);
+	}
+	
+	public List<Product> getProductsByCategoryNo(int categoryNo) throws SQLException {
+		String sql = "select * from sul_products where category_no = ? order by pd_no ";
+		
+		return helper.selectList(sql, rs -> {
+			Product product = new Product();
+			product.setNo(rs.getInt("pd_no"));
+			product.setCategoryNo(rs.getInt("category_no"));
+			product.setName(rs.getString("pd_name"));
+			product.setPrice(rs.getInt("pd_price"));
+			product.setSalePrice(rs.getInt("pd_sale_price"));
+			product.setStock(rs.getInt("pd_stock"));
+			product.setReviewScore(rs.getInt("pd_review_score"));
+			product.setReviewCount(rs.getInt("pd_review_count"));
+			product.setCompany(rs.getString("pd_company"));
+			product.setSaleQuantity(rs.getInt("pd_sale_quantity"));
+			product.setRecommended(rs.getString("pd_recommended"));
+			product.setFileName(rs.getString("pd_file_name"));
+			product.setCreatedDate(rs.getDate("pd_created_date"));
+			product.setUpdatedDate(rs.getDate("pd_updated_date"));
+			
+			return product;
+		}, categoryNo);
+	}
+
 	
 	public List<Product> getItemBySaleQuantity(int categoryNo, int beginIndex, int endIndex) throws SQLException {
 		
@@ -665,6 +736,20 @@ public class ProductDao {
 			return product;
 			
 		}, keyword, categoryName, company, beginIndex, endIndex);
+	}
+	
+	
+	
+	/**	시퀀스부분 수정해야합니다!!!!
+	 * 신규상품등록하기, DB에 상품STOCK 디폴트값이 30이므로, 신규상품등록은 PD_STOCK에 입고수량을 넣는다.
+	 * @param product
+	 * @throws SQLException
+	 */
+	public void insertNewProduct(Product product) throws SQLException {
+		String sql = "insert into sul_products (PD_NO, CATEGORY_NO, PD_NAME, PD_COMPANY, PD_PRICE, PD_SALE_PRICE, PD_STOCK, PD_RECOMMENDED, PD_FILE_NAME)"
+				   + "values(sul_products_seq.nextval, ?, ?, ?, ?, ?, ?, ?, ?) ";
+		
+		helper.insert(sql, product.getCategoryNo(), product.getName(), product.getCompany(), product.getPrice(), product.getSalePrice(), product.getStock(), product.getRecommended(),product.getFileName());
 	}
 	
 }

@@ -149,7 +149,7 @@ public class UserDao {
 	
 	public List<User> getAllCurrentUsers() throws SQLException {
 		
-		String sql = "select * from sul_users where user_deleted = 'N' ";
+		String sql = "select * from sul_users where user_deleted = 'N' order by user_no ";
 		
 		return helper.selectList(sql, rs -> {
 			User user = new User();
@@ -170,6 +170,77 @@ public class UserDao {
 			
 			return user;
 		});
+	}
+	
+	public int getTotalCurrentUsersCnt() throws SQLException {
+		String sql = "select count(*) cnt from sul_users where user_deleted = 'N' ";
+		
+		return helper.selectOne(sql, rs -> {
+			return 	rs.getInt("cnt");
+		});
+	}
+	public int getTotalDeletedUsersCnt() throws SQLException {
+		String sql = "select count(*) cnt from sul_users where user_deleted = 'Y' ";
+		
+		return helper.selectOne(sql, rs -> {
+			return 	rs.getInt("cnt");
+		});
+	}
+	
+	public List<User> getUsers(int beginIndex, int endIndex) throws SQLException {
+		String sql = "select * "
+				   + "from (select ROW_NUMBER() OVER (ORDER BY user_no) row_number, U.* "
+				   + "      from sul_users U "
+				   + "      where U.user_deleted = 'N') "
+				   + "where row_number >= ? and row_number <= ? ";
+		
+		return helper.selectList(sql, rs -> {
+			User user = new User();
+			user.setNo(rs.getInt("user_no"));
+			user.setId(rs.getString("user_id"));
+			user.setPassword(rs.getString("user_pw"));
+			user.setName(rs.getString("user_name"));
+			user.setEmail(rs.getString("user_email"));
+			user.setTel(rs.getString("user_tel"));
+			user.setPostCode(rs.getString("user_post_code"));
+			user.setAddress(rs.getString("user_address"));
+			user.setDetailAddress(rs.getString("user_detail_address"));
+			user.setPoint(rs.getInt("user_point"));
+			user.setDeleted(rs.getString("user_deleted"));
+			user.setCreatedDate(rs.getDate("user_created_date"));
+			user.setUpdatedDate(rs.getDate("user_updated_date"));
+			user.setIsAdmin(rs.getString("is_admin"));
+			
+			return user;
+		}, beginIndex, endIndex);
+	}
+	
+	public List<User> getDeletedUsers(int beginIndex, int endIndex) throws SQLException {
+		String sql = "select * "
+				   + "from (select ROW_NUMBER() OVER (ORDER BY user_no) row_number, U.* "
+				   + "      from sul_users U "
+				   + "      where U.user_deleted = 'Y') "
+				   + "where row_number >= ? and row_number <= ? ";
+		
+		return helper.selectList(sql, rs -> {
+			User user = new User();
+			user.setNo(rs.getInt("user_no"));
+			user.setId(rs.getString("user_id"));
+			user.setPassword(rs.getString("user_pw"));
+			user.setName(rs.getString("user_name"));
+			user.setEmail(rs.getString("user_email"));
+			user.setTel(rs.getString("user_tel"));
+			user.setPostCode(rs.getString("user_post_code"));
+			user.setAddress(rs.getString("user_address"));
+			user.setDetailAddress(rs.getString("user_detail_address"));
+			user.setPoint(rs.getInt("user_point"));
+			user.setDeleted(rs.getString("user_deleted"));
+			user.setCreatedDate(rs.getDate("user_created_date"));
+			user.setUpdatedDate(rs.getDate("user_updated_date"));
+			user.setIsAdmin(rs.getString("is_admin"));
+			
+			return user;
+		}, beginIndex, endIndex);
 	}
 	
 	public List<User> getAllDeletedUsers() throws SQLException {

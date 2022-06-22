@@ -23,5 +23,5 @@
 	ProductQuestionDao productQuestionDao = ProductQuestionDao.getInstance();
 	productQuestionDao.insertQuestion(question);
 	
-	response.sendRedirect("detail.jsp?productNo="+pdNo);
+	response.sendRedirect("detail.jsp?pdNo="+pdNo);
 %>

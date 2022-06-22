@@ -33,7 +33,7 @@
 		//로그인된 유저 객체 확인
 		User user = (User) session.getAttribute("LOGINED_USER");
 		
-		int productNo = Integer.parseInt(request.getParameter("productNo"));
+		int productNo = Integer.parseInt(request.getParameter("pdNo"));
 	
 		ProductDao productDao = ProductDao.getInstance();
 		Product product = productDao.getProductByNo(productNo);
@@ -68,7 +68,7 @@
 					</tr>
 					<tr>
 						<th class="p-2">판매가</th>
-						<td class="p-2"><span id="salePrice"><%=product.getSalePrice()%></span>원</td>
+						<td class="p-2"><span id="sale-price"><%=product.getSalePrice()%></span>원</td>
 						<%--총상품금을 수량에 따라서 변경하기 위해 판매가에 id값을 붙인다. --%>
 					</tr>
 					<tr>
@@ -81,13 +81,13 @@
 							<form id="product-form">
 							<input type="hidden" name="productNo" value="<%=product.getNo() %>" />
 							<%--총상품금을 수량에 따라서 변경하기 위해 수량 input박스에 id값을 붙인다. --%>
-							<input class=" p-2" name="quantity" type="number" min="1" max="100" id="productQuantity" value="1" onchange="updateTotalPrice()">
+							<input class=" p-2" name="quantity" type="number" min="1" max="100" id="product-quantity" value="1" onchange="updateTotalPrice()">
 							</form>
 						</td>
 					</tr>
 					<tr>
 						<th class="p-2">총상품금액</th>
-						<td class="p-2"><span id="totalPrice"><%=product.getSalePrice()%></span>원</td>
+						<td class="p-2"><span id="total-price"><%=product.getSalePrice()%></span>원</td>
 						<%--총상품금을 수량에 따라서 변경하기 위해 id값을 붙인다. --%>
 					</tr>
 					<tr>
@@ -117,6 +117,7 @@
 
 				<form class="row g-3" method="post" action="reviewRegister.jsp" enctype="multipart/form-data">
 					<input type="hidden" name="productNo" value="<%=product.getNo() %>" />
+					
 						<select class="form-select form-select-sm" name="reviewScore" aria-label=".form-select-sm example">
 		  					<option selected>평점을 입력해주세요</option>
 		 					<option value="5">★★★★★</option>
@@ -171,10 +172,16 @@
 	<div class="row mb-3" id="qna-row">
 		<div class="col-12 d-flex justify-content-between">
 			<h3>상품 Q&A</h3>
+				
+				<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#product-question-write" onclick="">
+	 				 상품문의 글쓰기
+				</button>
+				
 			<div>
 				<a href="productQuestionForm.jsp?pdNo=<%=product.getNo() %>" class="btn btn-primary btn-sm  " >상품문의 글쓰기</a>
 				<a href="productQuestionlist.jsp" class="btn btn-outline-secondary btn-sm  " >상품문의 전체보기</a>
 			</div>
+			
 		</div>
 	</div>
 	<div class="row mb-5">
@@ -221,12 +228,76 @@
 		%>
 		</div>
 	</div>
-		
-		
-		
 </div>
+
+<!-- Button trigger modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="product-question-write" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">상품문의 글쓰기</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      
+      <div class="row">
+				<div class="col-6 py-3 ">
+					<div>
+						<img alt="" src="../images/sample1.jpg" class="img-thumbnail" width="200">
+					</div>
+				</div>
+				<div class="col-6 p-3">
+					<h3 class="fs-5 text-bold"><%=product.getName() %></h3>
+					<p><%=product.getName() %></p>
+				</div>
+			</div>
+			
+			<%-- form에 id를 입력해줍니다.
+				button에 이벤트 걸고 값을 확인합니다. 제목이나 내용의 값이 하나라도 없을땐 alert창 뜨게하고
+				둘다 이상 없으면 submit();을 통해 값을 저장시킨다. --%>
+        <form class="border bg-light p-3" method="post" action="questionadd.jsp" >
+				<input type="hidden" name="pdNo" value="<%=product.getNo() %>" />
+				<div class="mb-3">
+					<label class="form-label">제목</label>
+					<input type="text" class="form-control" name="title" />
+				</div>
+				
+				<div class="mb-3">
+					<label class="form-label">내용</label>
+					<textarea rows="5" class="form-control" name="content"></textarea>
+				</div>
+		</form>
+		
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        <button type="button" class="btn btn-primary">등록</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
+	
+	// 상품 문의시 
+	function submitQuestionForm() {
+		let titleField = document.querySelector("input[name=title]");
+		if (titleField.value === '') {
+			alert("제목은 필수입력값입니다.");
+			titleField.focus();
+			return false;
+		}
+		let contentField = document.querySelector("textarea[name=content]");
+		if (contentField.value === '') {
+			alert("내용은 필수입력값입니다.");
+			contentField.focus();
+			return false;
+		}
+		return true;
+	}
 
 	function questionUserCheck(productNo) {
 		let islogin = document.quertSelector("#is-login").value
@@ -256,9 +327,9 @@
 	}
 	// 수량을 조절할 경우 활성화되는 기능입니다.
 	function updateTotalPrice() {
-		let span1 = document.getElementById("salePrice");
-		let input = document.getElementById("productQuantity");
-		let span2 = document.getElementById("totalPrice");
+		let span1 = document.getElementById("sale-price");
+		let input = document.getElementById("product-quantity");
+		let span2 = document.getElementById("total-price");
 		
 		let price = parseInt(span1.textContent);
 		// 태그 사이의 값은 textContent로 뽑아온다.

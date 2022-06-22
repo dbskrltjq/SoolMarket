@@ -32,5 +32,5 @@
 	
 	productReviewDao.insertReview(review);
 	
-	response.sendRedirect("detail.jsp?productNo=" + pdNo);
+	response.sendRedirect("detail.jsp?pdNo=" + pdNo);
 %>

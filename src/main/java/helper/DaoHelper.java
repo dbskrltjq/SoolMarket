@@ -51,19 +51,6 @@ public class DaoHelper {
 
 	
 
-	   public static String clobToString(Clob clob) throws SQLException {
-	      if (clob == null) {
-	         return null;
-	      }
-	      StringBuilder builder = new StringBuilder();
-
-	      try (BufferedReader reader = new BufferedReader(clob.getCharacterStream())) {
-	         reader.lines().forEach(text -> builder.append(text).append(System.lineSeparator()));
-	         return builder.toString();
-	      } catch (IOException e) {
-	         return null;
-	      }
-	   } 
 	
 	/**
 	 * SELECT문을 실행한다.

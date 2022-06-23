@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <%@page import="vo.User" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" errorPage="../error/500.jsp"%>
+<%
+	//세션에서 로그인된 관리자정보를 조회한다.
+	User admin = (User) session.getAttribute("ADMIN");
+	if (admin == null) {
+	throw new RuntimeException("해당 서비스는 관리자만 이용할 수 있습니다.");
+}      
+%>
 <html lang="ko">
 <head>
 	<meta charset="utf-8" />

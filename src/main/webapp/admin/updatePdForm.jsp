@@ -50,7 +50,7 @@
 										<button type="button" class="btn btn-primary " id="update-btn">상품수정하기</button>
 									</div>
 									<div class="form-div ">
-										<form id="update-form" class="row g-3" method="post" action="registerPdForm.jsp">
+										<form id="update-form" class="row g-3" method="post">
 												<div class="col-3 input-group ">
 												<input type="hidden" name="page" />
 												<select class="form-select form-select-sm" name="category" onchange="﻿loadProducts();" style="width: auto;">
@@ -63,12 +63,12 @@
 												}
 											%>
 												</select>
-												<select class="form-select form-select-sm float-end" name="keyword" onchange="﻿loadProducts();" style="width: auto;">
+												<select class="form-select form-select-sm float-end" name="search" onchange="﻿loadProducts();" style="width: auto;">
 													<option value="" selected disabled>검색조건</option>
 													<option value="company">제조사</option>
 													<option value="name">상품명</option>
 												</select>
-												<input type="text" class="form-control" placeholder="키워드 입력" style="width: auto;"/>
+												<input type="text" class="form-control" name="keyword" placeholder="키워드 입력" style="width: auto;"/>
 												<select class="form-select form-select-sm" name="period" onchange="﻿loadProducts();" style="width: auto;">
 													<option value="-9999">전체보기</option>
 													<option value="-1">1개월</option>											
@@ -76,7 +76,7 @@
 													<option value="-6">6개월</option>	
 												</select>
 												</div>
-												<button type="button" class="btn btn-outline-secondary" onclick="loadProducts();">검색</button>
+												<button type="button" class="btn btn-outline-secondary" onclick="searchByKeyword();">검색</button>
 												<select class="form-select form-select-sm float-end" name="rows" onchange="﻿loadProducts();" style="width: auto;">
 													<option value="5" <%=rows == 5 ? "selected" : ""%>>5개씩 보기</option>
 													<option value="10" <%=rows == 10 ? "selected" : ""%>>10개씩 보기</option>
@@ -139,7 +139,8 @@
 		let rows = document.querySelector("select[name=rows]").value;
 		let pageNo = page || 1; 
 		
-		let keyword = document.querySelector("select[name=keyword]").value;
+		let search = document.querySelector("select[name=search]").value;
+		let keyword = document.querySelector("input[name=keyword]").value;
 		
 		let tbody = document.querySelector("#product-table tbody");
 		let xhr = new XMLHttpRequest();
@@ -208,11 +209,26 @@
 			}
 		}
 		
-		xhr.open("GET", "productList.jsp?categoryNo=" + categoryNo + "&period=" + period + "&rows=" + rows + "&pageNo=" + pageNo + "&keyword=" + keyword);
+		xhr.open("GET", "productList.jsp?categoryNo=" + categoryNo + "&period=" + period + "&rows=" + rows + "&pageNo=" + pageNo + "&search=" + search + "&keyword=" + keyword);
 		xhr.send();
 		
 	}
 	
+	function searchByKeyword() {
+		let form = document.getElementById("update-form");
+		let formData = new FormData(form);
+		
+		let xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState === 4 && xhr.status === 200) {
+				loadProducts(1);
+			}
+		}
+		xhr.open("POST", "productList.jsp");			
+		xhr.send(formData);		 
+	
+		
+	}
 	
 	
 </script>

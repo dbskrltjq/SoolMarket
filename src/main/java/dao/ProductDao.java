@@ -222,20 +222,50 @@ public class ProductDao {
 	}
 	
 
-	/** 2022.06.22 유나
-	 * 카테고리별 상품조회
-	 * @param CategoryNo
+	/**
+	 * 
+	 * @param period 조회기간
+	 * @param keyword 제조사 키워드
+	 * @param categoryNo
 	 * @param beginIndex
 	 * @param endIndex
 	 * @return
 	 * @throws SQLException
 	 */
-	public List<Product> getProductsByCategoryNo(int period, String keyword, int categoryNo, int beginIndex, int endIndex) throws SQLException {
+	public List<Product> getProductsByCompanyKeyword(int period, String keyword, int categoryNo, int beginIndex, int endIndex) throws SQLException {
 		String sql = "select * "
 				   + "from (select ROW_NUMBER() OVER (PARTITION BY category_no ORDER BY pd_no desc) row_number, P.* "
 				   + "from sul_products P  where P.pd_created_date >= trunc( add_months ( sysdate, ? ))  and p.pd_company like '%'  || ? || '%') "
 				   + "where category_no = ? "
 				   + "and row_number >= ? and row_number <= ? ";
+		
+		return helper.selectList(sql, rs -> {
+			Product product = new Product();
+			product.setNo(rs.getInt("pd_no"));
+			product.setCategoryNo(rs.getInt("category_no"));
+			product.setName(rs.getString("pd_name"));
+			product.setPrice(rs.getInt("pd_price"));
+			product.setSalePrice(rs.getInt("pd_sale_price"));
+			product.setStock(rs.getInt("pd_stock"));
+			product.setReviewScore(rs.getInt("pd_review_score"));
+			product.setReviewCount(rs.getInt("pd_review_count"));
+			product.setCompany(rs.getString("pd_company"));
+			product.setSaleQuantity(rs.getInt("pd_sale_quantity"));
+			product.setRecommended(rs.getString("pd_recommended"));
+			product.setFileName(rs.getString("pd_file_name"));
+			product.setCreatedDate(rs.getDate("pd_created_date"));
+			product.setUpdatedDate(rs.getDate("pd_updated_date"));
+			
+			return product;
+		}, period, keyword ,categoryNo, beginIndex, endIndex);
+	}
+	
+	public List<Product> getProductsByName(int period, String keyword, int categoryNo, int beginIndex, int endIndex) throws SQLException {
+		String sql = "select * "
+				+ "from (select ROW_NUMBER() OVER (PARTITION BY category_no ORDER BY pd_no desc) row_number, P.* "
+				+ "from sul_products P  where P.pd_created_date >= trunc( add_months ( sysdate, ? ))  and p.pd_name like '%'  || ? || '%') "
+				+ "where category_no = ? "
+				+ "and row_number >= ? and row_number <= ? ";
 		
 		return helper.selectList(sql, rs -> {
 			Product product = new Product();

@@ -118,6 +118,17 @@ public class ProductDao {
 		}, categoryNo);
 	}
 	
+	public int getTotalRows(int categoryNo, int period) throws SQLException {
+		String sql = "select count(*) cnt "
+				   + "from sul_products "
+				   + "where category_no = ? "
+				   + "and pd_created_date >=  trunc( add_months ( sysdate, ? )) ";
+		
+		return helper.selectOne(sql, rs-> {
+			return rs.getInt("cnt");
+		}, categoryNo, period);
+	}
+	
 	public int getTotalRows(String keyword) throws SQLException {
 		String sql = "select count(*) cnt from sul_products where pd_name like '%' || ? || '%' ";
 		
@@ -740,7 +751,7 @@ public class ProductDao {
 	
 	
 	
-	/**	시퀀스부분 수정해야합니다!!!!
+	/**	시퀀스부분 수정?
 	 * 신규상품등록하기, DB에 상품STOCK 디폴트값이 30이므로, 신규상품등록은 PD_STOCK에 입고수량을 넣는다.
 	 * @param product
 	 * @throws SQLException

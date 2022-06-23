@@ -34,7 +34,7 @@
     		return;
     	}
     	
-    	rowCount = productReviewDao.getReviewUserCount(productNo);
+    	rowCount = productReviewDao.getReviewUserCount(productNo,user.getNo());
     	
     	if (rowCount > 0) {
     		result.put("msg", "exist");

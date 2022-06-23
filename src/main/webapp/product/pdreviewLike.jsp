@@ -9,7 +9,7 @@
 	User user = (User) session.getAttribute("LOGINED_USER");
 	
 	int reviewNo = StringUtil.stringToInt(request.getParameter("reviewNo"));
-
+	
 	ReviewDao reviewDao = ReviewDao.getInstance();
 	ReviewLikeUser reviewLikeUser = new ReviewLikeUser(reviewNo, user.getNo());
 	
@@ -21,7 +21,7 @@
 	reviewDao.insertReviewLikeUser(reviewLikeUser);
 	
 	
-	response.sendRedirect("detail.jsp");
+	response.sendRedirect("totalReview.jsp");
 	
 
 %>

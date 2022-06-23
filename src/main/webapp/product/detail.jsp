@@ -25,16 +25,16 @@
 		//로그인된 유저 객체 확인
 		User user = (User) session.getAttribute("LOGINED_USER");
 		
-		int productNo = Integer.parseInt(request.getParameter("pdNo"));
+		int pdNo = Integer.parseInt(request.getParameter("pdNo"));
 	
 		ProductDao productDao = ProductDao.getInstance();
-		Product product = productDao.getProductByNo(productNo);
+		Product product = productDao.getProductByNo(pdNo);
 		
 		ProductReviewDao productReviewDao = ProductReviewDao.getInstance();
-		List<ReviewDto> reviews = productReviewDao.getProductReviews(productNo);
+		List<ReviewDto> reviews = productReviewDao.getProductReviews(pdNo);
 		
 		ProductQuestionDao productQuestionDao = ProductQuestionDao.getInstance();
-		List<QuestionDto> questions = productQuestionDao.getProductQuestions(productNo);
+		List<QuestionDto> questions = productQuestionDao.getProductQuestions(pdNo);
 		
 	%>
 	<div class="container mt-3 mb-5">
@@ -183,12 +183,15 @@
 					</div>
 		      		<div class="col-10 p-3">
 		         			<p class="small"><%=review.getContent() %> </p>
+		         			
 		         		<div>
 							<img alt="" src="../images/sample1.jpg" class="img-thumbnail" width="100">
 						</div>
-		         			<p><a href="">1</a>개의 댓글이 있습니다. <span class="text-info ">추천 </span> : <span class="test-info"><%=review.getLikeCount() %></span>
+						
+		         			<a href="">1</a>개의 댓글이 있습니다. <span class="text-info ">추천 </span> : <span class="test-info"><%=review.getLikeCount() %></span>
 		         				<%--비 로그인시 리뷰 추천창이 안뜨도록 했습니다. 리뷰 추천기능 넣었습니다. --%>
-		         			   <a href="" class="btn btn-info btn-sm <%=user == null ? "btn-outline-secondary disabled" : "btn-outline-primary" %>" onclick="likeReview(<%=review.getNo() %>)">추천하기</a></p>
+		         			<button type="button" class="btn btn-info btn-sm <%=user == null ? "btn-outline-secondary disabled" : "btn-outline-primary" %>" onclick="likeReview(<%=review.getNo() %>)">추천하기</button>
+		     				<a href="reviewdelete.jsp" class="btn btn-outline-secondary-sm">X</a>
 		     		</div>
 	   			</div>
 			<%
@@ -321,22 +324,23 @@
 	
 				if(result.same) {
 					alert("자신이 작성한 글은 추천할수 없습니다.");
-					return;
+					return false;
 				} 
+				
 				if(result.already) {
 					alert("이미 추천한 리뷰입니다");
-					return;
+					return false;
 				}
-				location.href="pdreviewLike.jsp?reviewNo="+ reviewNo;
+				
+				location.href="../review/reviewLike.jsp?reviewNo="+ reviewNo;
 				alert("추천이 완료되었습니다");
 				return;
-				
 			}
-	
 		}
 		xhr.open("GET", '../review/reviewLikeCheck.jsp?reviewNo=' + reviewNo);
 		xhr.send();
 	}
+	
 	// 상품문의 글쓰기 체크와 모두 완료시 속성값 주는 기능
 	function questionCheckForm() {
 		// form의 id를 통해 값을 가져옵니다.
@@ -361,6 +365,7 @@
 		// 제목,내용이 모두 들어있다면 form의 속성명/속성값을 추가한다.
 		} else {
 			form.setAttribute("action","questionadd.jsp");
+			alert("상품문의가 등록되었습니다.");
 			form.submit();
 		}
 			
@@ -372,7 +377,7 @@
 			if (xhr.readyState === 4 && xhr.status === 200) {
 				let jsonText = xhr.responseText;
 				let result = JSON.parse(jsonText);
-				if (result.exist === "logout") {
+				if (!result.exist) {
 					// 비로그인시
 					alert("쇼핑몰 회원님만 글작성 가능합니다.")
 					location.replace("../loginform.jsp?fail=deny");

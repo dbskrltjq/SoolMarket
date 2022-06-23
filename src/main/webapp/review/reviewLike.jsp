@@ -4,9 +4,14 @@
 <%@page import="dao.ReviewDao"%>
 <%@page import="vo.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" errorPage="../error/500.jsp"%>
 <%
 	User user = (User) session.getAttribute("LOGINED_USER");
+
+	if (user == null) {
+		throw new RuntimeException("좋아요 기능은 로그인 후 사용가능한 서비스 입니다.");
+	}
+
 	
 	int reviewNo = StringUtil.stringToInt(request.getParameter("reviewNo"));
 

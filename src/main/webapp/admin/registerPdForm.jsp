@@ -7,7 +7,7 @@
 <%@page import="dao.CategoryDao"%>
 <%@page import="vo.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" %>
+    pageEncoding="UTF-8"  errorPage="../error/500.jsp"%>
     
 <!DOCTYPE html>
 <html lang="ko">
@@ -24,25 +24,26 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
 <style type="text/css">
 	select {margin: 3px;}
-	
 </style>
 </head>
 <%
 	//세션에서 로그인된 관리자정보를 조회한다.
-	/* User admin = (User) session.getAttribute("ADMIN");
+	  User admin = (User) session.getAttribute("ADMIN");
 	if (admin == null) {
 		throw new RuntimeException("해당 서비스는 관리자만 이용할 수 있습니다.");
-	} errorPage="../error/500.jsp" */
-	ProductDao productDao = ProductDao.getInstance();
+	}  
 	CategoryDao categoryDao = CategoryDao.getInstance();
-	
-	int categoryNo = StringUtil.stringToInt(request.getParameter("category"));
-	int currentPage = StringUtil.stringToInt(request.getParameter("page"), 1);
+	List<Category> categories = categoryDao.getCategories();
 	int rows = StringUtil.stringToInt(request.getParameter("rows"), 5);
+	
+	/* //ProductDao productDao = ProductDao.getInstance();
+	int categoryNo = StringUtil.stringToInt(request.getParameter("category"));
+	int period = StringUtil.stringToInt(request.getParameter("period"));
+	int currentPage = StringUtil.stringToInt(request.getParameter("page"), 1);
 	int totalRows = productDao.getTotalRows(categoryNo);   
 	
-	List<Category> categories = categoryDao.getCategories();
-	
+	//Pagination pagination = new Pagination(rows, totalRows, currentPage);
+	//List<Product> products = productDao.getProductsByCategoryNo(period, categoryNo, pagination.getBeginIndex(), pagination.getEndIndex()); */
 	
 	
 	
@@ -62,9 +63,10 @@
 
 							<div class="card my-4 ">
 								<div class="card-header">
-									<i class="fas fa-table me-1"></i> 
-									<strong class="me-3">신규 상품</strong>
-									<button type="button" class="btn btn-primary me-0" id="register-btn" data-bs-toggle="modal" data-bs-target="#registerModal">상품등록하기</button>
+									<div class="d-flex justify-content-between">
+										<strong class="me-3"><i class="fas fa-table me-1"></i>  신규 상품</strong>
+										<button type="button" class="btn btn-primary " id="register-btn" data-bs-toggle="modal" data-bs-target="#registerModal">상품등록하기</button>
+									</div>
 									<div class="form-div">
 										<form id="register-form" class="row g-3" method="post" action="registerPdForm.jsp">
 											<input type="hidden" name="page" />
@@ -228,7 +230,7 @@
 		</form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btn-form-close">닫기</button>
         <button type="button" id="registerBtn" class="btn btn-primary" onclick="submitForm();">등록하기</button>
       </div>
     </div>
@@ -278,6 +280,7 @@
 					let price = product.price;
 					let salePrice = product.salePrice;
 					let quantity = product.stock;
+					let createdDate= product.createdDate;
 					let recommended = product.recommended;
 					
 					rows += "<tr>";
@@ -286,7 +289,7 @@
 					rows += "<td>" + company + "</td>";
 					rows += "<td>" + price + "</td>";
 					rows += "<td>" + salePrice + "</td>";
-					rows += "<td>" + quantity + "</td>";
+					rows += "<td>" + quantity + "(" + createdDate + ")" + "</td>";
 					rows += "<td>" + recommended + "</td>";
 					rows += "</tr>";
 				}
@@ -381,7 +384,20 @@
 			return false;
 		}
 		
-		document.getElementById("newProduct-form").submit();
+		// 폼을 비동기방식으로 제출하기
+		let form = document.getElementById("newProduct-form");
+		let formData = new FormData(form);
+		
+		let xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState === 4 && xhr.status === 200) {
+				loadProducts(1);									// 다시 리스트 출력
+				document.getElementById("btn-form-close").click();
+				alert("상품등록이 완료되었습니다.");
+			}
+		}
+		xhr.open("POST", "addProduct.jsp");			// 상품추가 jsp 주소를 넣는다. form제출은 POST방식
+		xhr.send(formData);							// js의 객체를 담아서 보낸다.
 	}  
 		
 	

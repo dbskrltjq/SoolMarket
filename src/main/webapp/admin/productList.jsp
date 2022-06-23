@@ -16,11 +16,16 @@
 	int rows = StringUtil.stringToInt(request.getParameter("rows"));
 	int currentPage = StringUtil.stringToInt(request.getParameter("pageNo"));
 	int totalRows = productDao.getTotalRows(categoryNo, period);
+	String keyword = request.getParameter("keyword");
 	
 	Pagination pagination = new Pagination(rows, totalRows, currentPage);
-	List<Product> products = productDao.getProductsByCategoryNo(categoryNo, pagination.getBeginIndex(), pagination.getEndIndex());
-
 	Map<String, Object> result = new HashMap<>();
+	
+	List<Product> products = productDao.getProductsByCategoryNo(period, categoryNo, pagination.getBeginIndex(), pagination.getEndIndex());
+	if(keyword != "") {
+		products = productDao.getProductsByCategoryNo(period, keyword, categoryNo, pagination.getBeginIndex(), pagination.getEndIndex());
+	}
+
 	result.put("pagination", pagination);
 	result.put("products", products);
 

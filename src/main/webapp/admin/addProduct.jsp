@@ -44,25 +44,14 @@
 	ProductDao productDao = ProductDao.getInstance();
 	productDao.insertNewProduct(newProduct);
 	
-	switch (categoryNo) {
-	case 100 :
-		response.sendRedirect("registerPdForm.jsp?categoryNo=100");
-		break;
-	case 200 :
-		response.sendRedirect("registerPdForm.jsp?categoryNo=200");
-		break;
-	case 300 :
-		response.sendRedirect("registerPdForm.jsp?categoryNo=300");
-		break;
-	case 400 :
-		response.sendRedirect("registerPdForm.jsp?categoryNo=400");
-		break;
-	case 500 :
-		response.sendRedirect("registerPdForm.jsp?categoryNo=500");
-		break;
-	}
+	//int period = StringUtil.stringToInt(mr.getParameter("period"));
+	//int rows = StringUtil.stringToInt(mr.getParameter("rows"));
+	//int pageNo = StringUtil.stringToInt(mr.getParameter("pageNo"));
 	
+	//response.sendRedirect("registerPdForm.jsp?categoryNo=" + categoryNo);
+	//response.sendRedirect("productList.jsp?categoryNo=" + categoryNo + "&period=" + period + "&rows=" + rows + "&pageNo=" + pageNo);
 
+	response.setStatus(HttpServletResponse.SC_OK);
 
 
 %>

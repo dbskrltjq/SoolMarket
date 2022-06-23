@@ -350,6 +350,30 @@ public class ReviewDao {
 		}, keyword);
 	}
 	
+	public int getTotalRows(int categoryNo) throws SQLException {
+		String sql = "select count(*) cnt " 
+					+"from sul_reviews r, sul_products p "
+					+"where r.review_deleted = 'N' "
+					+"and r.pd_no = p.pd_no "
+					+"and p.category_no = ? ";
+		
+		return helper.selectOne(sql, rs -> {
+			return rs.getInt("cnt");
+		}, categoryNo);
+	}
+	
+	public int getTotalRows(String keyword, int categoryNo	) throws SQLException {
+		String sql = "select count(*) cnt " 
+					+"from sul_reviews r, sul_products p "
+					+"where r.review_deleted = 'N' and r.review_content like '%' || ? || '%' "
+					+"and r.pd_no = p.pd_no "
+					+"and p.category_no = ? ";
+		
+		return helper.selectOne(sql, rs -> {
+			return rs.getInt("cnt");
+		}, keyword, categoryNo);
+	}
+	
 	
 	
 	public ReviewLikeUser getReviewLikeUser(int reviewNo, int userNo) throws SQLException {
@@ -396,4 +420,22 @@ public class ReviewDao {
 		helper.update(sql, review.getLikeCount(), review.getNo());
 	}
 	
+	public void insertReview(Review review) throws SQLException {
+		String sql = "insert into sul_reviews "
+					+"(review_no, user_no, pd_no, review_content, review_file_name, review_score) "
+					+"values (sul_reviews_seq.nextval, ?, ?, ?, ?, ?) ";
+		
+		helper.insert(sql, review.getUserNo(), review.getPdNo(), review.getContent(), review.getFileName(), review.getScore());
+	}
+	
+	public int countReviewByUserNoPdNo(int userNo, int pdNo) throws SQLException {
+		String sql = "select count(*) cnt "
+					+"from sul_reivews "
+					+"where user_no = ? "
+					+"and pd_no = ? " ;
+		
+		return helper.selectOne(sql, rs -> {
+			return rs.getInt("cnt");
+		}, userNo, pdNo);
+	}
 }

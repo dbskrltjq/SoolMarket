@@ -7,21 +7,16 @@
 <%@ page language="java" contentType="application/json; charset=UTF-8"
     pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
     <%
-    	Map<String, Object> result = new HashMap<>();
+    	Map<String, String> result = new HashMap<>();
+    	Gson gson = new Gson();
     	
     	User user = (User) session.getAttribute("LOGINED_USER");
     
-    	ProductReviewDao productReviewDao = ProductReviewDao.getInstance();
-    	int reviewUserCount = productReviewDao.getReviewUserCount(user.getNo());
-    	
-    	if(reviewUserCount > 0) {
-    		result.put("exist",false);
-    	} else {
-    		result.put("exist",true);
+    	if (user == null) {
+    		result.put("exist","logout");
+    		String jsonText = gson.toJson(result);
+	    	out.write(jsonText);
+	    	
+	    	return;
     	}
-    	
-    	Gson gson = new Gson();
-    	String jsonText = gson.toJson(result);
-    	
-    	out.write(jsonText);
     %>

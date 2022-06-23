@@ -51,7 +51,7 @@ public class DaoHelper {
 
 	
 
-	   public static String clobToString(Clob clob) throws SQLException {
+	   public static String clobToString1(Clob clob) throws SQLException {
 	      if (clob == null) {
 	         return null;
 	      }

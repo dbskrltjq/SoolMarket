@@ -1,3 +1,7 @@
+<%@page import="dao.HistoryDao"%>
+<%@page import="dao.UserDao"%>
+<%@page import="org.apache.catalina.realm.UserDatabaseRealm.UserDatabasePrincipal"%>
+<%@page import="vo.PointHistory"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.lang.reflect.Array"%>
 <%@page import="java.util.List"%>
@@ -11,9 +15,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
-<% 
-
-	User user = (User) session.getAttribute("LOGINED_USER");
+<%
+User user = (User) session.getAttribute("LOGINED_USER");
 	if (user == null) {
 		throw new RuntimeException("구매는 로그인 후 사용가능한 서비스 입니다.");
 	}
@@ -78,18 +81,59 @@
 	// 주문명 : 1개 제품 주문하면 해당 제품명만, 2개 이상 제품 주문하면 맨 처음 제품명 + (전체갯수 - 1) 종 이라고 뜬다.
 	orderTitle = orderTitle + (orderItems.size() > 1 ?  " 외 " + (orderItems.size() - 1) + " 종" : "");
 	order.setTitle(orderTitle);
-	
+
 	// order - orderNo 담긴 후부터 orderItem 담아야 한다.
-	// 시퀀스 넣지 말고 값 바인딩하기
+	// orderNo에는 시퀀스 넣지 말고 값 바인딩하기
 	orderDao.insertOrder(order);
 	
-	// 아!!! 여기서 다시 for문 돌려서 insert하는 이유. 위에서는 orderItems 시퀀스가 없다. 
+	// 여기서 다시 for문 돌려서 insert하는 이유. 위에서는 orderItems 시퀀스가 없다. 
 	// 위의 상품갯수(size 말하는 거임)만큼 for문 돌려서 돌려진 것 하나하나 insertOrderItems( )에 넣는다. 파라미터는 (당연히) orderItem이다.
 	for (OrderItem orderItem : orderItems) {
 		orderDao.insertOrderItem(orderItem);
 	}
 	
+	// 포인트 변경한다.
+	UserDao userDao = UserDao.getInstance();
+	user = userDao.getUserByNo(user.getNo());
+
+	int usedPoint = Integer.parseInt(request.getParameter("usedPoint"));			// 사용포인트
+	int depositPoint = Integer.parseInt(request.getParameter("depositPoint"));		// 적립포인트
+	
+	PointHistory history = new PointHistory();
+	HistoryDao historyDao = HistoryDao.getInstance();
+	
+	// 1. 사용한 포인트가 있는 경우, POINT_HISTORY에 사용 이력을 넣는다.
+	if (usedPoint > 0) {
+		history.setUserNo(user.getNo()); 			//최신 유저 번호 불러오기 위해 이렇게 한다.
+		history.setOrderNo(orderNo);
+		history.setReason("포인트 사용");
+		history.setAmount(usedPoint);
+		
+		historyDao.insertPointHistory(history);			
+	}
+
+	// 2. 적립 포인트는 어느 경우에나 있으므로(0원 구매 불가, 전액 포인트 사용해도 적립됨) insert 한다.
+	if (depositPoint > 0) {
+		history.setUserNo(user.getNo()); 			//최신 유저 번호 불러오기 위해 이렇게 한다.
+		history.setOrderNo(orderNo);
+		history.setReason("포인트 적립");
+		history.setAmount(depositPoint);
+		
+		historyDao.insertPointHistory(history);	
+	} else {
+	%>
+		<script>
+		alert("잘못된 접근입니다. 결제 정보를 확인해 주세요.");
+		</script>
+	<%
+		return;
+	}
+
+	// 3. updateUserPoint를 사용해 userPoint를 업데이트 해 준다.
+	user.setPoint(user.getPoint() - usedPoint + depositPoint);
+	userDao.updateUserPoint(user);
+	
 	// orderNo를 함께 보내면 주문완료 창에서 주문 조회 가능하다.
 	response.sendRedirect("orderComplete.jsp?orderNo="+orderNo);
-	
+
 %> 

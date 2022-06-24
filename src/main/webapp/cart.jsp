@@ -182,7 +182,7 @@
 	<div class="row mb-3"> <!-- 버튼이 위에 있을지 밑에 있을지 고민 중 -->
     	<div class="col-6">
 			<button type="button" id="btn-order-choice-del" class="btn btn-outline-secondary btn-sm" onclick="cartPdDelete(); ">선택 상품 삭제</button>
-      		<a href="https://soolmarket.com:443/goods/goods_list.php?cateCd=014001" id="shop-go-link" class="btn btn-outline-secondary btn-sm">쇼핑 계속하기</a>
+      		<a href="javascript:history.back();" id="shop-go-link" class="btn btn-outline-secondary btn-sm">쇼핑 계속하기</a>
     	</div>
 		<div class="col-6 text-end">
             <button type="button" class="btn btn-primary btn-sm" onclick="orderSelectedCartItems()">선택 상품 주문</button>

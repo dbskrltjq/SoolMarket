@@ -47,7 +47,7 @@
 								<div class="card-header">
 									<div class="d-flex justify-content-between">
 										<strong class="me-3"><i class="fas fa-table me-1"></i>상품정보수정</strong>
-										<button type="button" class="btn btn-primary " id="update-btn">상품수정하기</button>
+										<button type="button" class="btn btn-primary " id="update-btn" data-bs-toggle="modal" data-bs-target="#updateModal">상품수정하기</button>
 									</div>
 									<div class="form-div ">
 										<form id="update-form" class="row g-3" method="post">
@@ -88,6 +88,7 @@
 								<div class="card-body">
 									<table class="table table-hover text-center" id="product-table">
 										<colgroup>
+											<col width="5%">
 											<col width="8%">
 											<col width="15%">
 											<col width="18%">
@@ -98,6 +99,7 @@
 										</colgroup>
 										<thead class="table-light">
 											<tr>
+												<th id=all-toggle><input type="checkbox" id="all-toggle-checkbox" onchange="toggleCheckbox();"/></th>
 												<th>상품분류</th>
 												<th>상품명</th>
 												<th>제조사</th>
@@ -131,9 +133,95 @@
 			</div>
 		</div>
 	</div>
+	
+	
+<!-- 모달만들기 -->
+<div class="modal fade" id="updateModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">상품수정하기</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <form id="newProduct-form" class="form-horizontal border bg-light p-3" method="post" enctype="multipart/form-data" action="addProduct.jsp">
+				<div class="row mb-3">
+					<label for="category" class="col-sm-2 col-form-label">상품 분류</label>
+					<div class="col-sm-10">
+						<select class="form-select" name="categoryNo">
+							<option value="" disabled selected >카테고리 선택</option>
+					<%
+						for(Category category : categories) {
+					%>	
+							<option value="<%=category.getNo() %>"><%=category.getName() %></option>
+					<%
+						}
+					%>
+						</select>
+					</div>
+				</div>
+				<div class="row mb-3">
+					<label for="name" class="col-sm-3 col-form-label">상품명</label>
+					<div class="col-sm-9">
+						<input type="text" name="name" id="modal-name" class="form-control">
+					</div>
+				</div>
+				<div class="row mb-3">
+					<label for="company" class="col-sm-3 col-form-label">제조사</label>
+					<div class="col-sm-9">
+						<input type="text" name="company" id="modal-company" class="form-control">
+					</div>
+				</div>
+				<div class="row mb-3">
+					<label for="price" class="col-sm-3 col-form-label">정가</label>
+					<div class="col-sm-9">
+						<input type="text" name="price" id="modal-price" class="form-control">
+					</div>
+				</div>
+				<div class="row mb-3">
+					<label for="salePrice" class="col-sm-3 col-form-label">판매가</label>
+					<div class="col-sm-9">
+						<input type="text" name="salePrice" id="modal-salePrice" class="form-control">
+					</div>
+				</div>
+				<div class="row mb-3">
+					<label for="quantity" class="col-sm-3 col-form-label">입고량</label>
+					<div class="col-sm-9">
+						<input type="number" name="quantity" id="modal-quantity" class="form-control" min="1">
+					</div>
+				</div>
+				<fieldset class="row mb-3">
+					<legend class="col-form-label col-sm-3 pt-0">추천상품</legend>
+					<div class="col-sm-9">
+						<div class="form-check form-check-inline">
+  							<input class="form-check-input" type="radio" name="recommended" id="inlineRadio1" value="Y" >
+  							<label class="form-check-label" for="inlineRadio1">예</label>
+						</div>
+						<div class="form-check form-check-inline">
+	  						<input class="form-check-input" type="radio" name="recommended" id="inlineRadio2" value="N" checked>
+	  						<label class="form-check-label" for="inlineRadio2">아니오</label>
+						</div>
+					</div>
+				</fieldset>
+				<div class="row mb-3">
+					<label for="quantity" class="col-sm-2 col-form-label">이미지</label>
+					<div class="col-sm-10">
+						<input type="file" name="upfile" class="form-control">
+					</div>
+				</div>
+		</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btn-form-close">닫기</button>
+        <button type="button" id="registerBtn" class="btn btn-primary" onclick="submitForm();">등록하기</button>
+      </div>
+    </div>
+  </div>
+</div>
 <script type="text/javascript">
 
 	function loadProducts(page) {
+		document.getElementById("all-toggle").innerHTML ='<input type="checkbox" id="all-toggle-checkbox" onchange="toggleCheckbox();"/>' // 페이지를 넘길 때 체크박스 초기화되도록? 다른 방법?
 		let categoryNo = document.querySelector("select[name=category]").value;
 		let period = document.querySelector("select[name=period]").value;
 		let rows = document.querySelector("select[name=rows]").value;
@@ -151,9 +239,11 @@
 				let pagination = result.pagination;
 				let products = result.products;
 				
+				
 				let rows ="";
 				for(let index = 0; index < products.length; index++) {
 					let product = products[index];
+					let pdNo = product.no;
 					let category = product.categoryNo;
 					let name = product.name;
 					let company = product.company;
@@ -163,9 +253,13 @@
 					let createdDate= product.createdDate;
 					let recommended = product.recommended;
 					
+					let modalInfo = {name : "막걸리"};
+					//let modalInfo = {categoryNo: product.categoryNo, name: name, company: company, price: price, salePrice: salePrice, quantity: quantity, recommended: recommended};
+					
 					rows += "<tr>";
+					rows += '<td><input type="checkbox" name="pdCheckbox" value="' + pdNo + '" onchange="changeCheckboxChecked();"/></td>';
 					rows += "<td>" + category + "</td>";
-					rows += "<td>" + name + "</td>";
+					rows += "<td><a href='' onclick='modalTest("+ modalInfo + ");' data-bs-toggle='modal' data-bs-target='#updateModal'>" + name + "</a></td>";
 					rows += "<td>" + company + "</td>";
 					rows += "<td>" + price + "</td>";
 					rows += "<td>" + salePrice + "</td>";
@@ -215,6 +309,16 @@
 	}
 	
 	function searchByKeyword() {
+		
+		// input박스 안에 키워드를 입력했지만 검색조건(제조자 or 상품명)를 설정하지 않은 경우 alert창을 출력한다.
+		let search = document.querySelector("select[name=search]").value;
+		let keyword = document.querySelector("input[name=keyword]").value.trim();
+		if(search === "" && keyword !== "") {
+			alert("검색조건을 선택해주세요!");
+			false;
+		}
+		
+		
 		let form = document.getElementById("update-form");
 		let formData = new FormData(form);
 		
@@ -229,6 +333,29 @@
 	
 		
 	}
+	
+	function modalTest(modalInfo) {
+		document.getElementById("modal-name").value = modalInfo.name;
+	}
+	
+	
+	
+	
+	function toggleCheckbox() {
+        let allToggleChecboxCheckedStatus = document.getElementById("all-toggle-checkbox").checked;
+        let pdCheckboxNodeList = document.querySelectorAll("input[name='pdCheckbox']");
+        for (let index = 0; index < pdCheckboxNodeList.length; index++) {
+            let pdCheckbox = pdCheckboxNodeList[index];
+            pdCheckbox.checked = allToggleChecboxCheckedStatus;
+        }
+    }
+	
+	function changeCheckboxChecked() {
+        let checkboxCount = document.querySelectorAll('input[name="pdCheckbox"]').length;
+        let checkedCheckboxCount = document.querySelectorAll('input[name="pdCheckbox"]:checked').length;
+
+        document.getElementById("all-toggle-checkbox").checked = (checkboxCount === checkedCheckboxCount);
+    }
 	
 	
 </script>

@@ -128,6 +128,27 @@ public class ProductDao {
 			return rs.getInt("cnt");
 		}, categoryNo, period);
 	}
+	public int getRowsByCompanyKeyword(int categoryNo, int period, String keyword) throws SQLException {
+		String sql = "select count(*) cnt "
+				   + "from sul_products "
+				   + "where category_no = ? "
+				   + "and pd_created_date >=  trunc( add_months ( sysdate, ? )) "
+				   + "and pd_company like '%' || ? || '%' ";
+		return helper.selectOne(sql, rs -> {
+			return rs.getInt("cnt");
+		}, categoryNo, period, keyword);
+	}
+	
+	public int getRowsByNameKeyword(int categoryNo, int period, String keyword) throws SQLException {
+		String sql = "select count(*) cnt "
+				   + "from sul_products "
+				   + "where category_no = ? "
+				   + "and pd_created_date >=  trunc( add_months ( sysdate, ? )) "
+				   + "and pd_name like '%' || ? || '%' ";
+		return helper.selectOne(sql, rs -> {
+			return rs.getInt("cnt");
+		}, categoryNo, period, keyword);
+	}
 	
 	public int getTotalRows(String keyword) throws SQLException {
 		String sql = "select count(*) cnt from sul_products where pd_name like '%' || ? || '%' ";

@@ -51,7 +51,7 @@
 	//response.sendRedirect("registerPdForm.jsp?categoryNo=" + categoryNo);
 	//response.sendRedirect("productList.jsp?categoryNo=" + categoryNo + "&period=" + period + "&rows=" + rows + "&pageNo=" + pageNo);
 
-	response.setStatus(HttpServletResponse.SC_OK);
+	response.setStatus(HttpServletResponse.SC_OK);			// registerPdForm.jsp에서 form객체를 생성해서 비동기방식으로 보낼 때 
 
 
 %>

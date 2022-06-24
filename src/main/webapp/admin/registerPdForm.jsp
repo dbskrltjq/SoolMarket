@@ -392,7 +392,7 @@
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState === 4 && xhr.status === 200) {
 				loadProducts(1);									// 다시 리스트 출력
-				document.getElementById("btn-form-close").click();
+				document.getElementById("btn-form-close").click();	// 닫기 버튼을 클릭하여 닫히도록 한다.
 				alert("상품등록이 완료되었습니다.");
 			}
 		}

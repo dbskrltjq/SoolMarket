@@ -274,13 +274,14 @@ public class ProductDao {
 	
 	public List<Product> getItemBySaleQuantity(int categoryNo, int beginIndex, int endIndex) throws SQLException {
 		
-		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
-				+ "from(select row_number() over (order by pd_sale_quantity desc) row_number, pd_name, pd_price, pd_sale_price, pd_review_score "
+		String sql = "select pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
+				+ "from(select row_number() over (order by pd_sale_quantity desc) row_number, pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
 				+ "from sul_products where category_no = ?) "
 				+ "where row_number >= ? and row_number <= ?";
 		
 		return helper.selectList(sql, rs -> {
 			Product product = new Product();
+			product.setNo(rs.getInt("pd_no"));
 			product.setName(rs.getString("pd_name"));
 			product.setPrice(rs.getInt("pd_price"));
 			product.setSalePrice(rs.getInt("pd_sale_price"));
@@ -292,13 +293,14 @@ public class ProductDao {
 	
 	public List<Product> getItemBySaleQuantity(String keyword, int beginIndex, int endIndex) throws SQLException {
 		
-		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
-				+ "from(select row_number() over (order by pd_sale_quantity desc) row_number, pd_name, pd_price, pd_sale_price, pd_review_score "
+		String sql = "select pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
+				+ "from(select row_number() over (order by pd_sale_quantity desc) row_number, pd_no,  pd_name, pd_price, pd_sale_price, pd_review_score "
 				+ "from sul_products where pd_name like '%' || ? || '%') "
 				+ "where row_number >= ? and row_number <= ? ";
 		
 		return helper.selectList(sql, rs -> {
 			Product product = new Product();
+			product.setNo(rs.getInt("pd_no"));
 			product.setName(rs.getString("pd_name"));
 			product.setPrice(rs.getInt("pd_price"));
 			product.setSalePrice(rs.getInt("pd_sale_price"));
@@ -310,8 +312,8 @@ public class ProductDao {
 	
 	public List<Product> getItemBySaleQuantityCategory(String keyword, String categoryName, int beginIndex, int endIndex) throws SQLException {
 		
-		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
-				   + "from(select row_number() over (order by pd_sale_quantity desc) row_number, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
+		String sql = "select pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
+				   + "from(select row_number() over (order by pd_sale_quantity desc) row_number, P.pd_no, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
 				   + "     from sul_products P, sul_category C "
 			   	   + "     where pd_name like '%' || ? || '%' "
 				   + "     and P.category_no = C.category_no "
@@ -320,6 +322,7 @@ public class ProductDao {
 		
 		return helper.selectList(sql, rs -> {
 			Product product = new Product();
+			product.setNo(rs.getInt("pd_no"));
 			product.setName(rs.getString("pd_name"));
 			product.setPrice(rs.getInt("pd_price"));
 			product.setSalePrice(rs.getInt("pd_sale_price"));
@@ -331,8 +334,8 @@ public class ProductDao {
 	
 	public List<Product> getItemBySaleQuantityCompany(String keyword, String company, int beginIndex, int endIndex) throws SQLException {
 		
-		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
-				   + "from(select row_number() over (order by pd_sale_quantity desc) row_number, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
+		String sql = "select pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
+				   + "from(select row_number() over (order by pd_sale_quantity desc) row_number, P.pd_no, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
 				   + "     from sul_products P, sul_category C "
 			   	   + "     where pd_name like '%' || ? || '%' "
 				   + "     and P.category_no = C.category_no "
@@ -341,6 +344,7 @@ public class ProductDao {
 		
 		return helper.selectList(sql, rs -> {
 			Product product = new Product();
+			product.setNo(rs.getInt("pd_no"));
 			product.setName(rs.getString("pd_name"));
 			product.setPrice(rs.getInt("pd_price"));
 			product.setSalePrice(rs.getInt("pd_sale_price"));
@@ -352,8 +356,8 @@ public class ProductDao {
 	
 	public List<Product> getItemBySaleQuantity(String keyword, String categoryName, String company, int beginIndex, int endIndex) throws SQLException {
 		
-		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
-				   + "from(select row_number() over (order by pd_sale_quantity desc) row_number, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
+		String sql = "select pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
+				   + "from(select row_number() over (order by pd_sale_quantity desc) row_number, P.pd_no, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
 				   + "     from sul_products P, sul_category C "
 			   	   + "     where pd_name like '%' || ? || '%' "
 				   + "     and P.category_no = C.category_no "
@@ -363,6 +367,7 @@ public class ProductDao {
 		
 		return helper.selectList(sql, rs -> {
 			Product product = new Product();
+			product.setNo(rs.getInt("pd_no"));
 			product.setName(rs.getString("pd_name"));
 			product.setPrice(rs.getInt("pd_price"));
 			product.setSalePrice(rs.getInt("pd_sale_price"));
@@ -374,13 +379,14 @@ public class ProductDao {
 	
 	public List<Product> getItemByMinPrice(int categoryNo, int beginIndex, int endIndex) throws SQLException {
 		
-		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
-				+ "from(select row_number() over (order by pd_sale_price asc) row_number, pd_name, pd_price, pd_sale_price, pd_review_score "
+		String sql = "select pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
+				+ "from(select row_number() over (order by pd_sale_price asc) row_number, pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
 				+ "from sul_products where category_no = ? ) "
 				+ "where row_number >= ? and row_number <= ?";
 		
 		return helper.selectList(sql, rs -> {
 			Product product = new Product();
+			product.setNo(rs.getInt("pd_no"));
 			product.setName(rs.getString("pd_name"));
 			product.setPrice(rs.getInt("pd_price"));
 			product.setSalePrice(rs.getInt("pd_sale_price"));
@@ -392,13 +398,14 @@ public class ProductDao {
 	
 	public List<Product> getItemByMinPrice(String keyword, int beginIndex, int endIndex) throws SQLException {
 		
-		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
-				+ "from(select row_number() over (order by pd_sale_price asc) row_number, pd_name, pd_price, pd_sale_price, pd_review_score "
+		String sql = "select pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
+				+ "from(select row_number() over (order by pd_sale_price asc) row_number, pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
 				+ "from sul_products where pd_name like '%' || ? || '%') "
 				+ "where row_number >= ? and row_number <= ?";
 		
 		return helper.selectList(sql, rs -> {
 			Product product = new Product();
+			product.setNo(rs.getInt("pd_no"));
 			product.setName(rs.getString("pd_name"));
 			product.setPrice(rs.getInt("pd_price"));
 			product.setSalePrice(rs.getInt("pd_sale_price"));
@@ -410,8 +417,8 @@ public class ProductDao {
 	
 	public List<Product> getItemByMinPriceCategory(String keyword, String categoryName, int beginIndex, int endIndex) throws SQLException {
 		
-		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
-				   + "from(select row_number() over (order by pd_sale_price asc) row_number, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
+		String sql = "select pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
+				   + "from(select row_number() over (order by pd_sale_price asc) row_number, P.pd_no, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
 				   + "     from sul_products P, sul_category C "
 			   	   + "     where pd_name like '%' || ? || '%' "
 				   + "     and P.category_no = C.category_no "
@@ -421,6 +428,7 @@ public class ProductDao {
 		
 		return helper.selectList(sql, rs -> {
 			Product product = new Product();
+			product.setNo(rs.getInt("pd_no"));
 			product.setName(rs.getString("pd_name"));
 			product.setPrice(rs.getInt("pd_price"));
 			product.setSalePrice(rs.getInt("pd_sale_price"));
@@ -432,8 +440,8 @@ public class ProductDao {
 	
 	public List<Product> getItemByMinPriceCompany(String keyword, String company, int beginIndex, int endIndex) throws SQLException {
 		
-		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
-				   + "from(select row_number() over (order by pd_sale_price asc) row_number, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
+		String sql = "select pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
+				   + "from(select row_number() over (order by pd_sale_price asc) row_number, P.pd_no, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
 				   + "     from sul_products P, sul_category C "
 			   	   + "     where pd_name like '%' || ? || '%' "
 				   + "     and P.category_no = C.category_no "
@@ -442,6 +450,7 @@ public class ProductDao {
 		
 		return helper.selectList(sql, rs -> {
 			Product product = new Product();
+			product.setNo(rs.getInt("pd_no"));
 			product.setName(rs.getString("pd_name"));
 			product.setPrice(rs.getInt("pd_price"));
 			product.setSalePrice(rs.getInt("pd_sale_price"));
@@ -453,8 +462,8 @@ public class ProductDao {
 	
 	public List<Product> getItemByMinPrice(String keyword, String categoryName, String company, int beginIndex, int endIndex) throws SQLException {
 		
-		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
-				   + "from(select row_number() over (order by pd_sale_price asc) row_number, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
+		String sql = "select pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
+				   + "from(select row_number() over (order by pd_sale_price asc) row_number, P.pd_no, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
 				   + "     from sul_products P, sul_category C "
 			   	   + "     where pd_name like '%' || ? || '%' "
 				   + "     and P.category_no = C.category_no "
@@ -464,6 +473,7 @@ public class ProductDao {
 		
 		return helper.selectList(sql, rs -> {
 			Product product = new Product();
+			product.setNo(rs.getInt("pd_no"));
 			product.setName(rs.getString("pd_name"));
 			product.setPrice(rs.getInt("pd_price"));
 			product.setSalePrice(rs.getInt("pd_sale_price"));
@@ -475,13 +485,14 @@ public class ProductDao {
 	
 	public List<Product> getItemByMaxPrice(int categoryNo, int beginIndex, int endIndex) throws SQLException {
 		
-		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
-				+ "from(select row_number() over (order by pd_sale_price desc) row_number, pd_name, pd_price, pd_sale_price, pd_review_score "
+		String sql = "select pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
+				+ "from(select row_number() over (order by pd_sale_price desc) row_number, pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
 				+ "from sul_products where category_no = ? ) "
 				+ "where row_number >= ? and row_number <= ?";
 		
 		return helper.selectList(sql, rs -> {
 			Product product = new Product();
+			product.setNo(rs.getInt("pd_no"));
 			product.setName(rs.getString("pd_name"));
 			product.setPrice(rs.getInt("pd_price"));
 			product.setSalePrice(rs.getInt("pd_sale_price"));
@@ -493,13 +504,14 @@ public class ProductDao {
 	
 	public List<Product> getItemByMaxPrice(String keyword, int beginIndex, int endIndex) throws SQLException {
 		
-		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
-				+ "from(select row_number() over (order by pd_sale_price desc) row_number, pd_name, pd_price, pd_sale_price, pd_review_score "
+		String sql = "select pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
+				+ "from(select row_number() over (order by pd_sale_price desc) row_number, pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
 				+ "from sul_products where pd_name like '%' || ? || '%') "
 				+ "where row_number >= ? and row_number <= ?";
 		
 		return helper.selectList(sql, rs -> {
 			Product product = new Product();
+			product.setNo(rs.getInt("pd_no"));
 			product.setName(rs.getString("pd_name"));
 			product.setPrice(rs.getInt("pd_price"));
 			product.setSalePrice(rs.getInt("pd_sale_price"));
@@ -511,8 +523,8 @@ public class ProductDao {
 	
 	public List<Product> getItemByMaxPriceCategory(String keyword, String categoryName, int beginIndex, int endIndex) throws SQLException {
 		
-		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
-				   + "from(select row_number() over (order by pd_sale_price desc) row_number, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
+		String sql = "select pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
+				   + "from(select row_number() over (order by pd_sale_price desc) row_number, P.pd_no, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
 				   + "     from sul_products P, sul_category C "
 			   	   + "     where pd_name like '%' || ? || '%' "
 				   + "     and P.category_no = C.category_no "
@@ -521,6 +533,7 @@ public class ProductDao {
 		
 		return helper.selectList(sql, rs -> {
 			Product product = new Product();
+			product.setNo(rs.getInt("pd_no"));
 			product.setName(rs.getString("pd_name"));
 			product.setPrice(rs.getInt("pd_price"));
 			product.setSalePrice(rs.getInt("pd_sale_price"));
@@ -532,8 +545,8 @@ public class ProductDao {
 	
 	public List<Product> getItemByMaxPriceCompany(String keyword, String company, int beginIndex, int endIndex) throws SQLException {
 		
-		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
-				   + "from(select row_number() over (order by pd_sale_price desc) row_number, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
+		String sql = "select pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
+				   + "from(select row_number() over (order by pd_sale_price desc) row_number, P.pd_no, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
 				   + "     from sul_products P, sul_category C "
 			   	   + "     where pd_name like '%' || ? || '%' "
 				   + "     and P.category_no = C.category_no "
@@ -542,6 +555,7 @@ public class ProductDao {
 		
 		return helper.selectList(sql, rs -> {
 			Product product = new Product();
+			product.setNo(rs.getInt("pd_no"));
 			product.setName(rs.getString("pd_name"));
 			product.setPrice(rs.getInt("pd_price"));
 			product.setSalePrice(rs.getInt("pd_sale_price"));
@@ -553,8 +567,8 @@ public class ProductDao {
 	
 	public List<Product> getItemByMaxPrice(String keyword, String categoryName, String company, int beginIndex, int endIndex) throws SQLException {
 		
-		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
-				   + "from(select row_number() over (order by pd_sale_price desc) row_number, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
+		String sql = "select pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
+				   + "from(select row_number() over (order by pd_sale_price desc) row_number, P.pd_no, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
 				   + "     from sul_products P, sul_category C "
 			   	   + "     where pd_name like '%' || ? || '%' "
 				   + "     and P.category_no = C.category_no "
@@ -564,6 +578,7 @@ public class ProductDao {
 		
 		return helper.selectList(sql, rs -> {
 			Product product = new Product();
+			product.setNo(rs.getInt("pd_no"));
 			product.setName(rs.getString("pd_name"));
 			product.setPrice(rs.getInt("pd_price"));
 			product.setSalePrice(rs.getInt("pd_sale_price"));
@@ -575,13 +590,14 @@ public class ProductDao {
 	
 	public List<Product> getItemByDate(int categoryNo, int beginIndex, int endIndex) throws SQLException {
 		
-		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
-				+ "from(select row_number() over (order by pd_created_date desc) row_number, pd_name, pd_price, pd_sale_price, pd_review_score "
+		String sql = "select pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
+				+ "from(select row_number() over (order by pd_created_date desc) row_number, pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
 				+ "from sul_products where category_no = ? ) "
 				+ "where row_number >= ? and row_number <= ?";
 		
 		return helper.selectList(sql, rs -> {
 			Product product = new Product();
+			product.setNo(rs.getInt("pd_no"));
 			product.setName(rs.getString("pd_name"));
 			product.setPrice(rs.getInt("pd_price"));
 			product.setSalePrice(rs.getInt("pd_sale_price"));
@@ -593,13 +609,14 @@ public class ProductDao {
 	
 	public List<Product> getItemByDate(String keyword, int beginIndex, int endIndex) throws SQLException {
 		
-		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
-				+ "from(select row_number() over (order by pd_created_date desc) row_number, pd_name, pd_price, pd_sale_price, pd_review_score "
+		String sql = "select pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
+				+ "from(select row_number() over (order by pd_created_date desc) row_number, pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
 				+ "from sul_products where pd_name like '%' || ? || '%' ) "
 				+ "where row_number >= ? and row_number <= ?";
 		
 		return helper.selectList(sql, rs -> {
 			Product product = new Product();
+			product.setNo(rs.getInt("pd_no"));
 			product.setName(rs.getString("pd_name"));
 			product.setPrice(rs.getInt("pd_price"));
 			product.setSalePrice(rs.getInt("pd_sale_price"));
@@ -611,8 +628,8 @@ public class ProductDao {
 	
 	public List<Product> getItemByDateCategory(String keyword, String categoryName, int beginIndex, int endIndex) throws SQLException {
 		
-		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
-				   + "from(select row_number() over (order by pd_created_date desc) row_number, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
+		String sql = "select pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
+				   + "from(select row_number() over (order by pd_created_date desc) row_number, P.pd_no, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
 				   + "     from sul_products P, sul_category C "
 			   	   + "     where pd_name like '%' || ? || '%' "
 				   + "     and P.category_no = C.category_no "
@@ -622,6 +639,7 @@ public class ProductDao {
 		
 		return helper.selectList(sql, rs -> {
 			Product product = new Product();
+			product.setNo(rs.getInt("pd_no"));
 			product.setName(rs.getString("pd_name"));
 			product.setPrice(rs.getInt("pd_price"));
 			product.setSalePrice(rs.getInt("pd_sale_price"));
@@ -633,8 +651,8 @@ public class ProductDao {
 	
 	public List<Product> getItemByDateCompany(String keyword, String company, int beginIndex, int endIndex) throws SQLException {
 		
-		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
-				   + "from(select row_number() over (order by pd_created_date desc) row_number, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
+		String sql = "select pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
+				   + "from(select row_number() over (order by pd_created_date desc) row_number, P.pd_no, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
 				   + "     from sul_products P, sul_category C "
 			   	   + "     where pd_name like '%' || ? || '%' "
 				   + "     and P.category_no = C.category_no "
@@ -643,6 +661,7 @@ public class ProductDao {
 		
 		return helper.selectList(sql, rs -> {
 			Product product = new Product();
+			product.setNo(rs.getInt("pd_no"));
 			product.setName(rs.getString("pd_name"));
 			product.setPrice(rs.getInt("pd_price"));
 			product.setSalePrice(rs.getInt("pd_sale_price"));
@@ -654,8 +673,8 @@ public class ProductDao {
 	
 	public List<Product> getItemByDate(String keyword, String categoryName, String company, int beginIndex, int endIndex) throws SQLException {
 		
-		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
-				   + "from(select row_number() over (order by pd_created_date desc) row_number, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
+		String sql = "select pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
+				   + "from(select row_number() over (order by pd_created_date desc) row_number, P.pd_no, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
 				   + "     from sul_products P, sul_category C "
 			   	   + "     where pd_name like '%' || ? || '%' "
 				   + "     and P.category_no = C.category_no "
@@ -665,6 +684,7 @@ public class ProductDao {
 		
 		return helper.selectList(sql, rs -> {
 			Product product = new Product();
+			product.setNo(rs.getInt("pd_no"));
 			product.setName(rs.getString("pd_name"));
 			product.setPrice(rs.getInt("pd_price"));
 			product.setSalePrice(rs.getInt("pd_sale_price"));
@@ -675,8 +695,8 @@ public class ProductDao {
 	}
 	
 	public List<Product> getItemByOptionCategory(String keyword, String categoryName, int beginIndex, int endIndex) throws SQLException {
-		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
-				   + "from(select row_number() over (order by pd_sale_quantity desc) row_number, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
+		String sql = "select pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
+				   + "from(select row_number() over (order by pd_sale_quantity desc) row_number, P.pd_no, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
 				   + "     from sul_products P, sul_category C "
 			   	   + "     where pd_name like '%' || ? || '%' "
 				   + "     and P.category_no = C.category_no "
@@ -685,6 +705,7 @@ public class ProductDao {
 		
 		return helper.selectList(sql, rs -> {
 			Product product = new Product();
+			product.setNo(rs.getInt("pd_no"));
 			product.setName(rs.getString("pd_name"));
 			product.setPrice(rs.getInt("pd_price"));
 			product.setSalePrice(rs.getInt("pd_sale_price"));
@@ -696,8 +717,8 @@ public class ProductDao {
 	}
 	
 	public List<Product> getItemByOptionCompany(String keyword, String company, int beginIndex, int endIndex) throws SQLException {
-		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
-				   + "from(select row_number() over (order by pd_sale_quantity desc) row_number, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
+		String sql = "select pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
+				   + "from(select row_number() over (order by pd_sale_quantity desc) row_number, P.pd_no, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
 				   + "     from sul_products P, sul_category C "
 			   	   + "     where pd_name like '%' || ? || '%' "
 				   + "     and P.category_no = C.category_no "
@@ -706,6 +727,7 @@ public class ProductDao {
 		
 		return helper.selectList(sql, rs -> {
 			Product product = new Product();
+			product.setNo(rs.getInt("pd_no"));
 			product.setName(rs.getString("pd_name"));
 			product.setPrice(rs.getInt("pd_price"));
 			product.setSalePrice(rs.getInt("pd_sale_price"));
@@ -717,8 +739,8 @@ public class ProductDao {
 	}
 	
 	public List<Product> getItemByOption(String keyword, String categoryName, String company, int beginIndex, int endIndex) throws SQLException {
-		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
-				   + "from(select row_number() over (order by pd_sale_quantity desc) row_number, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
+		String sql = "select pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
+				   + "from(select row_number() over (order by pd_sale_quantity desc) row_number, P.pd_no, P.pd_name, P.pd_price, P.pd_sale_price, P.pd_review_score "
 				   + "     from sul_products P, sul_category C "
 			   	   + "     where pd_name like '%' || ? || '%' "
 				   + "     and P.category_no = C.category_no "
@@ -728,6 +750,7 @@ public class ProductDao {
 		
 		return helper.selectList(sql, rs -> {
 			Product product = new Product();
+			product.setNo(rs.getInt("pd_no"));
 			product.setName(rs.getString("pd_name"));
 			product.setPrice(rs.getInt("pd_price"));
 			product.setSalePrice(rs.getInt("pd_sale_price"));

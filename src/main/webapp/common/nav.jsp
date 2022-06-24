@@ -14,8 +14,6 @@
 	#inline {display: inline-block;}
 	nav.navbar i {margin-right: 10px;
 	   color: orange;}
-	
-	   
 </style>
 <%
 	User user = (User)session.getAttribute("LOGINED_USER");
@@ -57,19 +55,23 @@
 		          			</ul>
 		        		</li>
 				      </ul>
-				      <form class="d-flex" role="search" action="/semi/searchList.jsp?sort=sell" onsubmit="savedKeyword();" >
+				      <form class="d-flex position-relative" role="search" action="/semi/searchList.jsp?sort=sell" onsubmit="savedKeyword();" >
 				      	<div class="input-group">
-					        <input class="form-control border-warning" type="search" name="keyword" placeholder="제품검색 ex)소주" aria-label="Search" >
-					        <button class="btn btn-outline-warning" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>	
-					        <!--  <div class="todo-inner">
-					        	<div class="allDelete off">
-						        	<p class="tit">최근 검색어</p>
-						        	<span class="btn">모두 지우기 ❌</span>
-					        	</div>
-					        </div>
-					        <p class="txt"></p>
-					        <ul id="keyword-list"></ul>	-->	
+					        <input class="form-control border-warning" id="search" type="text" name="keyword" placeholder="제품검색 ex)소주" onclick="openKeywordList();" onblur="closeKeywordList();" />
+					        <button class="btn btn-outline-warning" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>				
 					    </div>
+					    <ul class="list-group list-group-flush position-absolute d-none border" id="keyword-list" style="z-index: 2000; left: 0; top: 40px; width: 80%;">
+							
+						</ul>
+					    
+				        <!-- onfocus="paintToDo();" onblur="viewKeyword();"
+				        
+				        	<div class="list-group position-absolute " id="display" style="z-index: 2000; left: 0; top: 40px; width: 80%;"  >
+						  	<button type="button" class="list-group-item list-group-item-action">A second item</button>
+						  	<button type="button" class="list-group-item list-group-item-action">A third button item</button>
+						  	<button type="button" class="list-group-item list-group-item-action">A fourth button item</button>
+						 	<button type="button" class="list-group-item list-group-item-action">A disabled button item</button>
+						</div> -->				
 				      </form>
 				</div>     
 				<div class="col-3" style="text-align: right;">
@@ -103,22 +105,66 @@
 	//function searchKeyword() {
 	//	location.href="/semi/searchList.jsp?sort=sell&keyword=" + document.querySelector("input[name=keyword]").value	
 	//}
-	const keywordList = document.querySelector("keyword-list");
-	const keyword_key = "keyword";
+	let keywordList = document.getElementById('keyword-list');
 	
-	let searchKeyword = new Array();
+	let array = new Array();
+	
+	//let keywords = document.querySelector("input[name=keyword]").value;
+	//let text = localStorage.getItem("keyword") || '[]';
 	
 	function savedKeyword() {
-		localStorage.setItem(keyword_key, JSON.stringify(searchKeyword));
-	}
-	
-	function allDeleteKeyword() {
-		localStorage.clear(searchKeyword);
-		keywordList.innerText = '최근검색어 내역이 없습니다.';
-	}
-	
-	function deleteKeyword() {
+		let keywords = document.querySelector("input[name=keyword]").value;
+		let text = localStorage.getItem("keyword") || '[]';
+		array = JSON.parse(text);
 		
+		if (keywords === "") {
+			return;
+		} else {
+		array.unshift(keywords);
+		}
+		
+		text = JSON.stringify(array);
+		localStorage.setItem("keyword", text);
 	}
 	
+	function openKeywordList() {
+		let text = localStorage.getItem("keyword") || '[]';			
+		array = JSON.parse(text);	
+		event.stopPropagation()
+		let li = document.createElement("li");
+		let span = document.createElement("span");
+		let button = document.createElement("button");
+		
+		for (let i=0; i < array.length; i++) {
+			
+			li = document.createElement("li");
+			span = document.createElement("span");
+			button = document.createElement("button");
+			
+			li.classList.add('list');
+			li.classList.add('border-top');
+			span.innerText = array[i];
+			button.innerText = '삭제';
+			li.append(span, button);
+			keywordList.append(li);
+			button.addEventListener('click', deleteKeyword(i) );
+		}
+		
+		document.getElementById('keyword-list').classList.remove('d-none');
+	}
+	
+	function closeKeywordList() {
+		document.getElementById('keyword-list').classList.add('d-none');
+	}
+	
+	function deleteKeyword(i) {	
+		array.splice(i, 1);
+		text = JSON.stringify(array);
+		localStorage.setItem("keyword", text);
+	}
+	
+	function deleteAll() {
+		localStorage.clear(array);
+	    keywordList.innerText = '최근검색어 내역이 없습니다.';
+	}
 </script>

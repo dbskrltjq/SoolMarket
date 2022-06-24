@@ -53,28 +53,16 @@ public class ProductReviewDao {
 		},productNo);
 	}
 	
-	public int getReviewCount(int productNo, int userNo) throws SQLException {
-		String sql = "select count(*) cnt "
-				+ "from sul_orders O, sul_order_items I "
-				+ "where O.order_no = I.order_no "
-				+ "and I.pd_no = ? "
-				+ "and O.user_no = ? ";
-		
-		return helper.selectOne(sql, rs -> {
-			return rs.getInt("cnt");
-			
-		},productNo,userNo);
-	}
-	
-	public int getReviewUserCount(int productNo) throws SQLException {
+	public int getReviewUserCount(int productNo,int userNo) throws SQLException {
 		String sql = "select count(*) cnt "
 				+ "from sul_reviews R, sul_users U "
 				+ "where R.user_no = U.user_no "
-				+ "and R.pd_no = ? ";
+				+ "and R.pd_no = ? "
+				+ "and U.user_no = ? ";
 		
 		return helper.selectOne(sql, rs-> {
 			return rs.getInt("cnt");
 			
-		},productNo);
+		},productNo,userNo);
 	}
 }

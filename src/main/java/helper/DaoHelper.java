@@ -51,7 +51,8 @@ public class DaoHelper {
 
 	
 
-	   public static String clobToString(Clob clob) throws SQLException {
+
+	   public static String clobToString1(Clob clob) throws SQLException {
 	      if (clob == null) {
 	         return null;
 	      }
@@ -64,7 +65,7 @@ public class DaoHelper {
 	         return null;
 	      }
 	   } 
-	
+
 	/**
 	 * SELECT문을 실행한다.
 	 * * @param <T> 조회결과를 저장하는 객체
@@ -269,6 +270,4 @@ public class DaoHelper {
 	}
 	
 
-	   
 
-}

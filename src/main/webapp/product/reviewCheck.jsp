@@ -1,4 +1,4 @@
-<%@page import="dao.ProductOrdaerDao"%>
+<%@page import="dao.OrderDao"%>
 <%@page import="vo.User"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
@@ -24,9 +24,9 @@
     	int productNo = StringUtil.stringToInt(request.getParameter("productNo"));
     	
     	ProductReviewDao productReviewDao = ProductReviewDao.getInstance();
-    	ProductOrdaerDao productOrderDao = ProductOrdaerDao.getInstance();
+    	OrderDao orderDao = OrderDao.getInstance();
     	
-    	int rowCount = productOrderDao.getOrderCount(productNo, user.getNo());
+    	int rowCount = orderDao.getOrderCount(productNo, user.getNo());
     	
     	if(rowCount == 0) {
     		result.put("msg", "deny");
@@ -34,7 +34,7 @@
     		return;
     	}
     	
-    	rowCount = productReviewDao.getReviewCount(productNo, user.getNo());
+    	rowCount = productReviewDao.getReviewUserCount(productNo,user.getNo());
     	
     	if (rowCount > 0) {
     		result.put("msg", "exist");

@@ -41,6 +41,23 @@ public class UserDao {
 		helper.update(sql, user.getPassword(), user.getName(), user.getEmail(), user.getTel(), user.getPostCode(), user.getAddress(), user.getDetailAddress(), user.getDeleted(), user.getNo());
 	}
 	
+	// 220623 민지 추가 (point 작업에 사용)
+	public void updateUserPoint(User user) throws SQLException {
+		String sql = "update sul_users "
+				   + "	set user_pw = ?, "
+				   + "      user_name = ?, "
+				   + "      user_email = ?, "
+				   + "      user_tel = ?, "
+			   	   + "      user_post_code = ?, "
+				   + "      user_address = ?,"
+				   + " 		user_detail_address = ?, "
+				   + "		user_deleted = ?, "
+				   + "		user_updated_date = sysdate, "
+				   + "		user_point = ? "	
+				   + "where user_no = ? ";
+		helper.update(sql, user.getPassword(), user.getName(), user.getEmail(), user.getTel(), user.getPostCode(), user.getAddress(), user.getDetailAddress(), user.getDeleted(), user.getPoint(), user.getNo());
+	}
+	
 	public User getUserById(String id) throws SQLException {
 		
 		String sql = "select * from sul_users where user_id = ? ";
@@ -145,6 +162,34 @@ public class UserDao {
 			
 			return user;
 		}, tel);
+	}
+	
+	// 220623 민지 추가 (point 작업에 사용)
+	public User getUserByNo(int userNo) throws SQLException {
+		
+		String sql = "select * "
+				   + "from sul_users "
+				   + "where user_no = ? ";
+		
+		return helper.selectOne(sql, rs -> {
+			User user = new User();
+			user.setNo(rs.getInt("user_no"));
+			user.setId(rs.getString("user_id"));
+			user.setPassword(rs.getString("user_pw"));
+			user.setName(rs.getString("user_name"));
+			user.setEmail(rs.getString("user_email"));
+			user.setTel(rs.getString("user_tel"));
+			user.setPostCode(rs.getString("user_post_code"));
+			user.setAddress(rs.getString("user_address"));
+			user.setDetailAddress(rs.getString("user_detail_address"));
+			user.setPoint(rs.getInt("user_point"));
+			user.setDeleted(rs.getString("user_deleted"));
+			user.setCreatedDate(rs.getDate("user_created_date"));
+			user.setUpdatedDate(rs.getDate("user_updated_date"));
+			user.setIsAdmin(rs.getString("is_admin"));
+			
+			return user;
+		}, userNo);
 	}
 	
 	public List<User> getAllCurrentUsers() throws SQLException {

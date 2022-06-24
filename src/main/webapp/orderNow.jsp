@@ -1,3 +1,5 @@
+<%@page import="dao.OrderDao"%>
+<%@page import="vo.Product"%>
 <%@page import="dao.UserDao"%>
 <%@page import="vo.User"%>
 <%@page import="java.util.ArrayList"%>
@@ -63,21 +65,17 @@
 		
 		<!-- 주문상세내역 -->
 		<%
-			// 선택 주문 / 전체 주문 전부 가능한 로직
-			CartItemDao cartItemDao = CartItemDao.getInstance();		
-			String[] values = request.getParameterValues("cartNo");		// cartNo를 받아서 String 배열인 value에 넣는다.
+			int pdNo = StringUtil.stringToInt(request.getParameter("pdNo"));
+			int quantity = StringUtil.stringToInt(request.getParameter("quantity"));
+			OrderDao orderDao = OrderDao.getInstance();
 			
-			List<CartItemDto> cartItems = new ArrayList<>();			// CartItemDto 데이터타입의 arrayList를 하나 만든다.
-			for (String value : values) {	
-				// value를 int로 형변환해서 cartNo메소드에 넣는다. 그 결과를 CartItemDto 타입의 dto에 넣는다. 해당 카트번호의 정보가 dto안으로 들어간다.
-				CartItemDto dto = cartItemDao.getCartItemByCartNo(StringUtil.stringToInt(value));	
-				// cartItems 배열에 dto를 더한다.
-				cartItems.add(dto);
-			}
+			// 바로구매를 누른 상품 번호로 상품 정보를 찾는다.
+			Product product = orderDao.getProductByNo(pdNo);		
+		
+			int totalDeliveryCharge = 0;											// 배송비
+			int totalPdPrice = product.getSalePrice()*quantity;
+			int totalPdPoint = (int)(Math.floor(totalPdPrice*0.01));
 			
-			int totalPdsPrice = 0;				// 총상품금액(상품*수량*카트갯수)
-			int totalDeliveryCharge = 0;		// 배송비(총상품금액 3만원 이상 ? 0원 : 3000원)
-			int totalPdsPoint = 0;				// 총포인트
 		%>
 			<!-- form 시작!! -->
 			<input type="hidden" name="from" value="cart" />
@@ -101,52 +99,37 @@
 						<th>배송비</th>
 					</tr>
 				</thead>				
-				<%
-					int count = 0;
-						for(CartItemDto item : cartItems) {
-							
-						totalPdsPrice += item.getPdPrice() * item.getCartItemQuantity();
-						totalPdsPoint += item.getPdEarnPoint();
-							
-						count++;
-				%>
-						<tr>
-							<td class="align-middle">
-<!-- hidden!! 잘 사용하자!!! -->
-								<input type="hidden" name="pdNo" value="<%=item.getPdNo()%>"/>
-								<a class="text-dark text-decoration-none" href="detail.jsp?pdNo=<%=item.getPdNo()%>" >
-									<strong><%=item.getPdName() %></strong>
-								</a>
-							</td>
-							<td class="align-middle">
-								<input type=text class="w-25" name="quantity" value="<%=item.getCartItemQuantity() %>" readonly />
-							</td>
-							<td class="align-middle">
-								<strong><%=StringUtil.numberToString(item.getPdPrice()) %> 원</strong>
-							</td>
-							<td class="align-middle">
-								<em>적립 </em>
-								<strong id="order-point-<%=item.getCartNo()%>">+<%=StringUtil.numberToString(item.getPdEarnPoint()) %> 원</strong>
-							</td>
-							<td class="align-middle">
-								<span><strong class="text-danger" id="order-price-<%=item.getCartNo()%>"><%=StringUtil.numberToString(item.getPdPrice() * item.getCartItemQuantity()) %></strong> 원</span>
-							</td> 
-						<% 
-							if (count == 1) {
-						%>
-							<td class="cart-delivary align-middle" rowspan="<%=cartItems.size() %>">
-								기본 - 금액별 배송비 0원
-								(택배-선결제)
-							</td>
-						<%
-							}
-						%>
-						</tr>
-				<%
-						}
-						
-						totalDeliveryCharge = totalPdsPrice > 30000 ? 0 : 3000;
-				%>
+					<tr>
+						<td class="align-middle">
+							<input type="hidden" name="pdNo" value="<%=product.getNo()%>"/>
+							<a class="text-dark text-decoration-none" href="detail.jsp?pdNo=<%=product.getNo()%>" >
+								<strong><%=product.getName() %></strong>
+							</a>
+						</td>
+						<td class="align-middle">
+							<input type=text class="w-25" name="quantity" value="<%=quantity %>" readonly />
+						</td>
+						<td class="align-middle">
+							<strong><%=StringUtil.numberToString(product.getSalePrice()) %> 원</strong>
+						</td>
+						<td class="align-middle">
+							<em>적립 </em>
+							<strong id="order-point-<%=product.getNo()%>">
+								+
+								<%=totalPdPoint %> 원
+							</strong>
+						</td>
+						<td class="align-middle">
+							<span><strong class="text-danger" id="order-price-<%=product.getNo()%>"><%=StringUtil.numberToString(totalPdPrice) %></strong> 원</span>
+						</td> 
+						<td class="cart-delivary align-middle">
+							기본 - 금액별 배송비 0원
+							(택배-선결제)
+						</td>
+					</tr>
+					<%
+						totalDeliveryCharge = (product.getSalePrice()*quantity) > 30000 ? 0 : 3000;
+					%>
 
 				</tbody>
 			</table>
@@ -160,8 +143,8 @@
     			<tbody>
     				<tr>
     					<th class="text-end">
-    						총 <strong id="total-pds-cnt"><%=cartItems.size() %></strong>개의 상품금액
-    						<input type="hidden" name="totalQuantity" value="<%=cartItems.size() %>">
+    						총 <strong id="total-pds-cnt"><%=quantity %></strong>개의 상품금액
+    						<input type="hidden" name="totalQuantity" value="<%=quantity %>">
     					</th>
     					<td rowspan="2" class="align-middle text-center"><img src="images/order_price_plus.png" alt="더하기"></td>
     					<th class="text-end">배송비</th>
@@ -169,13 +152,13 @@
     					<th class="text-end">합계</th>
     				</tr>
     				<tr>
-    					<td class="text-end"><strong id="total-pds-price"><%=StringUtil.numberToString(totalPdsPrice) %></strong>원</td>
+    					<td class="text-end"><strong id="total-pds-price"><%=StringUtil.numberToString(totalPdPrice) %></strong>원</td>
     					<td class="text-end"><strong id="total-delivery-charge"><%=StringUtil.numberToString(totalDeliveryCharge) %></strong>원</td>
-    					<td class="text-end"><strong id="total-cart-price"><%=StringUtil.numberToString(totalPdsPrice + totalDeliveryCharge) %></strong>원</td>
+    					<td class="text-end"><strong id="total-ordernow-price"><%=StringUtil.numberToString(product.getSalePrice()*quantity + totalDeliveryCharge) %></strong>원</td>
     				</tr>
     				<tr>
     					<td colspan="5" class="text-end">
-    						적립예정 포인트 : <span id="total-pds-point"><%=StringUtil.numberToString(totalPdsPoint) %></span> 원
+    						적립예정 포인트 : <span id="total-pds-point"><%=StringUtil.numberToString(totalPdPoint) %></span> 원
     					</td>
     				</tr>
     			</tbody>
@@ -273,8 +256,8 @@
 				<tr>
 					<th>상품합계금액</th>
 					<td>
-						<strong id="total-cart-price"><%=StringUtil.numberToString(totalPdsPrice + totalDeliveryCharge) %></strong>원
-						<input type="hidden" name="totalPrice" value="<%=StringUtil.numberToString(totalPdsPrice + totalDeliveryCharge) %>"/>
+						<strong id="total-cart-price"><%=StringUtil.numberToString(totalPdPrice + totalDeliveryCharge) %></strong>원
+						<input type="hidden" name="totalPrice" value="<%=StringUtil.numberToString(totalPdPrice + totalDeliveryCharge) %>"/>
 					</td>
 
 				</tr>		
@@ -285,8 +268,8 @@
 				<tr>
 					<th>포인트 적립</th>
 					<td>
-						<strong id="total-pds-point"><%=StringUtil.numberToString(totalPdsPoint) %></strong>
-						<input type="hidden" name="depositPoint" value="<%=StringUtil.numberToString(totalPdsPoint) %>"/>					
+						<strong id="total-pds-point"><%=StringUtil.numberToString(totalPdPoint) %></strong>
+						<input type="hidden" name="depositPoint" value="<%=StringUtil.numberToString(totalPdPoint) %>"/>					
 					</td>
 				</tr>		
 				<tr>
@@ -316,8 +299,8 @@
 				<tr>
 					<th>최종결제금액</th>
 					<td>
-						<strong id="total-order-charge"><%=StringUtil.numberToString(totalPdsPrice + totalDeliveryCharge) %></strong>원
-						<input type="hidden" name="paymentPrice" id="h-paymentPrice" value="<%=StringUtil.numberToString(totalPdsPrice + totalDeliveryCharge) %>"/>				
+						<strong id="total-order-charge"><%=StringUtil.numberToString(totalPdPrice + totalDeliveryCharge) %></strong>원
+						<input type="hidden" name="paymentPrice" id="h-paymentPrice" value="<%=StringUtil.numberToString(totalPdPrice + totalDeliveryCharge) %>"/>				
 					</td>	
 				</tr>		
 			</tbody>
@@ -344,7 +327,7 @@
 			<tbody>
 				<tr>
 					<th>최종결제금액</th>
-					<td><strong id="total-order-charge2"><%=StringUtil.numberToString(totalPdsPrice + totalDeliveryCharge) %></strong>원</td>
+					<td><strong id="total-order-charge2"><%=StringUtil.numberToString(totalPdPrice + totalDeliveryCharge) %></strong>원</td>
 				</tr>
 			</tbody>
 		</table>

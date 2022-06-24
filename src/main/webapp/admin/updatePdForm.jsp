@@ -136,7 +136,7 @@
 	
 	
 <!-- 모달만들기 -->
-<div class="modal fade" id="updateModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="product-modify-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -163,38 +163,38 @@
 				<div class="row mb-3">
 					<label for="name" class="col-sm-3 col-form-label">상품명</label>
 					<div class="col-sm-9">
-						<input type="text" name="name" id="modal-name" class="form-control">
+						<input type="text" name="name"  class="form-control">
 					</div>
 				</div>
 				<div class="row mb-3">
 					<label for="company" class="col-sm-3 col-form-label">제조사</label>
 					<div class="col-sm-9">
-						<input type="text" name="company" id="modal-company" class="form-control">
+						<input type="text" name="company"  class="form-control">
 					</div>
 				</div>
 				<div class="row mb-3">
 					<label for="price" class="col-sm-3 col-form-label">정가</label>
 					<div class="col-sm-9">
-						<input type="text" name="price" id="modal-price" class="form-control">
+						<input type="text" name="price" class="form-control">
 					</div>
 				</div>
 				<div class="row mb-3">
 					<label for="salePrice" class="col-sm-3 col-form-label">판매가</label>
 					<div class="col-sm-9">
-						<input type="text" name="salePrice" id="modal-salePrice" class="form-control">
+						<input type="text" name="salePrice" class="form-control">
 					</div>
 				</div>
 				<div class="row mb-3">
 					<label for="quantity" class="col-sm-3 col-form-label">입고량</label>
 					<div class="col-sm-9">
-						<input type="number" name="quantity" id="modal-quantity" class="form-control" min="1">
+						<input type="number" name="quantity" class="form-control" min="1">
 					</div>
 				</div>
 				<fieldset class="row mb-3">
 					<legend class="col-form-label col-sm-3 pt-0">추천상품</legend>
 					<div class="col-sm-9">
 						<div class="form-check form-check-inline">
-  							<input class="form-check-input" type="radio" name="recommended" id="inlineRadio1" value="Y" >
+  							<input class="form-check-input" type="radio" name="recommended" value="Y" >
   							<label class="form-check-label" for="inlineRadio1">예</label>
 						</div>
 						<div class="form-check form-check-inline">
@@ -203,12 +203,7 @@
 						</div>
 					</div>
 				</fieldset>
-				<div class="row mb-3">
-					<label for="quantity" class="col-sm-2 col-form-label">이미지</label>
-					<div class="col-sm-10">
-						<input type="file" name="upfile" class="form-control">
-					</div>
-				</div>
+				
 		</form>
       </div>
       <div class="modal-footer">
@@ -244,7 +239,7 @@
 				for(let index = 0; index < products.length; index++) {
 					let product = products[index];
 					let pdNo = product.no;
-					let category = product.categoryNo;
+					let categoryNo = product.categoryNo;
 					let name = product.name;
 					let company = product.company;
 					let price = product.price;
@@ -253,13 +248,13 @@
 					let createdDate= product.createdDate;
 					let recommended = product.recommended;
 					
-					let modalInfo = {name : "막걸리"};
 					//let modalInfo = {categoryNo: product.categoryNo, name: name, company: company, price: price, salePrice: salePrice, quantity: quantity, recommended: recommended};
+					// 위와 같이 객체를 생성해서 전달하는 것은 불가능! 맨마지막 값만 들어가기 때문에
 					
-					rows += "<tr>";
-					rows += '<td><input type="checkbox" name="pdCheckbox" value="' + pdNo + '" onchange="changeCheckboxChecked();"/></td>';
-					rows += "<td>" + category + "</td>";
-					rows += "<td><a href='' onclick='modalTest("+ modalInfo + ");' data-bs-toggle='modal' data-bs-target='#updateModal'>" + name + "</a></td>";
+					rows += "<tr id='row-" + pdNo +"'>";
+					rows += '<td><input type="checkbox" name="pdCheckbox" value="' + pdNo + '" onchange="changeCheckboxChecked();"/></td>'; // 수정
+					rows += "<td data-product-category-no='"+ categoryNo + "'>" + categoryNo + "</td>";
+					rows += "<td><a href='javascript:openModal(" + pdNo +")'>" + name + "</a></td>"; //  data-bs-toggle='modal' data-bs-target='#product-modify-modal' 삭제
 					rows += "<td>" + company + "</td>";
 					rows += "<td>" + price + "</td>";
 					rows += "<td>" + salePrice + "</td>";
@@ -308,6 +303,26 @@
 		
 	}
 	
+	﻿
+	let productModifyModal= new bootstrap.Modal(document.getElementById('product-modify-modal'), {
+
+	keyboard: false
+
+	});
+	function openModal(productNo) {
+		let tds = document.querySelectorAll("#row-" + productNo);
+		
+		//alert("상품명: " + tds[2].textContent + "회사명: " + tds[3].textContent );
+		document.querySelector("#product-modify-modal input[name=name]").value = tds[2]﻿.querySelector("a").textContent;
+		document.querySelector("#product-modify-modal input[name=company]").value = tds[3].textContent;
+		document.querySelector("#product-modify-modal input[name=price]").value = tds[4].textContent;
+		document.querySelector("#product-modify-modal input[name=salePrice]").value = tds[5].textContent;
+		document.querySelector("#product-modify-modal input[name=quantity]").value = tds[6].textContent;
+		
+		productModifyModal.show(); 
+	}
+		﻿
+	
 	function searchByKeyword() {
 		
 		// input박스 안에 키워드를 입력했지만 검색조건(제조자 or 상품명)를 설정하지 않은 경우 alert창을 출력한다.
@@ -334,9 +349,7 @@
 		
 	}
 	
-	function modalTest(modalInfo) {
-		document.getElementById("modal-name").value = modalInfo.name;
-	}
+	
 	
 	
 	

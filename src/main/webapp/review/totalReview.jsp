@@ -57,11 +57,15 @@
 
 		// 전체 데이터 갯수 조회
 		int totalRows = 0;
-		if (keyword.isEmpty()) {
+		if (categoryNo == 0 && keyword.isEmpty()) {
 			totalRows = reviewDao.getTotalRows();
-		} else {
+		} else if(categoryNo > 0 && keyword.isEmpty()){
+			totalRows = reviewDao.getTotalRows(categoryNo);
+		} else if(categoryNo == 0 && !keyword.isEmpty()){
 			totalRows = reviewDao.getTotalRows(keyword);
-		}
+		} else if (categoryNo > 0 && !keyword.isEmpty()) {
+			totalRows = reviewDao.getTotalRows(keyword, categoryNo);
+		} 
 		
 		
 		// 페이징처리에 필요한 정보를 제공하는 객체 생성
@@ -134,8 +138,8 @@
 			</div>
 			<div class="col">
 				<select class="form-select form-select-sm" name="arrangement" onchange="">
-					<option value="date" selected >최신순</option>
-					<option value="score">평점</option> 
+					<option value="date" selected>최신순</option>
+					<option value="score" >평점</option> 
 					<option value="likeCount">추천</option> 
 				</select>
 			</div>

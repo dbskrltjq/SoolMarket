@@ -17,7 +17,7 @@ public class ProductDao {
 	
 	private DaoHelper helper = DaoHelper.getInstance();
 	
-	public Product getProductByNo(int productNo) throws SQLException {
+	public Product getProductByNo(int pdNo) throws SQLException {
 		
 		String sql = "select * "
 				   + "from sul_products "
@@ -40,7 +40,7 @@ public class ProductDao {
 			product.setFileName(rs.getString("pd_file_name"));
 			
 			return product;
-		},productNo);
+		},pdNo);
 	}
 	
 	public List<Product> getCompanyByKeyword(String keyword) throws SQLException {
@@ -792,6 +792,15 @@ public class ProductDao {
 				   + "values(sul_products_seq.nextval, ?, ?, ?, ?, ?, ?, ?, ?) ";
 		
 		helper.insert(sql, product.getCategoryNo(), product.getName(), product.getCompany(), product.getPrice(), product.getSalePrice(), product.getStock(), product.getRecommended(),product.getFileName());
+	}
+	
+	public void updateProductReviewCount(Product product) throws SQLException {
+		String sql = "update sul_products "
+				   + "set "
+				   + "		pd_review_count = ?"
+				   + "where pd_no = ? ";
+				   
+		helper.update(sql, product.getReviewCount(), product.getNo());
 	}
 	
 }

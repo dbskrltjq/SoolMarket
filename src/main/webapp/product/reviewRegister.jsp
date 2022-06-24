@@ -1,3 +1,5 @@
+<%@page import="dao.ProductDao"%>
+<%@page import="vo.Product"%>
 <%@page import="dao.ProductReviewDao"%>
 <%@page import="vo.User"%>
 <%@page import="vo.Review"%>
@@ -14,7 +16,8 @@
 	int userNo = user.getNo();
 	
 	ProductReviewDao productReviewDao = ProductReviewDao.getInstance();
-
+	ProductDao productDao = ProductDao.getInstance();
+	
 	MultipartRequest mr = new MultipartRequest(request,"C:\\eclipse\\workspace-web\\review-file");
 	
 	// 리뷰 요청파라미터 조회
@@ -23,6 +26,8 @@
 	String content = mr.getParameter("reviewContent");
 	String reviewFileName = mr.getFilename("reviewFileName");
 	
+	Product product = productDao.getProductByNo(pdNo);
+	
 	Review review = new Review();
 	review.setPdNo(pdNo);
 	review.setUserNo(userNo);
@@ -30,6 +35,8 @@
 	review.setContent(content);
 	review.setFileName(reviewFileName);
 	
+	product.setReviewCount(product.getReviewCount() + 1 );
+	productDao.updateProductReviewCount(product);
 	productReviewDao.insertReview(review);
 	
 	response.sendRedirect("detail.jsp?pdNo=" + pdNo);

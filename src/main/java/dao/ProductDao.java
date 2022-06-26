@@ -367,8 +367,8 @@ public class ProductDao {
 	
 	public List<Product> getItemBySaleQuantity(int categoryNo, int beginIndex, int endIndex) throws SQLException {
 		
-		String sql = "select pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
-				+ "from(select row_number() over (order by pd_sale_quantity desc) row_number, pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
+		String sql = "select pd_no, pd_name, pd_price, pd_sale_price, pd_review_score, pd_image_url "
+				+ "from(select row_number() over (order by pd_sale_quantity desc) row_number, pd_no, pd_name, pd_price, pd_sale_price, pd_review_score, pd_image_url "
 				+ "from sul_products where category_no = ?) "
 				+ "where row_number >= ? and row_number <= ?";
 		
@@ -379,8 +379,8 @@ public class ProductDao {
 			product.setPrice(rs.getInt("pd_price"));
 			product.setSalePrice(rs.getInt("pd_sale_price"));
 			product.setReviewScore(rs.getInt("pd_review_score"));
+			product.setImageUrl(rs.getString("pd_image_url"));
 
-			
 			return product;
 		}, categoryNo, beginIndex, endIndex);
 	}		

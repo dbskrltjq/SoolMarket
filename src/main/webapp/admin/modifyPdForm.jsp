@@ -52,7 +52,7 @@
 										<form id="modify-form" class="row g-3" method="post">
 												<div class="col-3 input-group ">
 												<input type="hidden" name="page" />
-												<select class="form-select form-select-sm" name="category" onchange="﻿loadProducts();" style="width: auto;">
+												<select class="form-select form-select-sm me-5" name="category" onchange="﻿loadProducts();">
 													<option disabled selected >카테고리 선택</option>
 											<%
 												for(Category category : categories) {
@@ -62,25 +62,28 @@
 												}
 											%>
 												</select>
-												<select class="form-select form-select-sm float-end" name="search" onchange="﻿loadProducts();" style="width: auto;">
+												
+												<select class="form-select form-select-sm float-end" name="search" onchange="﻿loadProducts();">
 													<option value="" selected disabled>검색조건</option>
 													<option value="company">제조사</option>
 													<option value="name">상품명</option>
 												</select>
-												<input type="text" class="form-control" name="keyword" placeholder="키워드 입력" style="width: auto;"/>
-												<select class="form-select form-select-sm" name="period" onchange="﻿loadProducts();" style="width: auto;">
+												<input type="text" class="form-control" name="keyword" placeholder="키워드 입력" />
+												<button type="button" class="btn btn-outline-secondary me-5" onclick="searchByKeyword();">검색</button>
+												
+												<select class="form-select form-select-sm" name="period" onchange="﻿loadProducts();" >
 													<option value="-9999">전체보기</option>
 													<option value="-1">1개월</option>											
 													<option value="-3">3개월</option>											
 													<option value="-6">6개월</option>	
 												</select>
-												</div>
-												<button type="button" class="btn btn-outline-secondary" onclick="searchByKeyword();">검색</button>
-												<select class="form-select form-select-sm float-end" name="rows" onchange="﻿loadProducts();" style="width: auto;">
+												
+												<select class="form-select form-select-sm float-end" name="rows" onchange="﻿loadProducts();" >
 													<option value="5" <%=rows == 5 ? "selected" : ""%>>5개씩 보기</option>
 													<option value="10" <%=rows == 10 ? "selected" : ""%>>10개씩 보기</option>
 													<option value="15" <%=rows == 15 ? "selected" : ""%>>15개씩 보기</option>
 												</select>
+												</div>
 										</form>
 									</div>
 								</div>

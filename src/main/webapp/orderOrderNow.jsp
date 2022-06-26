@@ -1,4 +1,3 @@
-<%@page import="dao.CartItemDao"%>
 <%@page import="dao.HistoryDao"%>
 <%@page import="dao.UserDao"%>
 <%@page import="org.apache.catalina.realm.UserDatabaseRealm.UserDatabasePrincipal"%>
@@ -151,15 +150,7 @@
 	// 3. updateUserPoint를 사용해 userPoint를 업데이트 해 준다.
 	user.setPoint(user.getPoint() - usedPoint + depositPoint);
 	userDao.updateUserPoint(user);
-	
-	// 4. 결제가 완료되었다는 가정 하에, 주문한 아이템을 cart에서 삭제한다.
-	// cartNo만 받기에는 바로구매가 있으므로, order를 order/orderOrderNow로 나눔. 분기 나누는 법 ... 모르겟당.
-	CartItemDao cartItemDao = CartItemDao.getInstance();
-	
-	for (OrderItem orderItem : orderItems) {
-		cartItemDao.deleteCartItemByPdNo(orderItem.getPdNo());
-	}
-	
+
 	// orderNo를 함께 보내면 주문완료 창에서 주문 조회 가능하다.
 	response.sendRedirect("orderComplete.jsp?orderNo="+orderNo);
 

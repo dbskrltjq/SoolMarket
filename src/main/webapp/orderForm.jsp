@@ -47,7 +47,7 @@
 			} else if("deny".equals(fail)) {
 		%>
 			<div class="alert alert-danger">
-				<strong>거부</strong>다른 사용자의 장바구니 아이템을 변경할 수 없습니다.
+				<strong>거부</strong>다른 사용자의 주문 아이템을 변경할 수 없습니다.
 			</div>
 		<%
 			}
@@ -295,7 +295,8 @@
 						<span>
 							<input type="number" min="0" max="<%=user.getPoint() %>" id="order-use-point" value="0" name="usedPoint" 
 								onkeyup="totalPriceChange();" 
-								onclick="totalPriceChange();" />
+								onclick="totalPriceChange();"
+								onchange="totalPriceChange();" />
 						</span>
 						<small>
 							<span><input type="checkbox" id="order-point-checkbox" onchange="useAllPoint();" />전액 사용하기</span>
@@ -358,7 +359,7 @@
 		<!-- 결제하기 버튼 -->	
 		<div class="mb-5">
 			<a href="home.jsp" class="btn btn-light btn-outline-dark">취소</a>
-			<button type="button" class="btn btn-primary" onclick="mustCheckBoxFunction();">결제하기</button>	
+			<button type="button" class="btn btn-primary" onclick="checkedOrderForm();">결제하기</button>	
 		</div>	
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
@@ -397,18 +398,26 @@
 	
 	// 포인트가 바뀌면 최종결제금액이 바뀌는 함수이다.
 	function totalPriceChange() {
-		let strong = document.getElementById("total-cart-price");			//<strong id="totalCartPrice">14,170</strong>
+		let strong = document.getElementById("total-cart-price");		//<strong id="totalCartPrice">14,170</strong>
 		let commaPrice = strong.textContent;							// '14,170'
 		let totalCartText = commaPrice.replaceAll(",", "");				// '14170'
 		let price = parseInt(totalCartText);							//  14170
 		
+		let strongP = document.getElementById("user-point");			// 유저 포인트 가져오는 변수이다.
+		let commaPriceP = strongP.textContent;							
+		let pointTextP = commaPriceP.replaceAll(",", "");				
+		let point = parseInt(pointTextP);							
+		
 			if (document.getElementById("order-use-point").value < 0) {
 				alert("0포인트부터 사용 가능합니다.");
 				document.getElementById("order-use-point").value = 0;
+			} else if (document.getElementById("order-use-point").value > point) {
+				alert("포인트 사용액은 소유한 포인트량을 넘을 수 없습니다.");
+				document.getElementById("order-use-point").value = point;
 			} else if (document.getElementById("order-use-point").value > price) {
-				// alert("포인트 사용액은 결제금액을 넘을 수 없습니다.");
+				alert("포인트 사용액은 결제금액을 넘을 수 없습니다.");
 				document.getElementById("order-use-point").value = price;
-			} 
+			}
 		
 		let totalPrice = price - document.getElementById("order-use-point").value;	// 가격 - 14170
 		
@@ -454,8 +463,34 @@
 		}
 
 	
+	// 배송정보 직접 입력 선택 시, *표에 빈칸이 있다면 주문으로 넘어가지 못하게 한다.
 	// 필수 체크박스 체크 안 하면 결제 못 하게 하는 함수
-	function mustCheckBoxFunction() {
+	// 원래 따로 있었으나, 이상하게 작동해서 한 함수 안에 넣어 -> 위에서 아래로 검사 검사 검사 하도록 만듬.
+	function checkedOrderForm() {
+		
+		let nameField = document.querySelector("input[name=receiveName]");
+		if (nameField.value.trim() === '') {
+			alert("받으실 분 성함을 입력해 주세요.");
+			nameField.focus();
+			return;
+		}
+
+		let postcodeField = document.getElementById("receive-postcode");	// 천재같당 근데 왜 name 아니고 얘네만 id일까
+		let addrField = document.getElementById("receive-addr");
+		let detailAddrField = document.getElementById("receive-detail-addr");
+		if (!postcodeField.value.trim() || !addrField.value.trim() || !detailAddrField.value.trim()) {
+			alert("주소를 입력해주세요.");
+			postcodeField.focus();
+			return;
+		}
+
+		let telField = document.querySelector("input[name=receiveTel]");
+		if (telField.value.trim() === '') {
+			alert("전화번호를 입력해주세요.")
+			telField.focus();
+			return;
+		}
+		
 		let checkedMustCheckboxCount = document.querySelectorAll('input[name="mustCheckBox"]:checked').length;	
 		if (checkedMustCheckboxCount < 2) {
 			alert("필수 체크박스에 모두 체크하셔야 구매하실 수 있습니다.");

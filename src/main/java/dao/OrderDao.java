@@ -177,6 +177,28 @@ public class OrderDao {
 		}, userNo);
 	}
 	
+	// userNo로 30일 내의 주문정보 읽어온다. mypage의 최근주문정보에서 사용된다.
+	public List<Order> getRecentOrdersByUserNo(int userNo) throws SQLException {
+		String sql = "select ORDER_NO, ORDER_PAYMENT_PRICE, ORDER_TOTAL_QUANTITY, ORDER_CREATED_DATE, ORDER_STATUS, ORDER_TITLE "
+				+ "from SUL_ORDERS "
+				+ "where user_no = ? "
+				+ "and ORDER_CREATED_DATE >= TRUNC(SYSDATE) - 30 "
+				+ "order by order_no desc";
+		
+		return helper.selectList(sql, rs -> {
+			Order order = new Order();
+			
+			order.setNo(rs.getInt("ORDER_NO"));
+			order.setPaymentPrice(rs.getInt("ORDER_PAYMENT_PRICE"));
+			order.setTotalQuantity(rs.getInt("ORDER_TOTAL_QUANTITY"));
+			order.setCreatedDate(rs.getDate("ORDER_CREATED_DATE"));
+			order.setStatus(rs.getString("ORDER_STATUS"));
+			order.setTitle(rs.getString("ORDER_TITLE"));
+			
+			return order;
+		}, userNo);
+	}
+	
 	// orderNo로 orderItem들 불러온다. myOrderDetail에서 사용된다.
 	public List<OrderItemDto> getOrderItemsByOrderNo(int orderNo) throws SQLException {
 		String sql = "select I.ORDER_NO, P.PD_NAME, I.ORDER_ITEM_PRICE, I.ORDER_ITEM_QUANTITY, (I.ORDER_ITEM_PRICE*I.ORDER_ITEM_QUANTITY) TOTALPRICE, O.ORDER_USED_POINT, O.ORDER_PAYMENT_PRICE, I.ORDER_ITEM_CREATED_DATE,  P.PD_NO "
@@ -199,9 +221,8 @@ public class OrderDao {
 			orders.setPdNo(rs.getInt("PD_NO"));
 			
 			return orders;
-		}, orderNo);
-
-	// pointhistory & user 포인트 수정하는 sql문
+		}, orderNo); 
+	}
 	
 	// 주문 여부를 확인하는 sql
 	public int getOrderCount(int productNo,int userNo) throws SQLException {
@@ -218,5 +239,4 @@ public class OrderDao {
 
 	}
 
-	
 }

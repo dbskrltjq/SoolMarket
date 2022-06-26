@@ -144,16 +144,16 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-      <form id="modifyProduct-form" class="form-horizontal border bg-light p-3" method="post"  action="modifyProduct.jsp">
+      <form id="modifyProduct-form" class="form-horizontal border bg-light p-3">
 				<div class="row mb-3">
 					<label for="category" class="col-sm-2 col-form-label">상품 분류</label>
 					<div class="col-sm-10">
 						<select class="form-select" name="categoryNo">
-							<option name="default" disabled selected >카테고리 선택</option>
+							<option value='' disabled selected >카테고리 선택</option>
 					<%
 						for(Category category : categories) {
 					%>	
-							<option name="<%=category.getNo() %>" value="<%=category.getNo() %>" class="testtest" ><%=category.getName() %></option>
+							<option value="<%=category.getNo() %>"><%=category.getName() %></option>
 					<%
 						}
 					%>
@@ -186,9 +186,9 @@
 					</div>
 				</div>
 				<div class="row mb-3">
-					<label for="quantity" class="col-sm-3 col-form-label">재고량</label>
+					<label for="stock" class="col-sm-3 col-form-label">재고량</label>
 					<div class="col-sm-9">
-						<input type="number" name="quantity" class="form-control" min="1">
+						<input type="number" name="stock" class="form-control" min="1">
 					</div>
 				</div>
 				<fieldset class="row mb-3">
@@ -317,7 +317,7 @@
 		let categoryNo = tds[1].textContent;
 		document.querySelector("#product-modify-modal input[name=pdNo]").value = productNo;
 		
-		document.querySelector("#product-modify-modal option[name='default']").removeAttribute("selected");
+		document.querySelector("#product-modify-modal option[value='']").removeAttribute("selected");
 		document.querySelector("#product-modify-modal option[value='" + categoryNo +"']").setAttribute("selected", "selected");
 		
 		document.querySelector("#product-modify-modal input[name=name]").value = tds[2]﻿.textContent;
@@ -426,7 +426,7 @@
 				alert("상품수정이 완료되었습니다.");
 			}
 		}
-		xhr.open("POST", "modifyProduct.jsp");			// 상품추가 jsp 주소를 넣는다. form제출은 POST방식
+		xhr.open("POST", "modifyProduct.jsp");			// 상품수정 jsp 주소를 넣는다. form제출은 POST방식
 		xhr.send(formData);							// js의 객체를 담아서 보낸다.
 		
 		

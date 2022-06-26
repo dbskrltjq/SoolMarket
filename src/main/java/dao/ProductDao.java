@@ -877,4 +877,25 @@ public class ProductDao {
 		helper.update(sql, product.getReviewCount(), product.getNo());
 	}
 	
+	
+	/**
+	 * modifyProduct.jsp 에서 사용되는 상품수정용 메소드입니다. 
+	 * @param product
+	 * @throws SQLException
+	 */
+	public void modifyProduct(Product product) throws SQLException {
+		String sql = "update sul_products "
+				   + " set " 
+				   + "     category_no = ?, "
+				   + "     pd_name = ?, "
+				   + "     pd_company = ?, "
+				   + "     pd_price = ?, "
+				   + "     pd_sale_price = ?, "
+				   + "     pd_stock = ?, "
+				   + "     pd_recommended = ? "
+				   + "where pd_no = ? ";
+		
+		helper.update(sql, product.getCategoryNo(), product.getName(), product.getCompany(), product.getPrice(), product.getSalePrice(), product.getStock(), product.getRecommended(), product.getNo());
+	}
+	
 }

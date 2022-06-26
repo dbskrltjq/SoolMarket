@@ -144,16 +144,16 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-      <form id="newProduct-form" class="form-horizontal border bg-light p-3" method="post" enctype="multipart/form-data" action="addProduct.jsp">
+      <form id="modifyProduct-form" class="form-horizontal border bg-light p-3" method="post"  action="modifyProduct.jsp">
 				<div class="row mb-3">
 					<label for="category" class="col-sm-2 col-form-label">상품 분류</label>
 					<div class="col-sm-10">
 						<select class="form-select" name="categoryNo">
-							<option value="" disabled selected >카테고리 선택</option>
+							<option name="default" disabled selected >카테고리 선택</option>
 					<%
 						for(Category category : categories) {
 					%>	
-							<option value="<%=category.getNo() %>"><%=category.getName() %></option>
+							<option name="<%=category.getNo() %>" value="<%=category.getNo() %>" class="testtest" ><%=category.getName() %></option>
 					<%
 						}
 					%>
@@ -161,6 +161,7 @@
 					</div>
 				</div>
 				<div class="row mb-3">
+					<input type="hidden" name="pdNo"   />
 					<label for="name" class="col-sm-3 col-form-label">상품명</label>
 					<div class="col-sm-9">
 						<input type="text" name="name"  class="form-control">
@@ -185,7 +186,7 @@
 					</div>
 				</div>
 				<div class="row mb-3">
-					<label for="quantity" class="col-sm-3 col-form-label">입고량</label>
+					<label for="quantity" class="col-sm-3 col-form-label">재고량</label>
 					<div class="col-sm-9">
 						<input type="number" name="quantity" class="form-control" min="1">
 					</div>
@@ -208,7 +209,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btn-form-close">닫기</button>
-        <button type="button" id="registerBtn" class="btn btn-primary" onclick="submitForm();">등록하기</button>
+        <button type="button" id="registerBtn" class="btn btn-primary" onclick="submitModifyForm();">등록하기</button>
       </div>
     </div>
   </div>
@@ -248,17 +249,18 @@
 					let createdDate= product.createdDate;
 					let recommended = product.recommended;
 					
+					
 					//let modalInfo = {categoryNo: product.categoryNo, name: name, company: company, price: price, salePrice: salePrice, quantity: quantity, recommended: recommended};
 					// 위와 같이 객체를 생성해서 전달하는 것은 불가능! 맨마지막 값만 들어가기 때문에
 					
-					rows += "<tr id='row-" + pdNo +"'>";
+					rows += "<tr id='row-" + pdNo +"'> ";
 					rows += '<td><input type="checkbox" name="pdCheckbox" value="' + pdNo + '" onchange="changeCheckboxChecked();"/></td>'; // 수정
 					rows += "<td data-product-category-no='"+ categoryNo + "'>" + categoryNo + "</td>";
 					rows += "<td><a href='javascript:openModal(" + pdNo +")'>" + name + "</a></td>"; //  data-bs-toggle='modal' data-bs-target='#product-modify-modal' 삭제
 					rows += "<td>" + company + "</td>";
 					rows += "<td>" + price + "</td>";
 					rows += "<td>" + salePrice + "</td>";
-					rows += "<td>" + quantity + "(" + createdDate + ")" + "</td>";
+					rows += "<td>" + quantity + "</td>";
 					rows += "<td>" + recommended + "</td>";
 					rows += "</tr>";
 				}
@@ -310,14 +312,27 @@
 
 	});
 	function openModal(productNo) {
-		let tds = document.querySelectorAll("#row-" + productNo);
+		let tds = document.querySelectorAll("#row-" + productNo + " td");
 		
-		//alert("상품명: " + tds[2].textContent + "회사명: " + tds[3].textContent );
-		document.querySelector("#product-modify-modal input[name=name]").value = tds[2]﻿.querySelector("a").textContent;
+		let categoryNo = tds[1].textContent;
+		document.querySelector("#product-modify-modal input[name=pdNo]").value = productNo;
+		
+		document.querySelector("#product-modify-modal option[name='default']").removeAttribute("selected");
+		document.querySelector("#product-modify-modal option[value='" + categoryNo +"']").setAttribute("selected", "selected");
+		
+		document.querySelector("#product-modify-modal input[name=name]").value = tds[2]﻿.textContent;
 		document.querySelector("#product-modify-modal input[name=company]").value = tds[3].textContent;
 		document.querySelector("#product-modify-modal input[name=price]").value = tds[4].textContent;
 		document.querySelector("#product-modify-modal input[name=salePrice]").value = tds[5].textContent;
-		document.querySelector("#product-modify-modal input[name=quantity]").value = tds[6].textContent;
+		document.querySelector("#product-modify-modal input[name=quantity]").value = tds[6].textContent; 
+		
+		let recommended = tds[7].textContent;
+		
+		if("Y" === recommended) {
+			document.querySelector("#product-modify-modal input[value=Y]").checked = true;
+		} else {
+			document.querySelector("#product-modify-modal input[value=N]").checked = true;
+		}
 		
 		productModifyModal.show(); 
 	}
@@ -349,7 +364,78 @@
 		
 	}
 	
-	
+	function submitModifyForm() {
+		
+		let selectField = document.querySelector("select[name=categoryNo]");
+		let selectValue = selectField.value;
+		if(selectValue === "") {					// select는 false / true 값으로 x, value의 값으로 value값은 항상 문자열
+			alert("카테고리를 선택해주세요");		// option 태그에 value 값을 주지 않으면 텍스트 자체가 들어간다.
+			selectField.focus();
+			return false;
+		}
+		
+		let nameField = document.querySelector("input[name=name]");
+		let name = nameField.value.trim();
+		if(name === ''){
+			alert("상품명을 입력해주세요");
+			nameField.focus();
+			return false;
+		}
+		
+		let companyField = document.querySelector("input[name=company]");
+		let company = companyField.value.trim();
+		if(company === ''){
+			alert("제조사 입력해주세요");
+			companyField.focus();
+			return false;
+		}
+		
+		let priceField = document.querySelector("input[name=price]");
+		let price = priceField.value.trim();
+		if(price === ''){
+			alert("정가를 입력해주세요");
+			priceField.focus();
+			return false;
+		}
+		
+		let salePriceField = document.querySelector("input[name=salePrice]");
+		let salePrice = salePriceField.value.trim();
+		if(salePrice === ''){
+			alert("판매가를 입력해주세요");
+			salePriceField.focus();
+			return false;
+		}
+		
+		let quantityField = document.querySelector("input[name=quantity]");
+		let quantity = quantityField.value.trim();
+		if(quantity === ''){
+			alert("재고수량을 입력해주세요");
+			quantityField.focus();
+			return false;
+		}
+		
+		// 폼을 비동기방식으로 제출하기
+		let form = document.getElementById("modifyProduct-form");
+		let formData = new FormData(form);
+		
+		let xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState === 4 && xhr.status === 200) {
+				loadProducts(1);									// 다시 리스트 출력
+				document.getElementById("btn-form-close").click();	// 닫기 버튼을 클릭하여 닫히도록 한다.
+				alert("상품수정이 완료되었습니다.");
+			}
+		}
+		xhr.open("POST", "modifyProduct.jsp");			// 상품추가 jsp 주소를 넣는다. form제출은 POST방식
+		xhr.send(formData);							// js의 객체를 담아서 보낸다.
+		
+		
+		
+		
+		
+		
+		
+	}
 	
 	
 	

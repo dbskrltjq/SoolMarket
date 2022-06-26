@@ -45,44 +45,44 @@
 
 							<div class="card my-4 ">
 								<div class="card-header">
-									<div class="d-flex justify-content-between">
+									<div class="d-flex mb-2">
 										<strong class="me-3"><i class="fas fa-table me-1"></i>상품정보수정</strong>
 									</div>
 									<div class="form-div ">
-										<form id="modify-form" class="row g-3" method="post">
-												<div class="col-3 input-group ">
-												<input type="hidden" name="page" />
-												<select class="form-select form-select-sm me-5" name="category" onchange="﻿loadProducts();">
-													<option disabled selected >카테고리 선택</option>
-											<%
-												for(Category category : categories) {
-											%>	
-													<option value="<%=category.getNo() %>"><%=category.getName() %></option>
-											<%
-												}
-											%>
-												</select>
-												
-												<select class="form-select form-select-sm float-end" name="search" onchange="﻿loadProducts();">
-													<option value="" selected disabled>검색조건</option>
-													<option value="company">제조사</option>
-													<option value="name">상품명</option>
-												</select>
-												<input type="text" class="form-control" name="keyword" placeholder="키워드 입력" />
-												<button type="button" class="btn btn-outline-secondary me-5" onclick="searchByKeyword();">검색</button>
-												
-												<select class="form-select form-select-sm" name="period" onchange="﻿loadProducts();" >
-													<option value="-9999">전체보기</option>
-													<option value="-1">1개월</option>											
-													<option value="-3">3개월</option>											
-													<option value="-6">6개월</option>	
-												</select>
-												
-												<select class="form-select form-select-sm float-end" name="rows" onchange="﻿loadProducts();" >
-													<option value="5" <%=rows == 5 ? "selected" : ""%>>5개씩 보기</option>
-													<option value="10" <%=rows == 10 ? "selected" : ""%>>10개씩 보기</option>
-													<option value="15" <%=rows == 15 ? "selected" : ""%>>15개씩 보기</option>
-												</select>
+										<form id="modify-form" method="post">
+												<div class="input-group input-group-sm d-flex justify-content-around" >
+													<input type="hidden" name="page" />
+													<select class="form-select form-select-sm me-5" name="category" onchange="﻿loadProducts();">
+														<option disabled selected >카테고리 선택</option>
+												<%
+													for(Category category : categories) {
+												%>	
+														<option value="<%=category.getNo() %>"><%=category.getName() %></option>
+												<%
+													}
+												%>
+													</select>
+													
+													<select class="form-select form-select-sm float-end" name="search" onchange="﻿loadProducts();">
+														<option value="" selected disabled>검색조건</option>
+														<option value="company">제조사</option>
+														<option value="name">상품명</option>
+													</select>
+													<input type="text" class="form-control" name="keyword" placeholder="키워드 입력" />
+													<button type="button" class="btn btn-outline-secondary me-5" onclick="searchByKeyword();"><i class="fas fa-search"></i></button>
+													
+													<select class="form-select form-select-sm" name="period" onchange="﻿loadProducts();" >
+														<option value="-9999">전체날짜보기</option>
+														<option value="-1">1개월</option>											
+														<option value="-3">3개월</option>											
+														<option value="-6">6개월</option>	
+													</select>
+													
+													<select class="form-select form-select-sm float-end" name="rows" onchange="﻿loadProducts();" >
+														<option value="5" <%=rows == 5 ? "selected" : ""%>>5개씩 보기</option>
+														<option value="10" <%=rows == 10 ? "selected" : ""%>>10개씩 보기</option>
+														<option value="15" <%=rows == 15 ? "selected" : ""%>>15개씩 보기</option>
+													</select>
 												</div>
 										</form>
 									</div>

@@ -3,7 +3,6 @@
 
 <%
 	User admin = (User)session.getAttribute("ADMIN");
-	String name = request.getParameter("name");
 %>
 <div id="layoutSidenav_nav" class="h-100">
       <nav class="sb-sidenav accordion sb-sidenav-dark ms-0" id="sidenavAccordion">
@@ -50,7 +49,7 @@
           </div>
           <div class="sb-sidenav-footer">
               <div class="small">Logged in as:</div>
-              <%=name %>
+              <%=admin.getName() %>
         </div>
     </nav>
 </div>

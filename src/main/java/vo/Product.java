@@ -20,6 +20,7 @@ public class Product {
 	private Date createdDate;
 	private Date updatedDate;
 	private String imageUrl;
+	private String deleted;
 	
 	public Product() {}
 
@@ -153,6 +154,14 @@ public class Product {
 
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
+
+	public String getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(String deleted) {
+		this.deleted = deleted;
+
 	}
 	
 	

@@ -30,7 +30,7 @@
 				} else if("deny".equals(fail)) {
 			%>
 				<div class="alert alert-danger">
-					<strong>거부</strong>다른 사용자의 장바구니 아이템을 변경할 수 없습니다.
+					<strong>거부</strong>다른 사용자의 주문 완료 페이지를 볼 수 없습니다.
 				</div>
 			<%
 				}
@@ -88,7 +88,7 @@
 						<td><%=order.getTitle() %></td>
 						<td><%=order.getTotalQuantity() %></td>
 						<td><%=order.getStatus() %></td>
-						<td><%=order.getPaymentPrice() %></td>
+						<td><%=StringUtil.numberToString(order.getPaymentPrice()) %></td>
 					</tr>
 			<%
 

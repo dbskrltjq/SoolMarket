@@ -64,7 +64,7 @@ public class CartItemDao {
 	}
 	
 	// 선생님 이 메소드 봐 주세요!!
-	// userNo가 필요한가요 로그인을 했어도? (이 메소드는 반드시 로그인된 상태에서만 실행된다.)
+	// userNo가 필요한가요 로그인을 했어도? (이 메소드는 반드시 로그인된 상태에서만 실행된다.) ㅇㅇ 필요함
 	// 지정된 장바구니 아이템 정보를 전달받아서 동일한 정보가 존재하면 수량을 증가시키고, 정보가 존재하지 않으면 추가한다. - add
 	// 여긴 userNo 필요
 	public void mergeCartItem(Cart cart) throws SQLException {
@@ -100,16 +100,16 @@ public class CartItemDao {
 	public Cart getCartItemByPdNo(int pdNo) throws SQLException {
 		String sql = "select * "
 				+ "from SUL_CARTS "
-				+ "where pdNo = ? ";
+				+ "where pd_No = ? ";
 		
 		return helper.selectOne(sql, rs -> {
 			Cart cart = new Cart();
-			cart.setNo(rs.getInt(""));
-			cart.setUserNo(rs.getInt(""));
-			cart.setPdNo(rs.getInt(""));
-			cart.setQuantity(rs.getInt(""));
-			cart.setCreatedDate(rs.getDate(""));
-			cart.setUpdatedDate(rs.getDate(""));
+			cart.setNo(rs.getInt("CART_NO"));
+			cart.setUserNo(rs.getInt("USER_NO"));
+			cart.setPdNo(rs.getInt("PD_NO"));
+			cart.setQuantity(rs.getInt("CART_ITEM_QUANTITY"));
+			cart.setCreatedDate(rs.getDate("CART_ITEM_CREATED_DATE"));
+			cart.setUpdatedDate(rs.getDate("CART_ITEM_UPDATED_DATE"));
 			
 			return cart;
 			
@@ -123,6 +123,14 @@ public class CartItemDao {
 				+ "where CART_NO = ? ";
 	
 		helper.delete(sql, cartNo);
+	}
+
+	// 지정된 아이템 번호와 일치하는 장바구니 아이템정보를 삭제한다. - delete
+	public void deleteCartItemByPdNo(int pdNo) throws SQLException {
+		String sql = "delete from SUL_CARTS "
+				+ "where PD_NO = ? ";
+		
+		helper.delete(sql, pdNo);
 	}
 
 }

@@ -1,3 +1,4 @@
+<%@page import="vo.User"%>
 <%@page import="java.util.List"%>
 <%@page import="dto.OrderItemDto"%>
 <%@page import="dao.OrderDao"%>
@@ -22,6 +23,33 @@
 	<jsp:param name="menu" value="cart"/>
 </jsp:include>
 <div class="container "  style="padding: 30px;">
+
+	<%
+		String fail = request.getParameter("fail");
+	
+		if ("invalid".equals(fail)) {
+	%>
+		<div class="alert alert-danger">
+			<strong>오류</strong>유효한 요청이 아닙니다. 
+		</div>	
+	<%
+		} else if("deny".equals(fail)) {
+	%>
+		<div class="alert alert-danger">
+			<strong>거부</strong> 다른 사용자의 주문정보는 조회 불가합니다.
+		</div>
+	<%
+		}
+	%>
+		
+	<% 	
+		User user = (User) session.getAttribute("LOGINED_USER");
+		if (user==null) {
+			response.sendRedirect("loginform.jsp?fail=deny"); 
+			return;
+		}
+	%>
+	
 	<div class="row">			
   		<div class="col-2">
 			<h5 class="border-bottom pb-2  mb-4"><strong>마이페이지</strong></h5>

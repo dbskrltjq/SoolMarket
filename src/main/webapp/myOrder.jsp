@@ -15,13 +15,32 @@
 </head>
 <style>
 	tr { text-align : center; }
-	td { text-align : center; }
+	td { text-align : center; padding: 5px;}
 </style>
 <body>
 <jsp:include page="common/nav.jsp">
 	<jsp:param name="menu" value="cart"/>
 </jsp:include>
 <div class="container "  style="padding: 30px;">
+
+	<%
+		String fail = request.getParameter("fail");
+	
+		if ("invalid".equals(fail)) {
+	%>
+		<div class="alert alert-danger">
+			<strong>오류</strong>유효한 요청이 아닙니다. 
+		</div>	
+	<%
+		} else if("deny".equals(fail)) {
+	%>
+		<div class="alert alert-danger">
+			<strong>거부</strong>다른 사용자의 장바구니 아이템을 변경할 수 없습니다.
+		</div>
+	<%
+		}
+	%>
+		
 	<% 	
 		User user = (User) session.getAttribute("LOGINED_USER");
 		if (user==null) {
@@ -74,7 +93,17 @@
 						OrderDao orderDao = OrderDao.getInstance();
 						List<Order> orders = orderDao.getAllOrdersByUserNo(user.getNo());
 						
-						for (Order order : orders) {
+						if(orders.isEmpty()) {
+					%>
+						<tr>
+							<td colspan="6" class="text-center"><strong>주문내역이 없습니다.</strong></td>
+						</tr>
+					
+					<%
+						
+						} else { 
+							for (Order order : orders) {
+
 					%>
 							<tr>
 								<td><%=order.getNo() %></td>
@@ -87,6 +116,7 @@
 								<td><%=StringUtil.numberToString(order.getPaymentPrice()) %></td>
 							</tr>
 					<%
+							}
 						}
 					%>
 						</tbody>

@@ -17,7 +17,7 @@
 </head>
 <body>
 <jsp:include page="common/nav.jsp">
-	<jsp:param name="menu" value="list"/>
+	<jsp:param name="menu" value="searchList"/>
 </jsp:include>
 <%
 	CategoryDao categoryDao = CategoryDao.getInstance();

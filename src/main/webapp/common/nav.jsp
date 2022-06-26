@@ -55,23 +55,13 @@
 		          			</ul>
 		        		</li>
 				      </ul>
-				      <form class="d-flex position-relative" role="search" action="/semi/searchList.jsp?sort=sell" onsubmit="savedKeyword();" >
-				      	<div class="input-group">
-					        <input class="form-control border-warning" id="search" type="text" name="keyword" placeholder="제품검색 ex)소주" onclick="openKeywordList();" onblur="closeKeywordList();" />
+				      <form class="d-flex position-relative" role="search"  action="/semi/searchList.jsp?sort=sell" onsubmit="savedKeyword();" >
+				      	<div class="input-group" >
+					        <input class="form-control border-warning" type="text" id="search" name="keyword" placeholder="제품검색 ex)소주" />
 					        <button class="btn btn-outline-warning" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>				
+							<div class="list-group position-absolute d-none" id="keyword-list" style="z-index: 2000; left: 0; top: 40px; width: 80%;"  ></div>
+							<div class="list-group position-absolute d-none" id="remove-list" style="z-index: 2000; right: 0; top: 40px; width: 20%;"  ></div>			
 					    </div>
-					    <ul class="list-group list-group-flush position-absolute d-none border" id="keyword-list" style="z-index: 2000; left: 0; top: 40px; width: 80%;">
-							
-						</ul>
-					    
-				        <!-- onfocus="paintToDo();" onblur="viewKeyword();"
-				        
-				        	<div class="list-group position-absolute " id="display" style="z-index: 2000; left: 0; top: 40px; width: 80%;"  >
-						  	<button type="button" class="list-group-item list-group-item-action">A second item</button>
-						  	<button type="button" class="list-group-item list-group-item-action">A third button item</button>
-						  	<button type="button" class="list-group-item list-group-item-action">A fourth button item</button>
-						 	<button type="button" class="list-group-item list-group-item-action">A disabled button item</button>
-						</div> -->				
 				      </form>
 				</div>     
 				<div class="col-3" style="text-align: right;">
@@ -102,25 +92,21 @@
 		return;
 	}
 	
-	//function searchKeyword() {
-	//	location.href="/semi/searchList.jsp?sort=sell&keyword=" + document.querySelector("input[name=keyword]").value	
-	//}
-	let keywordList = document.getElementById('keyword-list');
+	let recentKeyword = document.getElementById('search');
+	recentKeyword.addEventListener('click', function() {openKeywordList();});
+	//recentKeyword.addEventListener('blur', function() {closeKeywordList();});
 	
 	let array = new Array();
-	
-	//let keywords = document.querySelector("input[name=keyword]").value;
-	//let text = localStorage.getItem("keyword") || '[]';
 	
 	function savedKeyword() {
 		let keywords = document.querySelector("input[name=keyword]").value;
 		let text = localStorage.getItem("keyword") || '[]';
-		array = JSON.parse(text);
+		let array = JSON.parse(text);
 		
 		if (keywords === "") {
 			return;
 		} else {
-		array.unshift(keywords);
+			array.unshift(keywords);
 		}
 		
 		text = JSON.stringify(array);
@@ -128,12 +114,120 @@
 	}
 	
 	function openKeywordList() {
+		
+		
+		let keywordList = document.getElementById('keyword-list');
+		let removeList = document.getElementById('remove-list');
+		
+		//let booleanb = document.getElementById('keyword-list');
+		let booleanc = keywordList.hasChildNodes();
+		console.log(booleanc);
+		
+		if (keywordList.hasChildNodes()) {
+			return keywordOnOff();
+		}
+		
+		
 		let text = localStorage.getItem("keyword") || '[]';			
-		array = JSON.parse(text);	
-		event.stopPropagation()
-		let li = document.createElement("li");
-		let span = document.createElement("span");
-		let button = document.createElement("button");
+		let array = JSON.parse(text);	
+		//if (keywordList.hasChildNodes()) {
+		//	console.log(keywordList.hasChildNodes());
+		//}
+		
+		let buttonK = null;
+		let buttonR = null;
+		let li = null;
+		
+		for (let i=0; i < array.length; i++) {
+			
+			buttonK = document.createElement("button");
+			buttonR = document.createElement("button");
+			li = document.createElement("li");
+			
+			buttonK.classList.add('list-group-item');
+			buttonK.classList.add('list-group-item-action');
+			buttonR.classList.add('list-group-item');
+			buttonR.classList.add('list-group-item-action');
+			
+			buttonK.setAttribute('type', 'button');
+			buttonR.setAttribute('type', 'button');
+			
+			buttonK.innerText = array[i];
+			buttonR.innerText = 'X';
+			buttonK.addEventListener('click', function () {searchKeyword(i);});
+			buttonR.addEventListener('click', function () {deleteKeyword(i);});
+			keywordList.append(buttonK);
+			removeList.append(buttonR);
+		}
+		let buttonRAll = document.createElement("button");
+		buttonRAll.classList.add('list-group-item');
+		buttonRAll.classList.add('list-group-item-action');
+		buttonRAll.setAttribute('type', 'button');
+		buttonRAll.innerText = '전체삭제';
+		buttonRAll.addEventListener('click', function () {deleteAll();});
+		keywordList.append(buttonRAll);
+		
+		keywordOnOff();
+	}
+	
+	function keywordOnOff() {
+		
+		let keywordList = document.getElementById('keyword-list');
+		let removeList = document.getElementById('remove-list');
+		
+		if (keywordList.classList.contains('d-none') && removeList.classList.contains('d-none')) {
+			keywordList.classList.remove('d-none');
+			removeList.classList.remove('d-none');
+		} else { 
+			keywordList.classList.add('d-none');
+			removeList.classList.add('d-none');
+		}
+	}
+	
+	function deleteKeyword(i) {	
+		let text = localStorage.getItem("keyword") || '[]';			
+		let array = JSON.parse(text);	
+		
+		let keywordList = document.getElementById('keyword-list');
+		let removeList = document.getElementById('remove-list');
+		
+		let removeK = keywordList.childNodes[i];
+		removeK.remove();
+		
+		let removeR = removeList.childNodes[i];
+		removeR.remove();
+		
+		array.splice(i, 1);
+		text = JSON.stringify(array);
+		localStorage.setItem("keyword", text);
+	
+	}
+	
+	function deleteAll() {
+		
+		localStorage.clear(array);
+	   // keywordList.innerText = '최근검색어 내역이 없습니다.';
+	}
+	
+	function searchKeyword(i) {
+		let keywordList = document.getElementById('keyword-list');
+		let keyword = keywordList.childNodes[i];
+		
+		let formerKeyword = keyword.innerText;
+		
+		
+		location.href="/semi/searchList.jsp?keyword=" + keyword.innerText;
+	}
+	
+	function refreshDelete() {
+		let text = localStorage.getItem("keyword") || '[]';			
+		let array = JSON.parse(text);	
+		
+		let keywordList = document.getElementById('keyword-list');
+		
+		let li = null;
+		let span = null;
+		let button = null;
 		
 		for (let i=0; i < array.length; i++) {
 			
@@ -141,30 +235,16 @@
 			span = document.createElement("span");
 			button = document.createElement("button");
 			
-			li.classList.add('list');
-			li.classList.add('border-top');
-			span.innerText = array[i];
+			li.classList.add('list-group-item');
+			button.classList.add('btn');
+			button.classList.add('btn-outline-danger');
+			button.setAttribute('type', 'button');
 			button.innerText = '삭제';
+			button.addEventListener('click', deleteKeywordFunctionMaker(i));
+			span.innerText = array[i];
 			li.append(span, button);
 			keywordList.append(li);
-			button.addEventListener('click', deleteKeyword(i) );
 		}
-		
-		document.getElementById('keyword-list').classList.remove('d-none');
 	}
 	
-	function closeKeywordList() {
-		document.getElementById('keyword-list').classList.add('d-none');
-	}
-	
-	function deleteKeyword(i) {	
-		array.splice(i, 1);
-		text = JSON.stringify(array);
-		localStorage.setItem("keyword", text);
-	}
-	
-	function deleteAll() {
-		localStorage.clear(array);
-	    keywordList.innerText = '최근검색어 내역이 없습니다.';
-	}
 </script>

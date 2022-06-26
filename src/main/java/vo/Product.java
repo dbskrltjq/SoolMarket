@@ -19,6 +19,7 @@ public class Product {
 	private String fileName;
 	private Date createdDate;
 	private Date updatedDate;
+	private String imageUrl;
 	
 	public Product() {}
 
@@ -144,6 +145,14 @@ public class Product {
 
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 	
 	

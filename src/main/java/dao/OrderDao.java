@@ -200,6 +200,7 @@ public class OrderDao {
 			
 			return orders;
 		}, orderNo);
+	}
 
 	// pointhistory & user 포인트 수정하는 sql문
 	

@@ -29,7 +29,7 @@ public class ProductQuestionDao {
 	public List<QuestionDto> getProductQuestions(int productNo) throws SQLException {
 		String sql = "select Q.q_no, U.user_no, U.user_name, Q.pd_no, Q.q_title, Q.q_content, "
 				   + "Q.a_content, Q.q_deleted, Q.q_created_date, Q.q_updated_date, Q.a_created_date "
-				   + "from questions Q, sul_users U "
+				   + "from sul_questions Q, sul_users U "
 				   + "where Q.user_no = U.user_no "
 				   + "and Q.pd_no = ? ";
 		

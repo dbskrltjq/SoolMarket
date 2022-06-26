@@ -367,17 +367,18 @@ public class ProductDao {
 	
 	public List<Product> getItemBySaleQuantity(int categoryNo, int beginIndex, int endIndex) throws SQLException {
 		
-		String sql = "select pd_name, pd_price, pd_sale_price, pd_review_score "
-				+ "from(select row_number() over (order by pd_sale_quantity desc) row_number, pd_name, pd_price, pd_sale_price, pd_review_score "
-				+ "from sul_products where category_no = ?) "
-				+ "where row_number >= ? and row_number <= ?";
+		String sql = "select pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
+	            + "from(select row_number() over (order by pd_sale_quantity desc) row_number, pd_no, pd_name, pd_price, pd_sale_price, pd_review_score "
+	            + "from sul_products where category_no = ?) "
+	            + "where row_number >= ? and row_number <= ?";
 		
 		return helper.selectList(sql, rs -> {
-			Product product = new Product();
-			product.setName(rs.getString("pd_name"));
-			product.setPrice(rs.getInt("pd_price"));
-			product.setSalePrice(rs.getInt("pd_sale_price"));
-			product.setReviewScore(rs.getInt("pd_review_score"));
+	         Product product = new Product();
+	         product.setNo(rs.getInt("pd_no"));
+	         product.setName(rs.getString("pd_name"));
+	         product.setPrice(rs.getInt("pd_price"));
+	         product.setSalePrice(rs.getInt("pd_sale_price"));
+	         product.setReviewScore(rs.getInt("pd_review_score"));
 			
 			return product;
 		}, categoryNo, beginIndex, endIndex);

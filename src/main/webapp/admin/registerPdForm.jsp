@@ -23,7 +23,7 @@
 	<script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
 <style type="text/css">
-	select {margin: 3px;}
+	.input-group select {margin-right: 5px;}
 </style>
 </head>
 <%
@@ -63,33 +63,35 @@
 
 							<div class="card my-4 ">
 								<div class="card-header">
-									<div class="d-flex justify-content-between">
+									<div class="d-flex justify-content-between mb-2">
 										<strong class="me-3"><i class="fas fa-table me-1"></i>  신규 상품</strong>
-										<button type="button" class="btn btn-primary " id="register-btn" data-bs-toggle="modal" data-bs-target="#registerModal">상품등록하기</button>
+										<button type="button" class="btn btn-primary btn-sm" id="register-btn" data-bs-toggle="modal" data-bs-target="#registerModal">상품등록하기</button>
 									</div>
 									<div class="form-div">
 										<form id="register-form" class="row g-3" method="post" action="registerPdForm.jsp">
-											<input type="hidden" name="page" />
-											<select class="form-select" name="category" onchange="﻿loadProducts();" style="width: auto;">
-												<option disabled selected >카테고리 선택</option>
-										<%
-											for(Category category : categories) {
-										%>	
-												<option value="<%=category.getNo() %>"><%=category.getName() %></option>
-										<%
-											}
-										%>
-											</select>
-											<select class="form-select form-select-sm" name="period" onchange="﻿loadProducts();" style="width: auto;">
-												<option value="-1">1개월</option>											
-												<option value="-3">3개월</option>											
-												<option value="-6">6개월</option>											
-											</select>
-											<select class="form-select form-select-sm float-end" name="rows" onchange="﻿loadProducts();" style="width: auto;">
-												<option value="5" <%=rows == 5 ? "selected" : ""%>>5개씩 보기</option>
-												<option value="10" <%=rows == 10 ? "selected" : ""%>>10개씩 보기</option>
-												<option value="15" <%=rows == 15 ? "selected" : ""%>>15개씩 보기</option>
-											</select>
+											<div class="input-group input-group-sm justify-content-start" style="width: 40%;">
+												<input type="hidden" name="page" />
+												<select class="form-select form-select-sm" name="category" onchange="﻿loadProducts();" >
+													<option disabled selected >카테고리 선택</option>
+											<%
+												for(Category category : categories) {
+											%>	
+													<option value="<%=category.getNo() %>"><%=category.getName() %></option>
+											<%
+												}
+											%>
+												</select>
+												<select class="form-select form-select-sm" name="period" onchange="﻿loadProducts();" >
+													<option value="-1">1개월</option>											
+													<option value="-3">3개월</option>											
+													<option value="-6">6개월</option>											
+												</select>
+												<select class="form-select form-select-sm float-end" name="rows" onchange="﻿loadProducts();" >
+													<option value="5" <%=rows == 5 ? "selected" : ""%>>5개씩 보기</option>
+													<option value="10" <%=rows == 10 ? "selected" : ""%>>10개씩 보기</option>
+													<option value="15" <%=rows == 15 ? "selected" : ""%>>15개씩 보기</option>
+												</select>
+											</div>
 										</form>
 									</div>
 								</div>

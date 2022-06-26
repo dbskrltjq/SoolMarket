@@ -231,7 +231,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btn-form-close">닫기</button>
-        <button type="button" id="registerBtn" class="btn btn-primary" onclick="submitForm();">등록하기</button>
+        <button type="button" id="registerBtn" class="btn btn-primary" onclick="submitRegisterForm();">등록하기</button>
       </div>
     </div>
   </div>
@@ -335,7 +335,7 @@
 	}
 	
 		// 체크된 것이 없으면 value는 null
-	 function submitForm() {
+	 function submitRegisterForm() {
 		let selectField = document.querySelector("select[name=categoryNo]");
 		let selectValue = selectField.value;
 		if(selectValue === "") {					// select는 false / true 값으로 x, value의 값으로 value값은 항상 문자열

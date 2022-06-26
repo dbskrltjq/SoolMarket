@@ -4,12 +4,12 @@
 <%@page import="util.MultipartRequest"%>
 <%@page import="vo.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" %>
+    pageEncoding="UTF-8" errorPage="../error/500.jsp"%>
 <%
-	/* User admin = (User)session.getAttribute("ADMIN");
+	User admin = (User)session.getAttribute("ADMIN");
 	if(admin == null) {
 		throw new RuntimeException("신규상품등록은 관리자 로그인 후에 사용가능합니다.");
-	} errorPage="../error/500.jsp" */
+	}  
 	
 	// multipart/form-data요청을 처리하는 MultipartRequest객체 생성하기
 	MultipartRequest mr = new MultipartRequest(request, "C:\\eclipse\\workspace-web\\productImages");

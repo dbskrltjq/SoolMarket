@@ -42,7 +42,7 @@
                       <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                       새상품등록
                   </a>
-                  <a class="nav-link" href="updatePdForm.jsp">
+                  <a class="nav-link" href="modifyPdForm.jsp">
                       <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                       상품정보수정
                   </a>

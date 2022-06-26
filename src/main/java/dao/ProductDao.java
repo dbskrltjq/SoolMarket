@@ -879,7 +879,7 @@ public class ProductDao {
 	
 	
 	/**
-	 * modifyProduct.jsp 에서 사용되는 상품수정용 메소드입니다. 
+	 * modifyProduct.jsp 에서 사용되는 상품수정용 메소드
 	 * @param product
 	 * @throws SQLException
 	 */
@@ -892,10 +892,22 @@ public class ProductDao {
 				   + "     pd_price = ?, "
 				   + "     pd_sale_price = ?, "
 				   + "     pd_stock = ?, "
-				   + "     pd_recommended = ? "
+				   + "     pd_recommended = ?, "
+				   + "     pd_updated_date = sysdate "
 				   + "where pd_no = ? ";
 		
 		helper.update(sql, product.getCategoryNo(), product.getName(), product.getCompany(), product.getPrice(), product.getSalePrice(), product.getStock(), product.getRecommended(), product.getNo());
 	}
 	
+	/**
+	 * deleteProduct.jsp에서 사용되는 상품삭제 메소드, 메소드명은 d
+	 * @param productNo
+	 * @throws SQLException
+	 */
+	public void deleteProduct(int productNo) throws SQLException {
+		String sql = "delete from sul_products "
+				   + "where pd_no = ? ";
+		
+		helper.delete(sql, productNo);
+	}
 }

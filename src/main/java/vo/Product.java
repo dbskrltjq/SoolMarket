@@ -19,6 +19,7 @@ public class Product {
 	private String fileName;
 	private Date createdDate;
 	private Date updatedDate;
+	private String deleted;
 	
 	public Product() {}
 
@@ -144,6 +145,14 @@ public class Product {
 
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
+	}
+
+	public String getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(String deleted) {
+		this.deleted = deleted;
 	}
 	
 	

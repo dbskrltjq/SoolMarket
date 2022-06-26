@@ -47,10 +47,9 @@
 								<div class="card-header">
 									<div class="d-flex justify-content-between">
 										<strong class="me-3"><i class="fas fa-table me-1"></i>상품정보수정</strong>
-										<button type="button" class="btn btn-primary " id="update-btn" data-bs-toggle="modal" data-bs-target="#updateModal">상품수정하기</button>
 									</div>
 									<div class="form-div ">
-										<form id="update-form" class="row g-3" method="post">
+										<form id="modify-form" class="row g-3" method="post">
 												<div class="col-3 input-group ">
 												<input type="hidden" name="page" />
 												<select class="form-select form-select-sm" name="category" onchange="﻿loadProducts();" style="width: auto;">
@@ -118,6 +117,7 @@
 											</tr>
 										</tfoot>
 									</table>
+									<div id="delete-div"></div>
 									<nav>
 										<ul class="pagination justify-content-center" id="pagination">
 										
@@ -144,7 +144,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-      <form id="modifyProduct-form" class="form-horizontal border bg-light p-3">
+      <form id="modifyProduct-form" class="form-horizontal border bg-light p-3" method="post" enctype="multipart/form-data">
 				<div class="row mb-3">
 					<label for="category" class="col-sm-2 col-form-label">상품 분류</label>
 					<div class="col-sm-10">
@@ -217,6 +217,7 @@
 <script type="text/javascript">
 
 	function loadProducts(page) {
+		document.getElementById("delete-div").innerHTML = '<button type="button" class="btn btn-outline-secondary btn-sm" onclick="deleteProduct();">삭제하기</button>';
 		document.getElementById("all-toggle").innerHTML ='<input type="checkbox" id="all-toggle-checkbox" onchange="toggleCheckbox();"/>' // 페이지를 넘길 때 체크박스 초기화되도록? 다른 방법?
 		let categoryNo = document.querySelector("select[name=category]").value;
 		let period = document.querySelector("select[name=period]").value;
@@ -317,14 +318,14 @@
 		let categoryNo = tds[1].textContent;
 		document.querySelector("#product-modify-modal input[name=pdNo]").value = productNo;
 		
-		document.querySelector("#product-modify-modal option[value='']").removeAttribute("selected");
-		document.querySelector("#product-modify-modal option[value='" + categoryNo +"']").setAttribute("selected", "selected");
+		document.querySelector("#product-modify-modal option[value='']").selected = false;
+		document.querySelector("#product-modify-modal option[value='" + categoryNo +"']").selected = true;
 		
 		document.querySelector("#product-modify-modal input[name=name]").value = tds[2]﻿.textContent;
 		document.querySelector("#product-modify-modal input[name=company]").value = tds[3].textContent;
 		document.querySelector("#product-modify-modal input[name=price]").value = tds[4].textContent;
 		document.querySelector("#product-modify-modal input[name=salePrice]").value = tds[5].textContent;
-		document.querySelector("#product-modify-modal input[name=quantity]").value = tds[6].textContent; 
+		document.querySelector("#product-modify-modal input[name=stock]").value = tds[6].textContent; 
 		
 		let recommended = tds[7].textContent;
 		
@@ -349,7 +350,7 @@
 		}
 		
 		
-		let form = document.getElementById("update-form");
+		let form = document.getElementById("modify-form");
 		let formData = new FormData(form);
 		
 		let xhr = new XMLHttpRequest();
@@ -363,6 +364,37 @@
 	
 		
 	}
+		
+		
+	function deleteProduct() {
+		let checkedCheckboxes = document.querySelectorAll('input[name="pdCheckbox"]:checked');
+		
+		let deletePdNoList = new Array();
+		
+		for(let i = 0; i < checkedCheckboxes.length; i ++) {
+			deletePdNoList.push(checkedCheckboxes[i].value);
+		}
+		
+		//////////// 질문!!!!!!!!!!!!//////////////
+		deletePdNoObj = { pdNos : deletePdNoList};
+		let queryStr = Object.entries(deletePdNoObj).map(item => item.join('=').replace(/,/g, '&'+item[0]+'=')).join('&');
+
+
+		let xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState === 4 && xhr.status === 200) {
+				let jsonText = xhr.responseText;
+				let result = JSON.parse(jsonText);
+				let deletedPdCount = result.deletedPdCount;
+				alert("상품번호: " + result.pdNo + " 외(" + (deletedPdCount - 1) +"개) 상품명: " + result.pdName + " 외(" + (deletedPdCount - 1) +"개)가 삭제되었습니다.");			// 여러개 삭제할 경우 수정하기
+				loadProducts(1);
+			}
+		}
+		
+		xhr.open("POST", "deleteProduct.jsp?" + queryStr);
+		xhr.send(); 
+	}
+		
 	
 	function submitModifyForm() {
 		
@@ -406,11 +438,11 @@
 			return false;
 		}
 		
-		let quantityField = document.querySelector("input[name=quantity]");
-		let quantity = quantityField.value.trim();
-		if(quantity === ''){
+		let stockField = document.querySelector("input[name=stock]");
+		let stock = stockField.value.trim();
+		if(stock === ''){
 			alert("재고수량을 입력해주세요");
-			quantityField.focus();
+			stockField.focus();
 			return false;
 		}
 		

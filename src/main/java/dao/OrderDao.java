@@ -221,8 +221,12 @@ public class OrderDao {
 			orders.setPdNo(rs.getInt("PD_NO"));
 			
 			return orders;
-		}, orderNo); 
+
+		}, orderNo);
 	}
+
+	// pointhistory & user 포인트 수정하는 sql문
+
 	
 	// 주문 여부를 확인하는 sql
 	public int getOrderCount(int productNo,int userNo) throws SQLException {

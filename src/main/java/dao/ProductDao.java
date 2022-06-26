@@ -379,6 +379,7 @@ public class ProductDao {
 			product.setPrice(rs.getInt("pd_price"));
 			product.setSalePrice(rs.getInt("pd_sale_price"));
 			product.setReviewScore(rs.getInt("pd_review_score"));
+
 			
 			return product;
 		}, categoryNo, beginIndex, endIndex);
@@ -877,4 +878,37 @@ public class ProductDao {
 		helper.update(sql, product.getReviewCount(), product.getNo());
 	}
 	
+	
+	/**
+	 * modifyProduct.jsp 에서 사용되는 상품수정용 메소드
+	 * @param product
+	 * @throws SQLException
+	 */
+	public void modifyProduct(Product product) throws SQLException {
+		String sql = "update sul_products "
+				   + " set " 
+				   + "     category_no = ?, "
+				   + "     pd_name = ?, "
+				   + "     pd_company = ?, "
+				   + "     pd_price = ?, "
+				   + "     pd_sale_price = ?, "
+				   + "     pd_stock = ?, "
+				   + "     pd_recommended = ?, "
+				   + "     pd_updated_date = sysdate "
+				   + "where pd_no = ? ";
+		
+		helper.update(sql, product.getCategoryNo(), product.getName(), product.getCompany(), product.getPrice(), product.getSalePrice(), product.getStock(), product.getRecommended(), product.getNo());
+	}
+	
+	/**
+	 * deleteProduct.jsp에서 사용되는 상품삭제 메소드, 메소드명은 d
+	 * @param productNo
+	 * @throws SQLException
+	 */
+	public void deleteProduct(int productNo) throws SQLException {
+		String sql = "delete from sul_products "
+				   + "where pd_no = ? ";
+		
+		helper.delete(sql, productNo);
+	}
 }

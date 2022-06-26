@@ -379,6 +379,7 @@ public class ProductDao {
 			product.setPrice(rs.getInt("pd_price"));
 			product.setSalePrice(rs.getInt("pd_sale_price"));
 			product.setReviewScore(rs.getInt("pd_review_score"));
+
 			
 			return product;
 		}, categoryNo, beginIndex, endIndex);

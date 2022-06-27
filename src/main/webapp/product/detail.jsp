@@ -1,3 +1,4 @@
+<%@page import="dao.ReviewDao"%>
 <%@page import="dto.QuestionDto"%>
 <%@page import="dao.ProductQuestionDao"%>
 <%@page import="dto.ReviewDto"%>
@@ -32,6 +33,7 @@
 		
 		ProductReviewDao productReviewDao = ProductReviewDao.getInstance();
 		List<ReviewDto> reviews = productReviewDao.getProductReviews(pdNo);
+		
 		
 		ProductQuestionDao productQuestionDao = ProductQuestionDao.getInstance();
 		List<QuestionDto> questions = productQuestionDao.getProductQuestions(pdNo);

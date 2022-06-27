@@ -154,7 +154,8 @@ public class Product {
 
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
-
+	}
+		
 	public String getDeleted() {
 		return deleted;
 	}

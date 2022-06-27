@@ -10,6 +10,7 @@
 <style type="text/css">
 	.radioDiv {text-align: left;}
 	p {font-size: small;}
+	h3 {text-align: left;}
 
 </style>
 </head>
@@ -18,10 +19,10 @@
 	<jsp:param  name="menu" value="login" />
 </jsp:include>
 
-<div class="container">
+<div class="container w-60" >
 	<div class="row justify-content-center pt-5">
 		<div class="col-6">
-			<h3><strong>로그인 하기</strong></h3>
+			<h3><strong>로그인</strong></h3>
 	  		<form method="post" class="border p-5 mb-5" id="login-form" action="login.jsp?job=user"  onsubmit="return submitLoginForm()">
 	    		<img class="mb-4" src="images/logo.png" alt="" width="200" height="200">
 	    		<div class="radioDiv">

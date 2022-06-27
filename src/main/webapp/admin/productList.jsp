@@ -19,7 +19,7 @@
 	
 	String search = request.getParameter("search");
 	String keyword = request.getParameter("keyword");
-	System.out.println("categoryNo: " + categoryNo + ", period: " + period + ", rows: " + rows +", currentPage: " + ", search: " + search + ", keyword: " + keyword);
+	//System.out.println("categoryNo: " + categoryNo + ", period: " + period + ", rows: " + rows +", currentPage: " + ", search: " + search + ", keyword: " + keyword);
 	
 	
 	Map<String, Object> result = new HashMap<>();

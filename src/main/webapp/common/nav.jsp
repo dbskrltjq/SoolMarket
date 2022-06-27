@@ -59,8 +59,8 @@
 				      	<div class="input-group" >
 					        <input class="form-control border-warning" type="text" id="search" name="keyword" placeholder="제품검색 ex)소주" />
 					        <button class="btn btn-outline-warning" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>				
-							<div class="list-group position-absolute d-none" id="keyword-list" style="z-index: 2000; left: 0; top: 40px; width: 80%;"  ></div>
-							<div class="list-group position-absolute d-none" id="remove-list" style="z-index: 2000; right: 0; top: 40px; width: 20%;"  ></div>			
+							<div class="list-group position-absolute d-none border border-warning rounded" id="keyword-list" style="z-index: 2000; left: 0; top: 40px; width: 80%; font-size: 0.8rem;"  ></div>
+							<div class="list-group position-absolute d-none border border-warning rounded" id="remove-list" style="z-index: 2000; right: 0; top: 40px; width: 20%; font-size: 0.8rem;"  ></div>	
 					    </div>
 				      </form>
 				</div>     
@@ -94,7 +94,6 @@
 	
 	let recentKeyword = document.getElementById('search');
 	recentKeyword.addEventListener('click', function() {openKeywordList();});
-	//recentKeyword.addEventListener('blur', function() {closeKeywordList();});
 	
 	let array = new Array();
 	
@@ -115,24 +114,30 @@
 	
 	function openKeywordList() {
 		
+		let keywordList = document.getElementById('keyword-list');
+		let removeList = document.getElementById('remove-list');
+		
+		if (keywordList.hasChildNodes()) {
+			return keywordOnOff();
+		}		
+		
+		refreshKeywordList();	
+		keywordOnOff();
+	}
+	
+	function refreshKeywordList() {
 		
 		let keywordList = document.getElementById('keyword-list');
 		let removeList = document.getElementById('remove-list');
 		
-		//let booleanb = document.getElementById('keyword-list');
-		let booleanc = keywordList.hasChildNodes();
-		console.log(booleanc);
+		keywordList.innerHTML = "";
+		keywordList.innerHTML = "";
 		
-		if (keywordList.hasChildNodes()) {
-			return keywordOnOff();
-		}
-		
-		
+		removeList.innerHTML = "";
+		removeList.innerHTML = "";
+
 		let text = localStorage.getItem("keyword") || '[]';			
-		let array = JSON.parse(text);	
-		//if (keywordList.hasChildNodes()) {
-		//	console.log(keywordList.hasChildNodes());
-		//}
+		array = JSON.parse(text);	
 		
 		let buttonK = null;
 		let buttonR = null;
@@ -142,12 +147,14 @@
 			
 			buttonK = document.createElement("button");
 			buttonR = document.createElement("button");
-			li = document.createElement("li");
 			
 			buttonK.classList.add('list-group-item');
 			buttonK.classList.add('list-group-item-action');
+			buttonK.classList.add('border-warning');
+			
 			buttonR.classList.add('list-group-item');
-			buttonR.classList.add('list-group-item-action');
+			buttonR.classList.add('list-group-item-action');		
+			buttonR.classList.add('border-warning');
 			
 			buttonK.setAttribute('type', 'button');
 			buttonR.setAttribute('type', 'button');
@@ -159,15 +166,19 @@
 			keywordList.append(buttonK);
 			removeList.append(buttonR);
 		}
-		let buttonRAll = document.createElement("button");
-		buttonRAll.classList.add('list-group-item');
-		buttonRAll.classList.add('list-group-item-action');
-		buttonRAll.setAttribute('type', 'button');
-		buttonRAll.innerText = '전체삭제';
-		buttonRAll.addEventListener('click', function () {deleteAll();});
-		keywordList.append(buttonRAll);
 		
-		keywordOnOff();
+		
+		if (array.length === 0) {
+			keywordList.innerText = '최근검색어 내역이 없습니다.';
+		} else {
+			let deleteAll = document.createElement("button");
+			deleteAll.classList.add('list-group-item');
+			deleteAll.classList.add('list-group-item-action');
+			deleteAll.setAttribute('type', 'button');
+			deleteAll.innerText = '전체삭제';
+			deleteAll.addEventListener('click', function () {removeAll();});
+			keywordList.append(deleteAll);
+		}
 	}
 	
 	function keywordOnOff() {
@@ -186,65 +197,37 @@
 	
 	function deleteKeyword(i) {	
 		let text = localStorage.getItem("keyword") || '[]';			
-		let array = JSON.parse(text);	
-		
-		let keywordList = document.getElementById('keyword-list');
-		let removeList = document.getElementById('remove-list');
-		
-		let removeK = keywordList.childNodes[i];
-		removeK.remove();
-		
-		let removeR = removeList.childNodes[i];
-		removeR.remove();
+		array = JSON.parse(text);	
 		
 		array.splice(i, 1);
 		text = JSON.stringify(array);
 		localStorage.setItem("keyword", text);
-	
+		
+		refreshKeywordList();
 	}
 	
-	function deleteAll() {
+	function removeAll() {
 		
-		localStorage.clear(array);
-	   // keywordList.innerText = '최근검색어 내역이 없습니다.';
+		localStorage.setItem("keyword", []);
+		refreshKeywordList();
 	}
 	
 	function searchKeyword(i) {
 		let keywordList = document.getElementById('keyword-list');
 		let keyword = keywordList.childNodes[i];
+		let text = localStorage.getItem("keyword");
+		array = JSON.parse(text);
 		
 		let formerKeyword = keyword.innerText;
 		
+		location.href="/semi/searchList.jsp?keyword=" + formerKeyword;
 		
-		location.href="/semi/searchList.jsp?keyword=" + keyword.innerText;
-	}
-	
-	function refreshDelete() {
-		let text = localStorage.getItem("keyword") || '[]';			
-		let array = JSON.parse(text);	
+		array.unshift(formerKeyword);
+		array.splice(i+1, 1);
 		
-		let keywordList = document.getElementById('keyword-list');
+		text = JSON.stringify(array);
+		localStorage.setItem("keyword", text);
 		
-		let li = null;
-		let span = null;
-		let button = null;
-		
-		for (let i=0; i < array.length; i++) {
-			
-			li = document.createElement("li");
-			span = document.createElement("span");
-			button = document.createElement("button");
-			
-			li.classList.add('list-group-item');
-			button.classList.add('btn');
-			button.classList.add('btn-outline-danger');
-			button.setAttribute('type', 'button');
-			button.innerText = '삭제';
-			button.addEventListener('click', deleteKeywordFunctionMaker(i));
-			span.innerText = array[i];
-			li.append(span, button);
-			keywordList.append(li);
-		}
 	}
 	
 </script>

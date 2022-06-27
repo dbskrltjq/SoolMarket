@@ -190,7 +190,7 @@
 	%>
             <div class="col-lg-3 col-md-6 mb-4">
                <div class="card h-100">
-                   <a href="product/detail.jsp?pdNo=<%=product.getNo() %>" class="text-dark text-decoration-none"><img class="card-img-top" src="images/cate_01.jpg" alt="..." />
+                   <a href="product/detail.jsp?pdNo=<%=product.getNo() %>" class="text-dark text-decoration-none"><img class="card-img-top" src="<%=product.getImageUrl() %>" alt="..." />
                    	 <div class="card-body">
                        <h5 class="card-title fs-6 text-bold"><%=product.getName() %></h5>
                        <p class="mb-1"><del><%=product.getPrice() %></del> 원</p>

@@ -1,9 +1,9 @@
-<%@page import="vo.User"%>
-<%@page import="java.util.List"%>
-<%@page import="dto.OrderItemDto"%>
-<%@page import="dao.OrderDao"%>
 <%@page import="vo.Order"%>
+<%@page import="dto.OrderItemDto"%>
+<%@page import="java.util.List"%>
 <%@page import="util.StringUtil"%>
+<%@page import="dao.OrderDao"%>
+<%@page import="vo.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -14,10 +14,6 @@
 <title>Bootstrap demo</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<style>
-	tr { text-align : center; }
-	td { text-align : center; }
-</style>
 <body>
 <jsp:include page="common/nav.jsp">
 	<jsp:param name="menu" value="myOrderDetail"/>
@@ -36,7 +32,7 @@
 		} else if("deny".equals(fail)) {
 	%>
 		<div class="alert alert-danger">
-			<strong>거부</strong> 다른 사용자의 주문을 취소할 수 없습니다.
+			<strong>거부</strong> 로그인 해주세요.
 		</div>
 	<%
 		}
@@ -126,11 +122,7 @@
 					totalDeliveryCharge = totalPdsPrice > 30000 ? 0 : 3000;
 				%>
 						<tr>
-							<td class="text-start" colspan="2">
-								<button type="button" id="btn-order-choice-del" class="btn btn-outline-secondary btn-sm" onclick="cancelOrder(); ">주문 취소</button>
-								<input type="hidden" name="orderNo" value=<%=orderNo %> />
-							</td>
-							<td colspan="4" class="text-end">
+							<td colspan="6" class="text-end">
 								총 주문금액 <strong><%=StringUtil.numberToString(totalPdsPrice) %></strong>
 								<img src="images/order_price_plus.png" alt="합계">
 								택배비 <strong><%=StringUtil.numberToString(totalDeliveryCharge) %></strong>
@@ -150,12 +142,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-	function cancelOrder() {
-		let form = document.getElementById("my-order-detail");
-		form.setAttribute("action", "orderCancel.jsp");
-		form.submit();
-	}
-</script>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

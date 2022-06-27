@@ -1,8 +1,8 @@
 <%@page import="java.util.List"%>
+<%@page import="dao.OrderDao"%>
+<%@page import="vo.Order"%>
 <%@page import="util.StringUtil"%>
 <%@page import="vo.User"%>
-<%@page import="vo.Order"%>
-<%@page import="dao.OrderDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -13,13 +13,9 @@
 <title>Bootstrap demo</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<style>
-	tr { text-align : center; }
-	td { text-align : center; padding: 5px;}
-</style>
 <body>
 <jsp:include page="common/nav.jsp">
-	<jsp:param name="menu" value="cart"/>
+	<jsp:param name="menu" value="myCancel"/>
 </jsp:include>
 <div class="container "  style="padding: 30px;">
 
@@ -35,7 +31,7 @@
 		} else if("deny".equals(fail)) {
 	%>
 		<div class="alert alert-danger">
-			<strong>거부</strong>다른 사용자의 장바구니 아이템을 변경할 수 없습니다.
+			<strong>거부</strong> 로그인 해주세요.
 		</div>
 	<%
 		}
@@ -47,8 +43,9 @@
 			response.sendRedirect("loginform.jsp?fail=deny"); 
 			return;
 		}
+		
 	%>
-	<div class="row">			
+		<div class="row">			
   		<div class="col-2">
 			<h5 class="border-bottom pb-2  mb-4"><strong>마이페이지</strong></h5>
        		<p><strong class="fs-6">쇼핑정보</strong></p>
@@ -91,12 +88,12 @@
 						<tbody>
 					<%
 						OrderDao orderDao = OrderDao.getInstance();
-						List<Order> orders = orderDao.getAllOrdersByUserNo(user.getNo());
+						List<Order> orders = orderDao.getAllCancelsByUserNo(user.getNo());
 						
 						if(orders.isEmpty()) {
 					%>
 						<tr>
-							<td colspan="6" class="text-center"><strong>주문내역이 없습니다.</strong></td>
+							<td colspan="6" class="text-center"><strong>취소내역이 없습니다.</strong></td>
 						</tr>
 					
 					<%
@@ -109,7 +106,7 @@
 								<td><%=order.getNo() %></td>
 								<td><%=order.getCreatedDate() %></td>
 								<td style="text-align:left">
-									<a class="text-dark text-decoration-none" href="myOrderDetail.jsp?orderNo=<%=order.getNo() %>"><%=order.getTitle() %></a>
+									<a class="text-dark text-decoration-none" href="myCancelDetail.jsp?orderNo=<%=order.getNo() %>"><%=order.getTitle() %></a>
 								</td>
 								<td><%=order.getTotalQuantity() %></td>
 								<td><%=order.getStatus() %></td>

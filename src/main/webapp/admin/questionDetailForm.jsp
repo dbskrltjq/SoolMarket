@@ -21,6 +21,13 @@
 	<script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
 <style type="text/css">
+	html, body {
+		height: 100%;
+	}
+	.container-fluid {
+		height: 95%;
+		border-collapse: collapse;
+	}
 	h3, h6 {font-weight: bold;}
 	th {width: 10%;}
 	#user-info td{width: 40%;}
@@ -50,11 +57,11 @@
 <body>
 	<jsp:include page="admintop.jsp"></jsp:include>
 		<div class="container-fluid ">
-		   <div class="row" id=first-row >
+		   <div class="row h-100" id=first-row >
 			   <div class="col-2 p-0" >
 			   		<jsp:include page="adminleft.jsp"></jsp:include>
 			   </div>
-			   <div class="col-10 p-4" style="border: solid;">
+			   <div class="col-10 p-4">
 			   		<div class="row m-3">
 			   			<h3>문의 상세 페이지</h3>
 			   		</div>
@@ -62,7 +69,7 @@
 			   		<div class="container border border-secondary mb-5" > 
 				   		<div class="row m-3">
 				   			<div class="col-3">
-				   				<img src="../images/mak.jpg"  class="img-thumbnail" width="150">
+				   				<img src="<%=product.getImageUrl() %>" alt="이미지 준비중입니다."  class="img-thumbnail"  width="150">
 				   			</div>
 				   			<div class="col-9">
 					   			<div class="row">
@@ -168,8 +175,11 @@
 	       		 <form class="border bg-light p-3" id="answer-form" method="post" action="addAnswer.jsp" >
 					<input type="hidden" name="questionNo" value="<%=questionNo %>" />
 					<div class="mb-3">
-						<label class="form-label">내용</label>
-						<textarea rows="5" class="form-control" id="content-form" name="content">안녕하세요. 문의답변드립니다.</textarea>
+					<%
+						String answerContent = questionDto.getAnswerContent();
+					%>
+						<label class="form-label">내용</label>	                                <!-- 답글작성과 답글수정 기능을 구분하기 위한 것입니다.  -->
+						<textarea rows="5" class="form-control" id="content-form" name="content"><%= answerContent != null ? answerContent : "" %></textarea>
 					</div>
 				</form>
 	      </div>

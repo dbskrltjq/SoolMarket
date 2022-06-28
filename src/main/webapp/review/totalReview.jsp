@@ -15,6 +15,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bootstrap demo</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+#review-image {
+  transition: all 0.2s linear;
+}
+#review-image:hover {
+  transform: scale(3.0);
+}
+</style>
 </head>
 <body>
 <jsp:include page="../common/nav.jsp">
@@ -24,7 +33,7 @@
 
 <%
 	User user = (User) session.getAttribute("LOGINED_USER");
-%>
+%> 
 	<form id="review-form">
 		<div class="row border-bottom p-5">
 			
@@ -126,7 +135,7 @@
 		<div class="row p-4 border-bottom">
 			<div class="col">
 				<select class="form-select form-select-sm" name="category" >
-					<option value="0" selected="selected" disabled="disabled">카테고리선택</option>
+					<option value="0" selected  disabled="disabled">카테고리선택</option>
 				<%
 					for(Category category : categories) {
 				%>	
@@ -138,9 +147,9 @@
 			</div>
 			<div class="col">
 				<select class="form-select form-select-sm" name="arrangement" onchange="">
-					<option value="date" selected>최신순</option>
-					<option value="score" >평점</option> 
-					<option value="likeCount">추천</option> 
+					<option value="date" <%="date".equals(arrangement) ? "selected" : "" %>>최신순</option>
+					<option value="score" <%="score".equals(arrangement) ? "selected" : "" %> >평점</option> 
+					<option value="likeCount"<%="likeCount".equals(arrangement) ? "selected" : "" %>> 추천</option> 
 				</select>
 			</div>
 			<div class="col">
@@ -160,7 +169,7 @@
 	<div class="row border-bottom mb-3">
 		<div class="col-2 py-2 ">
 			<div>
-				<img alt="" src="../images/sample1.jpg" class="img-thumbnail">
+				<a href="../product/detail.jsp?pdNo=<%=review.getPdNo() %>"><img alt="" src="/semi/<%=review.getImageUrl() %>" class="img-thumbnail"></a>
 			</div>
 			<p class="text-muted mb-1"><%=review.getCreatedDate() %></p>
 			<p class="text-muted mb-1">평점 : 
@@ -193,7 +202,18 @@
 			<h3 class="fs-5 text-bold"><%=review.getPdName() %> </h3>
 			<p class="small"><%=review.getContent() %></p>
 			<div>
-				<img alt="" src="../images/sample1.jpg" class="img-thumbnail" width="100">
+			<%
+				if("".equals(review.getFileName()) ) {
+			%>
+				<p>이미지가 없습니다</p>
+			<%
+				} else {
+			%>
+				<img alt="" src="../reviewImage/<%=review.getFileName() %>" class="img-thumbnail" width="100" id="review-image">
+			<%
+				}
+			%>
+				
 			</div>
 			<%
 				if (user == null) {
@@ -218,7 +238,7 @@
 		<div class="col">
 			<nav>
 				<ul class="pagination justify-content-center">
-					<li class="page-item"><a class="page-link <%=pagination.getCurrentPage() == 1 ?"disabled" : "" %>" href="list.jsp?page=<%=pagination.getCurrentPage() -1 %>">이전</a></li>
+					<li class="page-item"><a class="page-link <%=pagination.getCurrentPage() == 1 ?"disabled" : "" %>" href="totalReview.jsp?page=<%=pagination.getCurrentPage() - 1%>&keyword=<%=keyword%>&category=<%=categoryNo%>&arrangement=<%=arrangement%>">이전</a></li>
 					
 				<%
 					for(int num = pagination.getBeginPage(); num <= pagination.getEndPage(); num++) {
@@ -230,7 +250,7 @@
 				%>
 					
 					<li class="page-item">
-						<a class="page-link <%=pagination.getCurrentPage() >= pagination.getTotalPages() ? "disabled" : "" %>" href="list.jsp?page=<%=pagination.getCurrentPage() +1 %>">다음</a></li>
+						<a class="page-link <%=pagination.getCurrentPage() >= pagination.getTotalPages() ? "disabled" : "" %>" href="totalReview.jsp?page=<%=pagination.getCurrentPage() + 1%>&keyword=<%=keyword%>&category=<%=categoryNo%>&arrangement=<%=arrangement%>">다음</a></li>
 				</ul>
 			</nav>
 			
@@ -277,7 +297,7 @@
 	}
 	
 	function reviewCheck() {
-		alert("쇼핑몰 회원님만 글작성 가능합니다.");
+		alert("쇼핑몰 회원님만 추천 가능합니다.");
 		return;
 	
 	}

@@ -196,7 +196,20 @@
 		<%
 			}
 		%>
-			<p class="text-muted"><%=review.getUserId() %></p>
+		
+		<%
+			StringBuilder newString = new StringBuilder(review.getUserId());
+			newString.setCharAt(2, '*');
+			
+			
+			String stringId = newString.toString();
+			
+			String[] id = stringId.split("\\*");
+			System.out.println(id[0]);
+			String realId = id[0] + "*****";
+			
+		%>
+			<span class="text-muted d-inline-block text-truncate"><%=realId %></span>
 		</div>
 		<div class="col-10 p-3">
 			<h3 class="fs-5 text-bold"><%=review.getPdName() %> </h3>
@@ -216,16 +229,35 @@
 				
 			</div>
 			<%
-				if (user == null) {
+				if (user == null && review.getaContent() == null) {
 			%>
-				<p><a href="">1</a>개의 댓글이 있습니다. <span class="text-info">추천 </span> : <span class="test-info"><%=review.getLikeCount() %></span> <button type="button" class="btn btn-info btn-sm" onclick="likeReviewNoUser()">추천하기</button> </p>
+				<p><a href="">0</a>개의 댓글이 있습니다. <span class="text-info">추천 </span> : <span class="test-info"><%=review.getLikeCount() %></span> <button type="button" class="btn btn-info btn-sm" onclick="likeReviewNoUser()">추천하기</button> </p>
 			<% 
+				} else if (user != null && review.getaContent() == null) {
+			%>
+				<p><a href="">0</a>개의 댓글이 있습니다. <span class="text-info">추천 </span> : <span class="test-info"><%=review.getLikeCount() %></span> <button type="button" class="btn btn-info btn-sm" onclick="likeReview(<%=review.getNo() %>)">추천하기</button> </p>
+			<%
+				}else if (user == null && review.getaContent() != null) {
+			%>
+				<a data-bs-toggle="collapse" href="#collapseExample<%=review.getNo() %>" role="button" aria-expanded="false" aria-controls="collapseExample">
+    			1개의 댓글이 있습니다.
+  				</a>
+				<span class="text-info">추천 </span> : <span class="test-info"><%=review.getLikeCount() %></span> <button type="button" class="btn btn-info btn-sm" onclick="likeReviewNoUser()">>추천하기</button> </p>
+			<%
 				} else {
 			%>
-				<p><a href="">1</a>개의 댓글이 있습니다. <span class="text-info">추천 </span> : <span class="test-info"><%=review.getLikeCount() %></span> <button type="button" class="btn btn-info btn-sm" onclick="likeReview(<%=review.getNo() %>)">추천하기</button> </p>
+				<a data-bs-toggle="collapse" href="#collapseExample<%=review.getNo() %>" role="button" aria-expanded="false" aria-controls="collapseExample">
+    			1개의 댓글이 있습니다.
+  				</a>
+				<span class="text-info">추천 </span> : <span class="test-info"><%=review.getLikeCount() %></span> <button type="button" class="btn btn-info btn-sm" onclick="likeReview(<%=review.getNo() %>)">>추천하기</button> </p>
 			<%
 				}
 			%>
+				<div class="collapse" id="collapseExample<%=review.getNo() %>">
+			  		<div class="card card-body " > <%=review.getaContent() %> </div>
+			</div>
+			
+			
 			
 		</div>
 	</div>
@@ -264,7 +296,7 @@
 <script type="text/javascript">
 	
 	function likeReviewNoUser() {
-		alert("쇼핑몰 회원님만 글작성 가능합니다.");
+		alert("쇼핑몰 회원님만 추천가능합니다.");
 		return;
 	}
 	
@@ -297,7 +329,7 @@
 	}
 	
 	function reviewCheck() {
-		alert("쇼핑몰 회원님만 추천 가능합니다.");
+		alert("쇼핑몰 회원님만 글작성 가능합니다.");
 		return;
 	
 	}

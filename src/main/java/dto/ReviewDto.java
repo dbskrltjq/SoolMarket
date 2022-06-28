@@ -20,10 +20,11 @@ public class ReviewDto {
 	
 	
 	
+	
 	public ReviewDto () {}
 	
 	
-	
+
 
 	public String getImageUrl() {
 		return imageUrl;

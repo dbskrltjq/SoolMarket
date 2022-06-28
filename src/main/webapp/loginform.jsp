@@ -107,7 +107,7 @@
 	
 	
 	// 아이디 저장/삭제 기능
-	idSaveCheckField.onchange = function() {
+	/* idSaveCheckField.onchange = function() {
 		let idValue = idField.value.trim();
 		
 		if (idSaveCheckField.checked) {
@@ -122,7 +122,7 @@
 			localStorage.setItem("checked", "no");		
 			localStorage.removeItem("savedId");			// 아이디 저장 체크박스의 체크를 해제하면 localStroage에 있는 값을 삭제한다.
 		}
-	} 
+	}  */
 
 	function keydown(e) {
 		if(e.repeat) {

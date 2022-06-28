@@ -38,7 +38,7 @@
 			<p><strong class="fs-6">회원정보</strong></p>
          	<div class="list-group list-group-flush">
          		<a href="myPagePassword.jsp" class="list-group-item list-group-item-action">- 회원정보 변경</a>
-         		<a href="userDelete.jsp" class="list-group-item list-group-item-action">- 회원 탈퇴</a>
+         		<a href="userDeleteForm.jsp" class="list-group-item list-group-item-action">- 회원 탈퇴</a>
          		<a href="#" class="list-group-item list-group-item-action">- 나의 상품문의</a>
 			</div>
       </div>

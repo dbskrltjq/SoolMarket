@@ -42,6 +42,7 @@
 		ProductQuestionDao productQuestionDao = ProductQuestionDao.getInstance();
 		List<QuestionDto> questions = productQuestionDao.getProductQuestions(pdNo);
 		
+		// pdNo파라미터값을 전달 받아 쿠키에 저장
 		StringJoiner joiner = new StringJoiner(":");
 		
 		Cookie[] cookies = request.getCookies();
@@ -59,6 +60,7 @@
 		
 		Cookie cookie = new Cookie("pdNo", joiner.toString());
 		cookie.setMaxAge(60*60*24);
+		cookie.setPath("/semi/");
 		response.addCookie(cookie);
 	%>
 	<div class="container mt-3 mb-5">

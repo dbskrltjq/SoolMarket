@@ -1,3 +1,5 @@
+<%@page import="java.util.Collections"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="dao.ProductDao"%>
 <%@page import="vo.Pagination"%>
 <%@page import="util.StringUtil"%>
@@ -46,9 +48,11 @@
 		productList = productDao.getItemByDate(categoryNo, pagination.getBeginIndex(), pagination.getEndIndex());
 	}
 	
-	// 쿠키 가져오기
-	Cookie[] ck = request.getCookies();
-	
+	//List<Product> pdNos = null;
+	//for (int i=0; i<values.length; i++) {
+	//	pdNos = Integer.parseInt(values[i]);
+	//}
+
 %>
 <div class="container">
 	<div class="text-center">
@@ -77,7 +81,7 @@
 	%>	
 	</div>
   	<div class="row">
-		<div class="col-10">
+		<div class="col-11">
 			<div class="row">
 				<p><%=categoryName %></p>
 				<p>전체상품<strong><%=pdQuantity %></strong>개</p>
@@ -102,12 +106,12 @@
 				for (Product product : productList) {
 			%>
 		             <div class="col-lg-3 col-md-6 mb-4">
-		               <div class="card h-100" style="width: 15rem;">
+		               <div class="card h-100">
 		                   <a href="product/detail.jsp?pdNo=<%=product.getNo() %>" class="text-dark text-decoration-none"><img class="card-img-top" src="<%=product.getImageUrl() %>" alt="상품 준비중입니다." />
 		                   	 <div class="card-body">
 		                       <h5 class="card-title fs-6 text-bold"><%=product.getName() %></h5>
-		                       <p class="mb-1"><del><%=product.getPrice() %></del> 원</p>
-		                       <p><strong class="text-danger"><%=product.getSalePrice() %></strong> 원</p>
+		                       <p class="mb-1"><del><%=StringUtil.numberToString(product.getPrice()) %></del> 원</p>
+		                       <p><strong class="text-danger"><%=StringUtil.numberToString(product.getSalePrice()) %></strong> 원</p>
 		                       <p class="card-text">상품설명(생략가능)</p>
 		                     </div>
 		                     <div class="card-footer"><small class="text-muted"><%=product.getReviewScore() %></small></div>
@@ -148,34 +152,56 @@
 			    </div>
 			</div>     
 	  	</div>
-	  <%
-	  	for (Cookie cookieValue : ck) {
+		<div class="col-1 text-content">
+			<div class="row border ms-3 p-3" style="position: fixed; top: 200px; width: 150px;">
+			<p><strong>Today View</strong></p>
+	  <% 	
+		// 쿠키 가져오기
+		Cookie[] ck = request.getCookies();
+		
+		if (ck != null) {
+			// name=pdNo인 쿠키의value[123:434:100]형식을 String 배열에 담기	
+			ArrayList<Integer> pdNos = new ArrayList<>();
+			
+			for (Cookie cookie : ck) {
+				String name = cookie.getName();
+				if ("pdNo".equals(name)) {
+					String value = cookie.getValue();
+					if (cookie.getValue() == "") {
+						cookie.setMaxAge(0);
+					} 
+					String[] values = value.split(":");
+					for (int i=0; i<values.length; i++) {
+						pdNos.add(Integer.parseInt(values[i]));
+					}
+				}
+			}	
+			
+			List<Product> recentPdList = new ArrayList<Product>();
+			for (int i=0; i<pdNos.size(); i++) {
+				recentPdList.add(productDao.getUrlByNo(pdNos.get(i)));
+			}
+			//Collections.reverse(recentPdList);
+			
+			for (int i=0; i<recentPdList.size(); i++) {
+				Product recent = recentPdList.get(i);
+	   %>
+	   		<a href="product/detail.jsp?pdNo=<%=recent.getNo() %>">
+				<div class="col-12 mb-1 card p-0" data-bs-toggle="tooltip" data-bs-placement="left">
+					<button type="button" class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="left" title="<%=recent.getName() %>&#10;&#13;<%=StringUtil.numberToString(recent.getSalePrice()) %> 원">
+						<img src="<%=recent.getImageUrl() %>" class="card-img-top" style="max-width: 100%; min-width: 100%;" />
+					</button>
+			</a>
+					<button type="button" class="btn btn-light" onclick="location.href='deleteRecent.jsp?recent=<%=i %>&categoryNo=<%=categoryNo %>&sort=<%=sort %>&rows=<%=rows %>&pdNo=<%=recent.getNo() %>';">x</button>
+				</div>
+	  <% 		
+			}
+		} else {
+			response.sendRedirect("/semi/list.jsp?categoryNo=" + categoryNo + "&sort=sell&page=1");
+		}
 	  %>
-		<div class="col-2 text-content">
-			<div class="row border ms-3 p-3" style="position: fixed; top: 200px; width: 180px;">
-				<div class="col-12 mb-3 card p-0">
-					<img src="images/sample1.jpg" class="card-img-top" style="max-width: 100%; min-width: 100%;"  />
-					<p><%=cookieValue.getValue() %><p>
-					<div class="card-body"></div>
-				</div>
-				<div class="col-12 mb-3 card p-0">
-					<img src="images/sample1.jpg" class="card-img-top" style="max-width: 100%; min-width: 100%;"  />
-					<div class="card-body"></div>
-				</div>
-				<div class="col-12 mb-3 card p-0">
-					<img src="images/sample1.jpg" class="card-img-top" style="max-width: 100%; min-width: 100%;"  />
-					<div class="card-body"></div>
-				</div>
-				<div class="col-12 mb-3 card p-0">
-					<img src="images/sample1.jpg" class="card-img-top" style="max-width: 100%; min-width: 100%;"  />
-					<div class="card-body"></div>
-				</div>
 			</div>
 		</div>
-	<%
-	  	}
-	%>
-		
 	</div>	
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
@@ -192,9 +218,10 @@
 		document.getElementById("search-form").submit();
 	}
 	
-	function saveKeyword() {
+	//function deleteRecent(i) {
 		
-	}
+		
+	//}
 
 </script>
 </body>

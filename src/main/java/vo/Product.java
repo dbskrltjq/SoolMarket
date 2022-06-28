@@ -157,8 +157,7 @@ public class Product {
 		this.imageUrl = imageUrl;
 	}
 
-
-	}
+	
 	public String getDeleted() {
 		return deleted;
 	}

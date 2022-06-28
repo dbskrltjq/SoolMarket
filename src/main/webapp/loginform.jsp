@@ -78,7 +78,7 @@
 	
 	    <div class="checkbox my-3">
 	      <label>
-	        <input type="checkbox" id="idSaveCheck" value="remember-me"> 아이디 저장
+	        <input type="checkbox" id="idSaveCheck" name="saved" value="yes"> 아이디 저장
 	      </label>
 	    </div>
 	   	<div>
@@ -107,7 +107,7 @@
 	
 	
 	// 아이디 저장/삭제 기능
-	idSaveCheckField.onchange = function() {
+	/* idSaveCheckField.onchange = function() {
 		let idValue = idField.value.trim();
 		
 		if (idSaveCheckField.checked) {
@@ -122,7 +122,7 @@
 			localStorage.setItem("checked", "no");		
 			localStorage.removeItem("savedId");			// 아이디 저장 체크박스의 체크를 해제하면 localStroage에 있는 값을 삭제한다.
 		}
-	}
+	}  */
 
 	function keydown(e) {
 		if(e.repeat) {
@@ -150,9 +150,19 @@
 			return false;
 		}
 		
-		if(document.getElementById("admin-radio").checked){
+		if(document.getElementById("admin-radio").checked){							// 관리자 로그인일 경우
 			document.getElementById("login-form").action = "login.jsp?job=admin";
 		}
+		
+		let idSaveCheckField = document.getElementById("idSaveCheck");
+		if (idSaveCheckField.checked) {
+			localStorage.setItem("savedId", idValue);	// "savedId" : idValue 의 key : value 형식으로 localStroage에 저장한다.
+			localStorage.setItem("checked", "yes");		// "checked" : "yes" 도 저장한다.
+		} else {
+			localStorage.setItem("checked", "no");		
+			localStorage.removeItem("savedId");			// 아이디 저장 체크박스의 체크를 해제하면 localStroage에 있는 값을 삭제한다.
+		}
+		
 		return true; 
 	}
 

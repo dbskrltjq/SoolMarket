@@ -55,7 +55,7 @@
        		<p></p>
        		<div class="list-group list-group-flush mb-4">
        			<a href="myOrder.jsp" class="list-group-item list-group-item-action">- 주문목록</a>
-       			<a href="#" class="list-group-item list-group-item-action">- 취소 내역</a>
+       			<a href="myCancel.jsp" class="list-group-item list-group-item-action">- 취소 내역</a>
        			<a href="cart.jsp" class="list-group-item list-group-item-action">- 장바구니 보기</a>
 			</div>
 			<p><strong class="fs-6">회원정보</strong></p>
@@ -109,7 +109,7 @@
 								<td><%=order.getNo() %></td>
 								<td><%=order.getCreatedDate() %></td>
 								<td style="text-align:left">
-									<a href="myOrderDetail.jsp?orderNo=<%=order.getNo() %>"><%=order.getTitle() %></a>
+									<a class="text-dark text-decoration-none" href="myOrderDetail.jsp?orderNo=<%=order.getNo() %>"><%=order.getTitle() %></a>
 								</td>
 								<td><%=order.getTotalQuantity() %></td>
 								<td><%=order.getStatus() %></td>

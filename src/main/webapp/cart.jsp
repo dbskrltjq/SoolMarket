@@ -48,19 +48,13 @@
 			</div>
 		<%
 			}
-		%>
-		
-		<% 	
+
 			User user = (User) session.getAttribute("LOGINED_USER");
 			if (user==null) {
 				response.sendRedirect("loginform.jsp?fail=deny"); 
 				return;
 			}
-		%>
-		
-		<hr />
-		
-		<%
+
 			CartItemDao cartItemDao = CartItemDao.getInstance();
 			List<CartItemDto> cartItems = cartItemDao.getCartItemByUser(user.getNo());
 			
@@ -68,15 +62,11 @@
 			int totalDeliveryCharge = 0;		// 배송비(총상품금액 3만원 이상 ? 0원 : 3000원)
 			int totalPdsPoint = 0;				// 총포인트
 		%>
-			<div id="orderStatus">
-			<!-- 단계별로 font-color: skyblue, strong 효과가 들어가야 한다. -->
-				<span>1. 장바구니 ></span>
-				<span>2. 주문서작성/결제 ></span>
-				<span>3. 주문완료</span>
-			</div>
+			<h2 class="mt-5 mb-3"><strong>장바구니</strong></h2>
+			<hr />
 		</div>
 	</div>
-	<div class="row">
+	<div class="row mt-5">
 		<div class="col">
 			<form id="cart-form" method="post">
 			<!-- 여기서 온 거구나! -->
@@ -134,7 +124,7 @@
 									onchange="changeCheckboxChecked(); updateCartPrice();"/>
 							</td>
 							<td class="align-middle">
-								<a class="text-dark text-decoration-none" href="detail.jsp?pdNo=<%=item.getPdNo()%>" >
+								<a class="text-dark text-decoration-none" href="product/detail.jsp?pdNo=<%=item.getPdNo()%>" >
 									<strong><%=item.getPdName() %></strong>
 								</a>
 							</td>
@@ -147,7 +137,7 @@
 								<button onclick="cartPdUpdown(<%=item.getCartNo()%>);" class="btn btn-outline-secondary btn-sm">확인</button>
 							</td>
 							<td class="align-middle">
-								<strong class="text-danger"><%=StringUtil.numberToString(item.getPdPrice()) %> 원</strong>
+								<strong><%=StringUtil.numberToString(item.getPdPrice()) %> 원</strong>
 							</td>
 							<td class="align-middle">
 								<em>적립 </em>

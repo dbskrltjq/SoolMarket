@@ -136,7 +136,7 @@ public class OrderDao {
 
 	// orderNo로 주문정보 읽어온다. orderComplete 사용됨.
 	public Order getOrderByOrderNo(int orderNo) throws SQLException {
-		String sql = "select ORDER_NO, ORDER_PAYMENT_PRICE, ORDER_TOTAL_QUANTITY, ORDER_CREATED_DATE, ORDER_STATUS, ORDER_TITLE, ORDER_TOTAL_PRICE, ORDER_USED_POINT "
+		String sql = "select ORDER_NO, ORDER_PAYMENT_PRICE, ORDER_TOTAL_QUANTITY, ORDER_CREATED_DATE, ORDER_STATUS, ORDER_TITLE, ORDER_TOTAL_PRICE, ORDER_USED_POINT, ORDER_DEPOSITE_POINT "
 				+ "from SUL_ORDERS "
 				+ "where order_no = ? ";
 		
@@ -151,16 +151,18 @@ public class OrderDao {
 			order.setTitle(rs.getString("ORDER_TITLE"));
 			order.setTotalPrice(rs.getInt("ORDER_TOTAL_PRICE"));
 			order.setUsedPoint(rs.getInt("ORDER_USED_POINT"));
+			order.setDepositPoint(rs.getInt("ORDER_DEPOSITE_POINT"));
 			
 			return order;
 		}, orderNo);
 	}
 	
-	// userNo로 주문정보 읽어온다. myOrder 에서 사용된다.
+	// userNo로 주문정보 읽어온다. myOrder 에서 사용된다. 취소되지 않은 주문들이다.
 	public List<Order> getAllOrdersByUserNo(int userNo) throws SQLException {
 		String sql = "select ORDER_NO, ORDER_PAYMENT_PRICE, ORDER_TOTAL_QUANTITY, ORDER_CREATED_DATE, ORDER_STATUS, ORDER_TITLE "
 				   + "from SUL_ORDERS "
 				   + "where user_no = ? "
+				   + "and ORDER_DELETED = 'N' "
 				   + "order by order_no desc";
 		
 		return helper.selectList(sql, rs -> {
@@ -175,6 +177,40 @@ public class OrderDao {
 			
 			return order;
 		}, userNo);
+	}
+	
+	// userNo로 주문정보 읽어온다. myCancel 에서 사용된다. 취소된 주문들 불러온다.
+	public List<Order> getAllCancelsByUserNo(int userNo) throws SQLException {
+		String sql = "select ORDER_NO, ORDER_PAYMENT_PRICE, ORDER_TOTAL_QUANTITY, ORDER_CREATED_DATE, ORDER_STATUS, ORDER_TITLE "
+				+ "from SUL_ORDERS "
+				+ "where user_no = ? "
+				+ "and ORDER_DELETED = 'Y' "
+				+ "order by order_no desc";
+		
+		return helper.selectList(sql, rs -> {
+			Order order = new Order();
+			
+			order.setNo(rs.getInt("ORDER_NO"));
+			order.setPaymentPrice(rs.getInt("ORDER_PAYMENT_PRICE"));
+			order.setTotalQuantity(rs.getInt("ORDER_TOTAL_QUANTITY"));
+			order.setCreatedDate(rs.getDate("ORDER_CREATED_DATE"));
+			order.setStatus(rs.getString("ORDER_STATUS"));
+			order.setTitle(rs.getString("ORDER_TITLE"));
+			
+			return order;
+		}, userNo);
+	}
+	
+	// orderCancel에서 사용된다. (취소할 때 상태 바꾸기 용도)
+	public void updateCancelOrder(Order order) throws SQLException {
+		String sql = "update SUL_ORDERS "
+				   + "set "
+				   + "	ORDER_STATUS = '취소완료', "
+				   + "	ORDER_DELETED = 'Y',"
+				   + "	ORDER_UPDATED_DATE = SYSDATE "
+				   + "where USER_NO = ? "
+				   + "	and ORDER_NO = ? ";
+		helper.update(sql, order.getUserNo(), order.getNo());
 	}
 	
 	// userNo로 30일 내의 주문정보 읽어온다. mypage의 최근주문정보에서 사용된다.

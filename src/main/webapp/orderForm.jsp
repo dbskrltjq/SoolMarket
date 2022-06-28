@@ -18,6 +18,7 @@
 	.red {color: red;}
 	textarea { resize: none;}
     th { background-color: bg-light; }
+    #total-order-charge2 { color: #189FD8 }
 </style>
 </head>
 <body>
@@ -79,6 +80,9 @@
 			int totalDeliveryCharge = 0;		// 배송비(총상품금액 3만원 이상 ? 0원 : 3000원)
 			int totalPdsPoint = 0;				// 총포인트
 		%>
+		
+			<h2 class="mt-5 mb-3"><strong>주문서 작성/결제</strong></h2>
+			<hr />
 			<!-- form 시작!! -->
 			<input type="hidden" name="from" value="cart" />
 			<table class="order-list table">
@@ -114,7 +118,7 @@
 							<td class="align-middle">
 <!-- hidden!! 잘 사용하자!!! -->
 								<input type="hidden" name="pdNo" value="<%=item.getPdNo()%>"/>
-								<a class="text-dark text-decoration-none" href="detail.jsp?pdNo=<%=item.getPdNo()%>" >
+								<a class="text-dark text-decoration-none" href="product/detail.jsp?pdNo=<%=item.getPdNo()%>" >
 									<strong><%=item.getPdName() %></strong>
 								</a>
 							</td>
@@ -184,7 +188,7 @@
     </div>
 				
 		<!-- 주문자 정보 (로그인한 유저와 동일) -->
-		<h4 class="mt-5">주문자 정보</h4>
+		<h4 class="mt-5 mb-3"><strong>주문자 정보</strong></h4>
 		<table class="table mb-5">
 			<tbody>
 				<tr>
@@ -211,7 +215,7 @@
 		</table>
 	
 		<!-- 배송 정보 (입력 가능) -->
-		<h4>배송정보</h4>
+		<h4 class="mt-5 mb-3"><strong>배송정보</strong></h4>
 		<table class="table mb-5 ">
 			<tbody class="orderReceiveForm">
 				<tr>
@@ -220,16 +224,16 @@
 						 value 사용하기!!! 주문자와 동일한 경우는 위 order-n value 뽑아서 넣자.
 						 직접 입력이면 "" <-- 이거 넣으면 빈칸 되니까 ... 이거 넣기 ... reset은 안 쓰는구만
 					-->
-					<th>배송지 확인</th>
+					<th class="bg-light">배송지 확인</th>
 					<td><input type="radio" name="orderReceiveSelect" id="receive-place-same" value="order-receive-user" onchange="orderReceiveFormSame();" checked /> 주문자와 동일</td>
 					<td><input type="radio" name="orderReceiveSelect" id="receive-place-input" value="order-receive-input" onchange="orderReceiveFormInput();" /> 직접 입력</td>
 				</tr>
 				<tr>
-					<th><span class="red">*</span> 받으실 분</th>
+					<th class="bg-light"><span class="red">*</span> 받으실 분</th>
 					<td><input class="receiveForm" type="text" name="receiveName" value="<%=user.getName() %>" id="receive-name" readonly/></td>
 				</tr>
 				<tr>
-					<th><span class="red">*</span> 주소</th>
+					<th class="bg-light"><span class="red">*</span> 주소</th>
 						<td class="d-grid gap-3">
 							<div class="w-75">
 								<input type="text" class="receiveForm" name="receivePostcode" id="receive-postcode" value="<%=user.getPostCode() %>" readonly >
@@ -240,11 +244,11 @@
 						</td>
 				</tr>
 				<tr>
-					<th><span class="red">*</span> 휴대폰 번호</th>
+					<th class="bg-light"><span class="red">*</span> 휴대폰 번호</th>
 					<td><input type="text" name="receiveTel" class="receiveForm" value="<%=user.getTel() %>" id="receive-tel" readonly /></td>
 				</tr>
 				<tr>
-					<th>남기실 말씀</th>
+					<th class="bg-light">남기실 말씀</th>
 					<td>
 						<textarea name="deliveryMemo" id="delivery-memo" rows="1" cols="50" maxlength='30' 
 						placeholder="요청사항을 입력해 주세요. (최대 30자)" onkeyup="deliveryMemoLimit();"></textarea>
@@ -267,11 +271,11 @@
 		</table>
 		
 		<!-- 결제정보 총총합계금액, 배송비, 포인트, 포인트 사용[ ---원 ] ㅁ 전액사용하기, 최종결제금액 nn원-->
-		<h4>배송 정보</h4>
+		<h4 class="mt-5 mb-3"><strong>배송 정보</strong></h4>
 		<table class="table mb-5">
 			<tbody>
 				<tr>
-					<th>상품합계금액</th>
+					<th class="bg-light">상품합계금액</th>
 					<td>
 						<strong id="total-cart-price"><%=StringUtil.numberToString(totalPdsPrice + totalDeliveryCharge) %></strong>원
 						<input type="hidden" name="totalPrice" value="<%=StringUtil.numberToString(totalPdsPrice + totalDeliveryCharge) %>"/>
@@ -279,18 +283,18 @@
 
 				</tr>		
 				<tr>
-					<th>배송비</th>
+					<th class="bg-light">배송비</th>
 					<td><strong id="total-delivery-charge"><%=StringUtil.numberToString(totalDeliveryCharge) %></strong>원</td>
 				</tr>		
 				<tr>
-					<th>포인트 적립</th>
+					<th class="bg-light">포인트 적립</th>
 					<td>
 						<strong id="total-pds-point"><%=StringUtil.numberToString(totalPdsPoint) %></strong>
 						<input type="hidden" name="depositPoint" value="<%=StringUtil.numberToString(totalPdsPoint) %>"/>					
 					</td>
 				</tr>		
 				<tr>
-					<th>포인트 사용</th>
+					<th class="bg-light">포인트 사용</th>
 					<td>
 						<span>
 							<input type="number" min="0" max="<%=user.getPoint() %>" id="order-use-point" value="0" name="usedPoint" 
@@ -315,7 +319,7 @@
 					</td>
 				</tr>		
 				<tr>
-					<th>최종결제금액</th>
+					<th class="bg-light">최종결제금액</th>
 					<td>
 						<strong id="total-order-charge"><%=StringUtil.numberToString(totalPdsPrice + totalDeliveryCharge) %></strong>원
 						<input type="hidden" name="paymentPrice" id="h-paymentPrice" value="<%=StringUtil.numberToString(totalPdsPrice + totalDeliveryCharge) %>"/>				
@@ -326,11 +330,11 @@
 	
 	
 		<!-- 결제수단 선택, 결제 : 일반결제 - 신용카드, 계좌이체, 가상계좌만 -->
-		<h4>결제수단 선택 / 결제</h4>
+		<h4 class="mt-5 mb-3"><strong>결제수단 선택 / 결제</strong></h4>
 		<table class="table mb-5">
 			<tbody>
 				<tr>
-					<th>일반결제</th>
+					<th class="bg-light">일반결제</th>
 					<td>
 						<input type="radio" name="payment" value="신용카드" checked /> 신용카드
 						<input type="radio" name="payment" value="계좌이체" /> 계좌이체
@@ -341,27 +345,46 @@
 		</table>
 		
 		<!-- 최종결제금액 -->
-		<table class="table mb-5">
-			<tbody>
-				<tr>
-					<th>최종결제금액</th>
-					<td><strong id="total-order-charge2"><%=StringUtil.numberToString(totalPdsPrice + totalDeliveryCharge) %></strong>원</td>
-				</tr>
-			</tbody>
-		</table>
+		<div class="row mb-3 justify-content-end border">
+	    	<div class="col p-3">
+		    	<table class="table">
+		    			<tbody>
+		    				<tr>
+		    					<th class="text-center">
+									<th>최종결제금액</th>
+									<td class="text-end">
+										<h1 id="total-order-charge2"><strong><%=StringUtil.numberToString(totalPdsPrice + totalDeliveryCharge) %></strong>원</h1>
+									</td>
+		    					</th>
+		    				</tr>
+		    			</tbody>
+	    		</table>
+	    	</div>
+		</div>
 </form>
 <!-- form 끝!!! -->
-		
-		<!-- 필수 체크사항 -->
-		<input class="mb-5" type="checkbox" name="mustCheckBox" value="mustCheck2" /> 
-			(필수) 구매하실 상품의 결제정보를 확인하였으며, 구매진행에 동의합니다.
-		
-		<!-- 결제하기 버튼 -->	
-		<div class="mb-5">
-			<a href="home.jsp" class="btn btn-light btn-outline-dark">취소</a>
-			<button type="button" class="btn btn-primary" onclick="checkedOrderForm();">결제하기</button>	
-		</div>	
-</div>
+<!-- 필수 체크사항, 결제하기 버튼 -->	
+		<div class="row mb-5 justify-content-end">
+	    	<div class="col p-3">
+		    	<table class="table table-borderless">
+		    			<tbody>
+		    				<tr>
+		    					<th class="text-center">
+									<input class="mb-3" type="checkbox" name="mustCheckBox" value="mustCheck2" /> 
+									<span class="red"> (필수)</span> 구매하실 상품의 결제정보를 확인하였으며, 구매진행에 동의합니다.
+		    					</th>
+		    				</tr>
+		    				<tr>
+		    					<th class="text-center">
+		    						<a href="home.jsp" class="btn btn-light btn-outline-dark">취소</a>
+									<button type="button" class="btn btn-primary" onclick="checkedOrderForm();">결제하기</button>	 
+		    					</th>
+		    				</tr>
+		    			</tbody>
+	    		</table>
+	    	</div>
+		</div>
+	</div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>

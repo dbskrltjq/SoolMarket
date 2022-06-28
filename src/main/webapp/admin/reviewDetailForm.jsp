@@ -1,3 +1,5 @@
+<%@page import="dto.ReviewDto"%>
+<%@page import="dao.ReviewDao"%>
 <%@page import="dao.ProductDao"%>
 <%@page import="vo.Product"%>
 <%@page import="vo.User"%>
@@ -41,7 +43,7 @@
 %>
 </head>
 <%
-	int questionNo = StringUtil.stringToInt(request.getParameter("questionNo"));
+	int reviewNo = StringUtil.stringToInt(request.getParameter("reviewNo"));
 	int pdNo = StringUtil.stringToInt(request.getParameter("pdNo"));
 	int userNo = StringUtil.stringToInt(request.getParameter("userNo"));
 	
@@ -51,8 +53,8 @@
 	ProductDao productDao = ProductDao.getInstance();
 	Product product = productDao.getProductByNo(pdNo);
 	
-	ProductQuestionDao productQuestionDao = ProductQuestionDao.getInstance();
-	QuestionDto questionDto = productQuestionDao.getProductQuestion(questionNo);
+	ReviewDao reviewDao = ReviewDao.getInstance();
+	ReviewDto reviewDto = reviewDao.getReviewDtoByreviewNo(reviewNo);
 %>
 <body>
 	<jsp:include page="admintop.jsp"></jsp:include>
@@ -63,7 +65,7 @@
 			   </div>
 			   <div class="col-10 p-4">
 			   		<div class="row m-3">
-			   			<h3>문의 상세 페이지</h3>
+			   			<h3>리뷰 상세 페이지</h3>
 			   		</div>
 					<h6><i class="fa-solid fa-square-info"></i> 상품정보</h6>		   			
 			   		<div class="container border border-secondary mb-5" > 
@@ -79,7 +81,7 @@
 				   			</div>
 				   		</div>
 			   		</div>
-			   		<h6><i class="fa-solid fa-comments-question-check"></i> 문의내역</h6>
+			   		<h6><i class="fa-solid fa-comments-question-check"></i> 리뷰내역</h6>
 			   		<div class="container p-3">
 			   		<table class="table border" id="user-info">
 			   			<tr>
@@ -96,7 +98,7 @@
 			   			</tr>
 			   			<tr>
 			   				<th class="bg-light">작성일</th>
-			   				<td><%=questionDto.getCreatedDate() %></td>
+			   				<td><%=reviewDto.getCreatedDate() %></td>
 			   				<th class="bg-light">첨부파일</th>
 			   				<td></td>
 			   			</tr>
@@ -104,16 +106,16 @@
 			   		<table class="table border">
 			   			<tr>
 			   				<th class="bg-light">제목</th>
-			   				<td><%=questionDto.getTitle() %></td>
+			   				<td><%=reviewDto.getTitle() %></td>
 			   			</tr>
 			   			<tr>
 			   				<th class="bg-light">내용</th>
-			   				<td><%=questionDto.getContent() %></td>
+			   				<td><%=reviewDto.getContent() %></td>
 			   			</tr>
 			   		</table>
 			   		<div class="d-flex justify-content-end">
 			   	<%
-			   		if("N".equals(questionDto.getAnswered())) {
+			   		if("N".equals(reviewDto.getAnswered())) {
 			   	%>
 			   			<button class="btn btn-outline-secondary" data-bs-toggle='modal' data-bs-target='#question-answer-modal'>답글작성</button>
 			   	<%
@@ -124,7 +126,7 @@
 			   		<h6><i class="fa-solid fa-comments-question-check"></i> 답변내역</h6>
 			   		<div class="container p-3">
 			   	<%
-			   		if("N".equals(questionDto.getAnswered())) {
+			   		if("N".equals(reviewDto.getAnswered())) {
 			   			
 			   	%>
 			   		<strong style="color: red;">!</strong> 답변을 작성해주세요
@@ -134,11 +136,11 @@
 			   			<table class="table border">
 			   			<tr>
 			   				<th class="bg-light">작성일자</th>
-			   				<td><%=questionDto.getAnswerCreatedDate() %></td>
+			   				<td><%=reviewDto.getAnswerCreatedDate() %></td>
 			   			</tr>
 			   			<tr>
 			   				<th class="bg-light">답변내용</th>
-			   				<td><%=questionDto.getAnswerContent() %></td>
+			   				<td><%=reviewDto.getAnswerContent() %></td>
 			   			</tr>
 			   		</table>
 			   		<button class="btn btn-outline-secondary" data-bs-toggle='modal' data-bs-target='#question-answer-modal'>답글수정</button>
@@ -172,11 +174,11 @@
 						<p><%=product.getName() %></p>
 					</div>
 				</div>
-	       		 <form class="border bg-light p-3" id="answer-form" method="post" action="addAnswer.jsp?job=question" >
-					<input type="hidden" name="questionNo" value="<%=questionNo %>" />
+	       		 <form class="border bg-light p-3" id="answer-form" method="post" action="addAnswer.jsp?job=review" >
+					<input type="hidden" name="reviewNo" value="<%=reviewNo %>" />
 					<div class="mb-3">
 					<%
-						String answerContent = questionDto.getAnswerContent();
+						String answerContent = reviewDto.getAnswerContent();
 					%>
 						<label class="form-label">내용</label>	                                <!-- 답글작성과 답글수정 기능을 구분하기 위한 것입니다.  -->
 						<textarea rows="5" class="form-control" id="content-form" name="content"><%= answerContent != null ? answerContent : "" %></textarea>

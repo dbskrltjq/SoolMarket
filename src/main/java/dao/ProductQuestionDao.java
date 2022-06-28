@@ -26,6 +26,7 @@ public class ProductQuestionDao {
 		helper.insert(sql, question.getUserNo(), question.getPdNo(), question.getTitle(), question.getContent());
 	}
 	
+	// 관리자가 상품문의 답글을 넣을 때 사용하는 메소드
 	public void addAnswer(QuestionDto questionDto) throws SQLException {
 		String sql = "update sul_questions "
 				   + " set "

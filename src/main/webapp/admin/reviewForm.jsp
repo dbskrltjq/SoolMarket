@@ -163,10 +163,10 @@
 								<table class="table table-hover table-borderless text-center border-top border-bottom" id="review-table">
 									<colgroup>
 										<col width="5%">
-										<col width="15%">
+										<col width="25%">
 										<col width="10%">
 										<col width="*">
-										<col width="10%">
+										<col width="6%">
 										<col width="12%">
 										<col width="10%">
 									</colgroup>
@@ -182,7 +182,7 @@
 										</tr>
 									</thead>
 									<tbody>
-								<%
+								<%-- <%
 									for(ReviewDto reviewDto : reviewDtos) {
 								%>			
 										<tr>					
@@ -196,7 +196,7 @@
 										</tr>
 								<%
 									}
-								%> 
+								%>  --%>
 									</tbody>
 									<tfoot>
 										<tr>
@@ -249,6 +249,7 @@
 					
 					let reviewNo = review.no;
 					let userNo = review.userNo;
+					let pdNo = review.pdNo;
 					let pdName = review.pdName
 					let userName = review.userName;
 					let title = review.title;

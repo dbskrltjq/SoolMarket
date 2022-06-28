@@ -1,9 +1,19 @@
+<%@page import="org.apache.catalina.authenticator.SavedRequest"%>
 <%@page import="java.net.URLEncoder"%>
 <%@page import="util.PasswordUtil"%>
 <%@page import="vo.User"%>
 <%@page import="dao.UserDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bootstrap demo</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
 <%
 	String id = request.getParameter("id");    // 사용자가 입력한 아이디
 	String password = request.getParameter("password");			// 사용자가 입력한 비밀번호
@@ -57,9 +67,35 @@
 		}
 	
 		session.setAttribute("LOGINED_USER", savedUser);
+		String saved = request.getParameter("saved");
+		User user = (User)session.getAttribute("LOGINED_USER");
 		
 		response.sendRedirect("home.jsp");
 	
 	}
 	
 %>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript">
+	
+	<%-- <%
+		if ("yes".equals(saved)) {
+	%>
+		let savedUserId = "<%= %>";
+	
+		localStorage.setItem("savedId", savedUserId);	// "savedId" : idValue 의 key : value 형식으로 localStroage에 저장한다.
+		localStorage.setItem("checked", "yes");	
+	<%		
+	} else {
+	%>
+		localStorage.setItem("checked", "no");		
+		localStorage.removeItem("savedId");	
+	<%		
+	}
+	%> --%>
+	
+</script>
+</body>
+</html>

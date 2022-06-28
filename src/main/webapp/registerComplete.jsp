@@ -15,12 +15,11 @@
 <jsp:include page="common/nav.jsp"></jsp:include>
 	<div class="container"> 
 		<div class="row">
-			<h1>로그인완료페이지입니다.</h1>
+			<h1>회원가입완료페이지입니다.</h1>
 			<%
-				User user = (User)session.getAttribute("LOGINED_USER");
-				String saved = request.getParameter("saved");
+				String name = request.getParameter("name");
 			%>
-					<strong><%=user.getName() %></strong>님 환영합니다.
+					<strong><%=name %></strong>님 환영합니다.
 		
 		</div>
 	</div>
@@ -36,21 +35,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
 	
-	<%
-		if ("yes".equals(saved)) {
-	%>
-			let savedUserId = "<%=user.getId()%>";
-		
-			localStorage.setItem("savedId", savedUserId);	// "savedId" : idValue 의 key : value 형식으로 localStroage에 저장한다.
-			localStorage.setItem("checked", "yes");	
-	<%		
-		} else {
-	%>
-			localStorage.setItem("checked", "no");		
-			localStorage.removeItem("savedId");	
-	<%		
-		}
-	%>
+	
 	
 </script>
 </body>

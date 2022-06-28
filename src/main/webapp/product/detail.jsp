@@ -162,7 +162,7 @@
 						%>
 							<span>★★★★★</span>
 						<%
-							} else if(review.getScore() ==4 ) {
+							} else if(review.getScore() == 4 ) {
 						%>
 							<span>★★★★</span>
 						<%
@@ -174,7 +174,7 @@
 						%>
 							<span>★★</span>
 						<%
-							} else if (review.getScore() ==1 ) {
+							} else if (review.getScore() == 1 ) {
 						%>
 							<span>★</span>
 						<%
@@ -211,7 +211,7 @@
 					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#product-question-write" onclick="questionUserCheck(<%=product.getNo()%>)">
 		 				 상품문의 글쓰기
 					</button>
-					<a href="productQuestionlist.jsp" class="btn btn-outline-secondary " >상품문의 전체보기</a>
+					<a href="../questionlist.jsp" class="btn btn-outline-secondary " >상품문의 전체보기</a>
 				</div>
 				
 			</div>

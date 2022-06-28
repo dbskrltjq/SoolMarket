@@ -131,10 +131,6 @@ public class Product {
 	public Date getCreatedDate() {
 		return createdDate;
 	}
-	
-	public void setCreatedDate() {
-		this.createdDate = createdDate;
-	}
 
 	public Date getUpdatedDate() {
 		return updatedDate;
@@ -153,7 +149,8 @@ public class Product {
 	}
 
 	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl; }
+		this.imageUrl = imageUrl;
+	}
 
 	public String getDeleted() {
 		return deleted;

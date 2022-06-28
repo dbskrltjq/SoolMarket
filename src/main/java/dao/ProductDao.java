@@ -38,6 +38,7 @@ public class ProductDao {
 			product.setSaleQuantity(rs.getInt("pd_sale_quantity"));
 			product.setRecommended(rs.getString("pd_recommended"));
 			product.setFileName(rs.getString("pd_file_name"));
+			product.setImageUrl(rs.getString("pd_image_url")); 		// 빠져있어서 추가했습니다! by 유나
 			
 			return product;
 		},pdNo);

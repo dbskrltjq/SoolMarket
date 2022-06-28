@@ -56,7 +56,7 @@
 %>
 <body>
 	<jsp:include page="admintop.jsp"></jsp:include>
-		<div class="container-fluid ">
+		<div class="container-fluid">
 		   <div class="row h-100" id=first-row >
 			   <div class="col-2 p-0" >
 			   		<jsp:include page="adminleft.jsp"></jsp:include>
@@ -66,19 +66,22 @@
 			   			<h3>문의 상세 페이지</h3>
 			   		</div>
 					<h6><i class="fa-solid fa-square-info"></i> 상품정보</h6>		   			
-			   		<div class="container border border-secondary mb-5" > 
+			   		<div class="container border border-secondary bg-light" > 
 				   		<div class="row m-3">
-				   			<div class="col-3">
-				   				<img src="<%=product.getImageUrl() %>" alt="이미지 준비중입니다."  class="img-thumbnail"  width="150">
+				   			<div class="col-2">
+				   				<a href="../product/detail.jsp?pdNo=<%=pdNo %>"><img src="../<%=product.getImageUrl() %>" alt="이미지 준비중입니다."  class="img-thumbnail"  width="150"></a>
 				   			</div>
-				   			<div class="col-9">
-					   			<div class="row">
-				   					<strong>상품명: </strong><%=product.getName() %>
-					   				<strong>판매가격: </strong><%=product.getPrice() %>
+				   			<div class="col-8">
+					   			<div class="row mt-5" style="font-weight: bold;">
+				   					<p>상품명: <%=product.getName() %></p>
+					   				<p>판매가격: <%=product.getPrice() %> 원</p>
 					   			</div>
 				   			</div>
 				   		</div>
 			   		</div>
+			   		<div class="row mb-4" style="font-size: small; font-weight: bold;">
+						<p><span style="color: red;">※</span> 상품이미지를 클릭하시면 상품상세페이지로 이동합니다.</p>			   				
+					</div>
 			   		<h6><i class="fa-solid fa-comments-question-check"></i> 문의내역</h6>
 			   		<div class="container p-3">
 			   		<table class="table border" id="user-info">

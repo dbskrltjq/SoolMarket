@@ -139,7 +139,7 @@ public class ProductQuestionDao {
 	public List<QuestionDto> getQuestionsWithoutKeyword(int categoryNo, int period, String answered, int beginIndex, int endIndex) throws SQLException {
 		
 		String sql = "select * "
-				+ "from (select row_number() over (partition by P.category_no order by Q.q_no desc) row_number, Q.*, P.category_no, U.user_name "
+				+ "from (select row_number() over (partition by P.category_no order by Q.q_no desc) row_number, Q.*, P.category_no, P.pd_name, U.user_name "
 				+ "		from sul_questions Q, sul_products P,  sul_users U "
 				+ "		where Q.user_no = U.user_no "
 				+ "		and Q.pd_no = P.pd_no "
@@ -163,6 +163,7 @@ public class ProductQuestionDao {
 			question.setUpdatedDate(rs.getDate("q_updated_date"));
 			question.setAnswerCreatedDate(rs.getDate("a_created_date"));
 			question.setAnswered(rs.getString("a_answered"));
+			question.setPdName(rs.getString("pd_name"));
 			
 			return question;
 			
@@ -199,7 +200,7 @@ public class ProductQuestionDao {
 	public List<QuestionDto> getQuestionsByPdNameKeyword(String keyword, int period, String answered, int beginIndex, int endIndex) throws SQLException {
 		
 		String sql = "select * "
-				   +"from (select row_number() over (order by Q.q_no desc) row_number, Q.*, P.category_no, U.user_name "
+				   +"from (select row_number() over (order by Q.q_no desc) row_number, Q.*, P.category_no, P.pd_name, U.user_name "
 				   + "		from sul_questions Q, sul_products P,  sul_users U "
 				   + "		where Q.user_no = U.user_no "
 				   + "		and Q.pd_no = P.pd_no "
@@ -223,6 +224,7 @@ public class ProductQuestionDao {
 			question.setUpdatedDate(rs.getDate("q_updated_date"));
 			question.setAnswerCreatedDate(rs.getDate("a_created_date"));
 			question.setAnswered(rs.getString("a_answered"));
+			question.setPdName(rs.getString("pd_name"));
 			
 			return question;
 			
@@ -246,7 +248,7 @@ public class ProductQuestionDao {
 	public List<QuestionDto> getQuestionsByPdNameKeyword(int categoryNo, String keyword, int period, String answered, int beginIndex, int endIndex) throws SQLException {
 		
 		String sql = "select * "
-				+ "from(select row_number() over (partition by P.category_no order by Q.q_no desc) row_number, Q.*, P.category_no, U.user_name "
+				+ "from(select row_number() over (partition by P.category_no order by Q.q_no desc) row_number, Q.*, P.category_no, P.pd_name, U.user_name "
 				+ "		from sul_questions Q, sul_products P, sul_users U "
 				+ "		where Q.user_no = U.user_no "
 				+ "		and Q.pd_no = P.pd_no "
@@ -271,6 +273,7 @@ public class ProductQuestionDao {
 			question.setUpdatedDate(rs.getDate("q_updated_date"));
 			question.setAnswerCreatedDate(rs.getDate("a_created_date"));
 			question.setAnswered(rs.getString("a_answered"));
+			question.setPdName(rs.getString("pd_name"));
 			
 			return question;
 			
@@ -304,7 +307,7 @@ public class ProductQuestionDao {
 	public List<QuestionDto> getQuestionsBytitleKeyword(String keyword, int period, String answered, int beginIndex, int endIndex) throws SQLException {
 		
 		String sql = "select * "
-					+ "from (select row_number() over (order by Q.q_no desc) row_number, Q.*, P.category_no, U.user_name "
+					+ "from (select row_number() over (order by Q.q_no desc) row_number, Q.*, P.category_no, P.pd_name, U.user_name "
 					+ "     from sul_questions Q, sul_products P, sul_users U "
 					+ "		where Q.user_no = U.user_no "
 					+ "		and Q.pd_no = P.pd_no "
@@ -328,6 +331,7 @@ public class ProductQuestionDao {
 			question.setUpdatedDate(rs.getDate("q_updated_date"));
 			question.setAnswerCreatedDate(rs.getDate("a_created_date"));
 			question.setAnswered(rs.getString("a_answered"));
+			question.setPdName(rs.getString("pd_name"));
 			
 			return question;
 			
@@ -352,7 +356,7 @@ public class ProductQuestionDao {
 	public List<QuestionDto> getQuestionsBytitleKeyword(int categoryNo ,String keyword, int period, String answered, int beginIndex, int endIndex) throws SQLException {
 		
 		String sql = "select * "
-				+ "from (select row_number() over (partition by P.category_no order by Q.q_no desc) row_number, Q.*, P.category_no, U.user_name "
+				+ "from (select row_number() over (partition by P.category_no order by Q.q_no desc) row_number, Q.*, P.category_no, P.pd_name, U.user_name "
 				+ "      from sul_questions Q, sul_products P, sul_users U "
 				+ "		where Q.user_no = U.user_no "
 				+ "		and Q.pd_no = P.pd_no "
@@ -377,6 +381,7 @@ public class ProductQuestionDao {
 			question.setUpdatedDate(rs.getDate("q_updated_date"));
 			question.setAnswerCreatedDate(rs.getDate("a_created_date"));
 			question.setAnswered(rs.getString("a_answered"));
+			question.setPdName(rs.getString("pd_name"));
 			
 			return question;
 			
@@ -410,7 +415,7 @@ public class ProductQuestionDao {
 	public List<QuestionDto> getQuestionsBycontentKeyword(String keyword, int period, String answered, int beginIndex, int endIndex) throws SQLException {
 		
 		String sql = "select * "
-				+ "from(select row_number() over (order by Q.q_no desc) row_number, Q.*, P.category_no, U.user_name "
+				+ "from(select row_number() over (order by Q.q_no desc) row_number, Q.*, P.category_no, P.pd_name, U.user_name "
 				+ "     from sul_questions Q, sul_products P, sul_users U "
 				+ "		where Q.user_no = U.user_no "
 				+ "		and Q.pd_no = P.pd_no "
@@ -435,6 +440,7 @@ public class ProductQuestionDao {
 			question.setUpdatedDate(rs.getDate("q_updated_date"));
 			question.setAnswerCreatedDate(rs.getDate("a_created_date"));
 			question.setAnswered(rs.getString("a_answered"));
+			question.setPdName(rs.getString("pd_name"));
 			
 			return question;
 			
@@ -460,7 +466,7 @@ public class ProductQuestionDao {
 	public List<QuestionDto> getQuestionsBycontentKeyword(int categoryNo, String keyword, int period, String answered, int beginIndex, int endIndex) throws SQLException {
 		
 		String sql = "select * "
-				+ "from (select  row_number() over (partition by P.category_no order by Q.q_no desc) row_number, Q.*, P.category_no, U.user_name "
+				+ "from (select  row_number() over (partition by P.category_no order by Q.q_no desc) row_number, Q.*, P.category_no, P.pd_name, U.user_name "
 				+ "      from sul_questions Q, sul_products P, sul_users U "
 				+ "		 where Q.user_no = U.user_no "
 				+ "		 and Q.pd_no = P.pd_no "
@@ -485,6 +491,7 @@ public class ProductQuestionDao {
 			question.setUpdatedDate(rs.getDate("q_updated_date"));
 			question.setAnswerCreatedDate(rs.getDate("a_created_date"));
 			question.setAnswered(rs.getString("a_answered"));
+			question.setPdName(rs.getString("pd_name"));
 			
 			return question;
 			

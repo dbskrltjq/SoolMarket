@@ -23,6 +23,7 @@
 	<script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
 <style type="text/css">
+
 	html, body {
 		height: 100%;
 	}
@@ -68,19 +69,31 @@
 			   			<h3>리뷰 상세 페이지</h3>
 			   		</div>
 					<h6><i class="fa-solid fa-square-info"></i> 상품정보</h6>		   			
-			   		<div class="container border border-secondary mb-5" > 
-				   		<div class="row m-3">
-				   			<div class="col-3">
-				   				<img src="<%=product.getImageUrl() %>" alt="이미지 준비중입니다."  class="img-thumbnail"  width="150">
+			   		<div class="container border border-secondary bg-light" > 
+				   		<div class="row m-3 ">
+				   			<div class="col-2">
+				   				<a href="../product/detail.jsp?pdNo=<%=pdNo %>"><img src="../<%=product.getImageUrl() %>" alt="이미지 준비중입니다."  class="img-thumbnail"  width="150"></a>
 				   			</div>
-				   			<div class="col-9">
+				   			<div class="col-8">
 					   			<div class="row">
-				   					<strong>상품명: </strong><%=product.getName() %>
-					   				<strong>판매가격: </strong><%=product.getPrice() %>
+				   					<p>상품명: <strong><%=product.getName() %></strong></p>
+					   				<p>판매가격: <strong><%=product.getSalePrice() %></strong> 원</p>
+					   				<p>리뷰평균점수: <strong style="color: red;">
+					   		<%
+					   			for(int i = 1; i <= product.getReviewScore() ; i++) {
+					   				
+					   		%>
+					   				★
+					   		<%
+					   			}
+					   		%>		</strong> </p>
 					   			</div>
 				   			</div>
 				   		</div>
 			   		</div>
+					<div class="row mb-4" style="font-size: small; font-weight: bold;">
+						<p><span style="color: red;">※</span> 상품이미지를 클릭하시면 상품상세페이지로 이동합니다.</p>			   				
+					</div>
 			   		<h6><i class="fa-solid fa-comments-question-check"></i> 리뷰내역</h6>
 			   		<div class="container p-3">
 			   		<table class="table border" id="user-info">
@@ -158,7 +171,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-	        <h5 class="modal-title" id="staticBackdropLabel">상품문의 답변쓰기</h5>
+	        <h5 class="modal-title" id="staticBackdropLabel">상품리뷰 답변쓰기</h5>
 	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 	      </div>
 	      <div class="modal-body">

@@ -21,6 +21,7 @@
 
 	String[] pdNoList = request.getParameterValues("pdNos");
 	
+	// alert창에서 ~~상품 외 7개를 출력하기 위해서
     Product firstProduct = productDao.getProductByNo(StringUtil.stringToInt(pdNoList[0]));
     	result.put("pdNo", firstProduct.getNo());
     	result.put("pdName", firstProduct.getName());

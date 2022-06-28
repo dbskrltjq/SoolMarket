@@ -4,7 +4,7 @@
 <%@page import="dao.CategoryDao"%>
 <%@page import="vo.Category"%>
 <%@page import="vo.User" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" errorPage="../error/500.jsp" trimDirectiveWhitespaces="true"%>
 <html lang="ko">
 <head>
 	<meta charset="utf-8" />
@@ -18,11 +18,25 @@
 	<script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
 <style type="text/css">
+	html, body {
+		height: 100%;
+	}
+	.container-fluid {
+		height: 95%;
+		border-collapse: collapse;
+	}
 	#search-form .row { padding-bottom: 5px; height: 20%;}
 	#search-form {font-size: small;}
 	#search-form select {width: auto;}
 	#search-form .col-1 {background-color: #DDDDDD; }
 </style>
+<%
+	//세션에서 로그인된 관리자정보를 조회한다.
+	User admin = (User) session.getAttribute("ADMIN");
+	if (admin == null) {
+		throw new RuntimeException("해당 서비스는 관리자만 이용할 수 있습니다.");
+	}  
+%>
 </head>
 <%
 	CategoryDao categoryDao = CategoryDao.getInstance();
@@ -32,7 +46,7 @@
 <body>
 	<jsp:include page="admintop.jsp"></jsp:include>
 	<div class="container-fluid">
-		<div class="row">
+		<div class="row h-100">
 			<div class="col-2 p-0">
 				<jsp:include page="adminleft.jsp"></jsp:include>
 			</div>

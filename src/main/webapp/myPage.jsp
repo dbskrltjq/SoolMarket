@@ -1,3 +1,7 @@
+<%@page import="util.StringUtil"%>
+<%@page import="vo.Order"%>
+<%@page import="java.util.List"%>
+<%@page import="dao.OrderDao"%>
 <%@page import="vo.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" errorPage="error/500.jsp"%>
@@ -31,9 +35,9 @@
 
          	<p><strong class="fs-6">쇼핑정보</strong><p>
          	<div class="list-group list-group-flush mb-4">
-         		<a href="#" class="list-group-item list-group-item-action">- 주문목록</a>
+         		<a href="myOrder.jsp" class="list-group-item list-group-item-action">- 주문목록</a>
          		<a href="#" class="list-group-item list-group-item-action">- 취소 내역</a>
-         		<a href="#" class="list-group-item list-group-item-action">- 장바구니 보기</a>
+         		<a href="cart.jsp" class="list-group-item list-group-item-action">- 장바구니 보기</a>
 			</div>
 			<p><strong class="fs-6">회원정보</strong></p>
          	<div class="list-group list-group-flush">
@@ -67,31 +71,54 @@
 				</div>
 				<table class="border">
 					<colgroup>
-						<col width="25%">
-						<col width="*">
-						<col width="20%%">
-						<col width="15%">
-						<col width="15%">
+							<col width="10%">
+							<col width="15%">
+							<col width="*">	
+							<col width="10%">
+							<col width="10%">
+							<col width="5%">
 					</colgroup>
 					<thead>
 						<tr class="bg-light">
-							<th>날짜/주문번호</th>
-							<th>상품명/옵션</th>
-							<th>상품금액/수량</th>
+							<th>주문번호</th>
+							<th>날짜</th>
+							<th>주문정보</th>
 							<th>주문상태</th>
+							<th>결제금액</th>
 							<th>확인/리뷰</th>
 						</tr>
 					</thead>
 					<tbody class="table-group-divider">
-						<tr>
-							<td>2022년07월09일</td>
-							<td>맑은 막걸리</td>
-							<td>23000원/5개</td>
-							<td>배송중</td>
+				<%
+					OrderDao orderDao = OrderDao.getInstance();
+					List<Order> orders = orderDao.getRecentOrdersByUserNo(user.getNo());
+					
+					if(orders.isEmpty()) {
+				%>
+					<tr>
+						<td colspan="6" class="text-center"><strong>지난 30일간의 주문내역이 없습니다.</strong></td>
+					</tr>
+				
+				<%
+					} else {
+						for(Order order : orders) {
+				%>
+						<tr >
+							<td><%=order.getNo() %></td>
+							<td><%=order.getCreatedDate() %></td>
+							<td style="text-align:left">
+								<a href="myOrderDetail.jsp?orderNo=<%=order.getNo() %>" class="my-order-link"><%=order.getTitle() %></a>
+							</td>
+							<td><%=order.getStatus() %></td>
+							<td><%= StringUtil.numberToString(order.getPaymentPrice()) %></td>
 							<td></td>
 						</tr>
+				<%
+						}
+					}
+				%>
 					</tbody>
-				</table>
+			</table>
 			</div>
 			<div class="row mt-5">
 				<h6><strong>최근 본 상품</strong> <span><%=user.getName()%>님께서 본 최근 상품입니다.</span></h6>

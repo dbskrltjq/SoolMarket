@@ -5,7 +5,7 @@
 	User admin = (User)session.getAttribute("ADMIN");
 %>
 <div id="layoutSidenav_nav" class="h-100">
-      <nav class="sb-sidenav accordion sb-sidenav-dark ms-0" id="sidenavAccordion">
+      <nav class="sb-sidenav accordion sb-sidenav-dark ms-0" id="sidenavAccordion" >
           <div class="sb-sidenav-menu">
               <div class="nav">
                   <div class="sb-sidenav-menu-heading">core</div>
@@ -13,7 +13,7 @@
                       <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                       main
                   </a>
-                  <div class="sb-sidenav-menu-heading">Interface</div>
+                  <div class="sb-sidenav-menu-heading">User</div>
                   <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                       <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                       회원관리
@@ -27,7 +27,7 @@
                   </div>
                  <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                       <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                      후기 및 리뷰 관리
+                      문의 및 리뷰 관리
                       <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                   </a>
                   <div class="collapse" id="collapsePages" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
@@ -36,7 +36,7 @@
                           <a class="nav-link" href="/semi/admin/reviewForm.jsp">등록된 리뷰</a>
                       </nav>
                   </div>
-                  <div class="sb-sidenav-menu-heading">Addons</div>
+                  <div class="sb-sidenav-menu-heading">Product</div>
                   <a class="nav-link" href="registerPdForm.jsp">
                       <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                       새상품등록

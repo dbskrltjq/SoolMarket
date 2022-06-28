@@ -366,7 +366,6 @@ public class ReviewDao {
 	
 	
 	
-	
 	public int getTotalRows() throws SQLException {
 		String sql = "select count(*) cnt "
 				   + "from sul_reviews "
@@ -475,4 +474,5 @@ public class ReviewDao {
 			return rs.getInt("cnt");
 		}, userNo, pdNo);
 	}
+
 }

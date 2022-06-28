@@ -1,4 +1,8 @@
+
 <%@page import="java.util.StringJoiner"%>
+
+<%@page import="dao.ReviewDao"%>
+
 <%@page import="dto.QuestionDto"%>
 <%@page import="dao.ProductQuestionDao"%>
 <%@page import="dto.ReviewDto"%>
@@ -33,6 +37,7 @@
 		
 		ProductReviewDao productReviewDao = ProductReviewDao.getInstance();
 		List<ReviewDto> reviews = productReviewDao.getProductReviews(pdNo);
+		
 		
 		ProductQuestionDao productQuestionDao = ProductQuestionDao.getInstance();
 		List<QuestionDto> questions = productQuestionDao.getProductQuestions(pdNo);
@@ -413,7 +418,7 @@
 	function buy() {
 		let form = document.getElementById("product-form");
 		// form에서 id를 통해 값을 가져옵니다.
-		form.setAttribute("action","orderForm.jsp");
+		form.setAttribute("action","../orderNow.jsp");
 		// setAttribute를 통해 action 기능을 넣고 orderForm.jsp 페이지로 넘어가게 만들었습니다.
 		form.submit();
 		// 제출
@@ -422,7 +427,7 @@
 	function cart() {
 		let form = document.getElementById("product-form");
 		// form에서 id를 통해 값을 가져옵니다.
-		form.setAttribute("action","cartItemAdd.jsp");
+		form.setAttribute("action","../cartItemAdd.jsp");
 		// setAttribute를 통해 action 기능을 넣고 orderForm.jsp 페이지로 넘어가게 만들었습니다.
 		form.submit();
 		// 제출

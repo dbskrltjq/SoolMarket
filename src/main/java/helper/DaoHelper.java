@@ -268,8 +268,12 @@ public class DaoHelper {
 		 */
 		T mapRow(ResultSet rs) throws SQLException;
 	}
-}
+
 	
+
+
+
+}
 
 
 

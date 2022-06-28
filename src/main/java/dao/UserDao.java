@@ -44,18 +44,11 @@ public class UserDao {
 	// 220623 민지 추가 (point 작업에 사용)
 	public void updateUserPoint(User user) throws SQLException {
 		String sql = "update sul_users "
-				   + "	set user_pw = ?, "
-				   + "      user_name = ?, "
-				   + "      user_email = ?, "
-				   + "      user_tel = ?, "
-			   	   + "      user_post_code = ?, "
-				   + "      user_address = ?,"
-				   + " 		user_detail_address = ?, "
-				   + "		user_deleted = ?, "
+				   + "	set "
 				   + "		user_updated_date = sysdate, "
 				   + "		user_point = ? "	
 				   + "where user_no = ? ";
-		helper.update(sql, user.getPassword(), user.getName(), user.getEmail(), user.getTel(), user.getPostCode(), user.getAddress(), user.getDetailAddress(), user.getDeleted(), user.getPoint(), user.getNo());
+		helper.update(sql, user.getPoint(), user.getNo());
 	}
 	
 	public User getUserById(String id) throws SQLException {

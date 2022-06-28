@@ -14,6 +14,7 @@ public class Review {
 	private Date updatedDate;
 	private int score;
 	private int likeCount;
+	private String title;
 	
 	public Review() {}
 
@@ -95,6 +96,14 @@ public class Review {
 
 	public void setLikeCount(int likeCount) {
 		this.likeCount = likeCount;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	

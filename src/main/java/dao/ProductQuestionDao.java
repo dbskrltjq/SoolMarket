@@ -139,11 +139,11 @@ public class ProductQuestionDao {
 		
 		String sql = "select * "
 				+ "from (select row_number() over (partition by P.category_no order by Q.q_no desc) row_number, Q.*, P.category_no, U.user_name "
-				+ "from sul_questions Q, sul_products P,  sul_users U "
-				+ "where Q.user_no = U.user_no "
-				+ "and Q.pd_no = P.pd_no "
-				+ "AND q.q_created_date >= trunc(sysdate - ?) "
-				+ "and Q.a_answered = ?) "
+				+ "		from sul_questions Q, sul_products P,  sul_users U "
+				+ "		where Q.user_no = U.user_no "
+				+ "		and Q.pd_no = P.pd_no "
+				+ "		AND q.q_created_date >= trunc(sysdate - ?) "
+				+ "		and Q.a_answered = ?) "
 				+ "where row_number >= ? and row_number <= ? "
 				+ "and category_no = ? ";
 		
@@ -246,6 +246,7 @@ public class ProductQuestionDao {
 		
 		String sql = "select * "
 				+ "from(select row_number() over (partition by P.category_no order by Q.q_no desc) row_number, Q.*, P.category_no, U.user_name "
+				+ "		from sul_questions Q, sul_products P, sul_users U "
 				+ "		where Q.user_no = U.user_no "
 				+ "		and Q.pd_no = P.pd_no "
 				+ "		and P.pd_name like '%' || ? || '%' "
@@ -301,8 +302,9 @@ public class ProductQuestionDao {
 	 */
 	public List<QuestionDto> getQuestionsBytitleKeyword(String keyword, int period, String answered, int beginIndex, int endIndex) throws SQLException {
 		
-		String sql = "select *"
+		String sql = "select * "
 					+ "from (select row_number() over (order by Q.q_no desc) row_number, Q.*, P.category_no, U.user_name "
+					+ "     from sul_questions Q, sul_products P, sul_users U "
 					+ "		where Q.user_no = U.user_no "
 					+ "		and Q.pd_no = P.pd_no "
 					+ "		and Q.q_title like '%' || ? || '%' "
@@ -337,7 +339,6 @@ public class ProductQuestionDao {
 				+ "from sul_questions Q, sul_products P,  sul_users U "
 				+ "where Q.user_no = U.user_no "
 				+ "and Q.pd_no = P.pd_no "
-				+ "and P.category_no = ? "
 				+ "and Q.q_title like '%' || ? || '%' "
 				+ "AND q.q_created_date >= trunc(sysdate - ?) "
 				+ "and Q.a_answered = ? ";
@@ -349,13 +350,14 @@ public class ProductQuestionDao {
 	
 	public List<QuestionDto> getQuestionsBytitleKeyword(int categoryNo ,String keyword, int period, String answered, int beginIndex, int endIndex) throws SQLException {
 		
-		String sql = "select *"
+		String sql = "select * "
 				+ "from (select row_number() over (partition by P.category_no order by Q.q_no desc) row_number, Q.*, P.category_no, U.user_name "
-				+ "where Q.user_no = U.user_no "
-				+ "and Q.pd_no = P.pd_no "
-				+ "and Q.q_title like '%' || ? || '%' "
-				+ "AND q.q_created_date >= trunc(sysdate - ?) "
-				+ "and Q.a_answered = ?) "
+				+ "      from sul_questions Q, sul_products P, sul_users U "
+				+ "		where Q.user_no = U.user_no "
+				+ "		and Q.pd_no = P.pd_no "
+				+ "		and Q.q_title like '%' || ? || '%' "
+				+ "		AND q.q_created_date >= trunc(sysdate - ?) "
+				+ "		and Q.a_answered = ?) "
 				+ "where row_number >= ? and row_number <= ? "
 				+ "and category_no = ? ";
 		
@@ -408,11 +410,12 @@ public class ProductQuestionDao {
 		
 		String sql = "select * "
 				+ "from(select row_number() over (order by Q.q_no desc) row_number, Q.*, P.category_no, U.user_name "
-				+ "where Q.user_no = U.user_no "
-				+ "and Q.pd_no = P.pd_no "
-				+ "and Q.q_content like '%' || ? || '%' "
-				+ "AND q.q_created_date >= trunc(sysdate - ?) "
-				+ "and Q.a_answered = ?) "
+				+ "     from sul_questions Q, sul_products P, sul_users U "
+				+ "		where Q.user_no = U.user_no "
+				+ "		and Q.pd_no = P.pd_no "
+				+ "		and Q.q_content like '%' || ? || '%' "
+				+ "		AND q.q_created_date >= trunc(sysdate - ?) "
+				+ "		and Q.a_answered = ?) "
 				+ "where row_number >= ? and row_number <= ? ";
 				
 		
@@ -457,6 +460,7 @@ public class ProductQuestionDao {
 		
 		String sql = "select * "
 				+ "from (select  row_number() over (partition by P.category_no order by Q.q_no desc) row_number, Q.*, P.category_no, U.user_name "
+				+ "      from sul_questions Q, sul_products P, sul_users U "
 				+ "		 where Q.user_no = U.user_no "
 				+ "		 and Q.pd_no = P.pd_no "
 				+ "      and Q.q_content like '%' || ? || '%' "

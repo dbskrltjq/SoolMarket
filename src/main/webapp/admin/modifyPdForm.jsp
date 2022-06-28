@@ -17,8 +17,15 @@
 	<link href="css/styles.css" rel="stylesheet" />
 	<script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
-<style type="text/css">
-</style>
+	<style type="text/css">
+		html, body {
+			height: 100%;
+		}
+		.container-fluid {
+			height: 95%;
+			border-collapse: collapse;
+		}
+	</style>
 </head>
 <%
 	//세션에서 로그인된 관리자정보를 조회한다.
@@ -33,7 +40,7 @@
 <body>
 <jsp:include page="admintop.jsp"></jsp:include>
 	<div class="container-fluid ">
-		<div class="row">
+		<div class="row h-100">
 			<div class="col-2 p-0">
 				<jsp:include page="adminleft.jsp"></jsp:include>
 			</div>

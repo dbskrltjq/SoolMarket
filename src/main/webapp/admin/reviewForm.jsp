@@ -1,6 +1,13 @@
 <!DOCTYPE html>
+<%@page import="dto.ReviewDto"%>
+<%@page import="vo.Review"%>
+<%@page import="dao.ReviewDao"%>
+<%@page import="util.StringUtil"%>
+<%@page import="java.util.List"%>
+<%@page import="dao.CategoryDao"%>
+<%@page import="vo.Category"%>
 <%@page import="vo.User" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" errorPage="../error/500.jsp" trimDirectiveWhitespaces="true"%>
 <html lang="ko">
 <head>
 	<meta charset="utf-8" />
@@ -13,118 +20,337 @@
 	<link href="css/styles.css" rel="stylesheet" />
 	<script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+<style type="text/css">
+	html, body {
+		height: 100%;
+	}
+	.container-fluid {
+		height: 95%;
+		border-collapse: collapse;
+	}
+	#search-form .row { padding-bottom: 5px; height: 20%;}
+	#search-form {font-size: small;}
+	#search-form select {width: auto;}
+	#search-form .col-1 {background-color: #DDDDDD; }
+</style>
+<%
+	//세션에서 로그인된 관리자정보를 조회한다.
+	User admin = (User) session.getAttribute("ADMIN");
+	if (admin == null) {
+		throw new RuntimeException("해당 서비스는 관리자만 이용할 수 있습니다.");
+	}  
+%>
 </head>
+<%
+	CategoryDao categoryDao = CategoryDao.getInstance();
+	List<Category> categories = categoryDao.getCategories();
+	int rows = StringUtil.stringToInt(request.getParameter("rows"), 5);
+	
+	ReviewDao reviewDao = ReviewDao.getInstance();
+	List<ReviewDto> reviewDtos = reviewDao.getAllReviewDtos();
+%>
 <body>
-<jsp:include page="admintop.jsp"></jsp:include>
-<div class="container-fluid">
-	<div class="row">
-		<div class="col-2 p-0">
-			<jsp:include page="adminleft.jsp"></jsp:include>
+	<jsp:include page="admintop.jsp"></jsp:include>
+	<div class="container-fluid">
+		<div class="row h-100">
+			<div class="col-2 p-0">
+				<jsp:include page="adminleft.jsp"></jsp:include>
+			</div>
+			<div class="col-10">
+				<div id="layoutSidenav_content">
+					<main>
+						<div class="container-fluid px-4">
+							<h2 class="mt-4">상품리뷰 관리</h2>
+							<form id="search-form" method="post" enctype="multipart/form-data">
+									<div class="row">
+										<div class="col-1">
+											<strong>상품분류</strong>
+										</div>
+										<div class="col-5">
+											<select class="form-select form-select-sm" name="category">
+												<option disabled selected>카테고리 선택</option>
+											<%
+											for (Category category : categories) {
+											%>
+												<option value="<%=category.getNo()%>"><%=category.getName()%></option>
+											<%
+											}
+											%>
+											</select>
+										</div>
+										<div class="col-1">
+											<strong>검색분류</strong>
+										</div>
+										<div class="col-5 d-inline-flex">
+											<select class="form-select form-select-sm" name="search">
+												<option value="" selected disabled>검색조건</option>
+												<option value="name">상품명</option>
+												<option value="title">제목</option>
+												<option value="content">내용</option>
+											</select> 
+											<input type="text" class="form-control form-control-sm" name="keyword" placeholder="키워드 입력" style="width: auto;"/>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-1">
+											<strong>리뷰등록일</strong>
+										</div>
+										<div class="col-5  d-inline-flex">
+											<div class="col-9 " style=" width: auto;">
+												<div class="form-check form-check-inline">
+						  							<input class="form-check-input" type="radio" name="period" value="0" checked >
+						  							<label class="form-check-label" for="inlineRadio1">오늘</label>
+												</div>
+												<div class="form-check form-check-inline">
+							  						<input class="form-check-input" type="radio" name="period" id="inlineRadio2" value="7" >
+							  						<label class="form-check-label" for="inlineRadio2">7일</label>
+												</div>
+												<div class="form-check form-check-inline">
+							  						<input class="form-check-input" type="radio" name="period" id="inlineRadio2" value="30" >
+							  						<label class="form-check-label" for="inlineRadio2">1개월</label>
+												</div>
+												<div class="form-check form-check-inline">
+							  						<input class="form-check-input" type="radio" name="period" id="inlineRadio2" value="9999" >
+							  						<label class="form-check-label" for="inlineRadio2">전체</label>
+												</div>
+											</div>
+										</div>
+										<div class="col-1">
+											<strong>처리상태</strong>
+										</div>
+										<div class="col-5 d-inline-flex">
+											<div class="col-sm-9">
+												<div class="form-check form-check-inline">
+						  							<input class="form-check-input" type="radio" name="deleted" value="Y" >
+						  							<label class="form-check-label" for="inlineRadio1">삭제</label>
+												</div>
+												<div class="form-check form-check-inline">
+							  						<input class="form-check-input" type="radio" name="deleted" id="inlineRadio2" value="N" checked>
+							  						<label class="form-check-label" for="inlineRadio2">보유</label>
+												</div>
+												
+											</div>
+										</div>
+									</div>
+									<div class="row d-flex justify-content-center mt-3">
+											<button type="button" class="btn btn-primary btn-sm me-2" id="search-btn" onclick="loadReviews();" style="width: 8%;">검색</button>
+											<input type="reset" class="btn btn-outline-secondary btn-sm" style="width: 8%;"/>
+									</div>
+							
+							<div class="row">
+								<h6>총 1개</h6>
+							</div>
+							<div class="row d-flex justify-content-between my-2">
+								<div class="">
+									<button class="btn btn-outline-primary btn-sm">삭제</button>
+									<!-- <select class="form-select form-select-sm me-2" name="period" onchange="﻿">
+										<option value="">등록일순</option>
+										<option value="">오래된순</option>
+									</select> -->
+									<select class="form-select form-select-sm float-end" name="rows" onchange="">
+										<option value="5" <%=rows == 5 ? "selected" : ""%>>5개씩
+											보기</option>
+										<option value="10" <%=rows == 10 ? "selected" : ""%>>10개씩
+											보기</option>
+										<option value="15" <%=rows == 15 ? "selected" : ""%>>15개씩
+											보기</option>
+									</select>
+									<input type="hidden" name="page" />
+								</div>
+							</div>
+							</form>
+							<div>
+								<table class="table table-hover table-borderless text-center border-top border-bottom" id="review-table">
+									<colgroup>
+										<col width="5%">
+										<col width="15%">
+										<col width="10%">
+										<col width="*">
+										<col width="10%">
+										<col width="12%">
+										<col width="10%">
+									</colgroup>
+									<thead class="table-light">
+										<tr>
+											<th id=all-toggle><input type="checkbox" id="all-toggle-checkbox" onchange="toggleCheckbox();" /></th>
+											<th>상품명</th>
+											<th>작성자</th>
+											<th>제목</th>
+											<th>평점</th>
+											<th>등록일</th>
+											<th>상태</th>
+										</tr>
+									</thead>
+									<tbody>
+								<%
+									for(ReviewDto reviewDto : reviewDtos) {
+								%>			
+										<tr>					
+											<td><input type="checkbox" value="<%=reviewDto.getNo() %>" /></td>
+											<td><%=reviewDto.getPdName() %></td>
+											<td><%=reviewDto.getUserName() %></td>
+											<td><%=reviewDto.getTitle() %></td>
+											<td><%=reviewDto.getScore() %></td>
+											<td><%=reviewDto.getUpdatedDate() %></td>
+											<td><%=reviewDto.getDeleted() %></td>
+										</tr>
+								<%
+									}
+								%> 
+									</tbody>
+									<tfoot>
+										<tr>
+
+										</tr>
+									</tfoot>
+								</table>
+								<nav>
+									<ul class="pagination justify-content-center" id="pagination">
+										
+									</ul>
+								</nav>
+							</div>
+
+
+
+						</div>
+					</main>
+					<jsp:include page="adminbottom.jsp"></jsp:include>
+
+				</div>
+			</div>
 		</div>
-		<div class="col-10">
- 			<div id="layoutSidenav_content">
-                <main>
-                    <div class="container-fluid px-4">
-                        <h1 class="mt-4">리뷰페이지입니다.</h1>
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Dashboard</li>
-                        </ol>
-                        <div class="row">
-                            
-                        </div>
-                        
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                새로 등록한 회원
-                            </div>
-                            <div class="card-body">
-                                <table id="datatablesSimple">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Office</th>
-                                            <th>Age</th>
-                                            <th>Start date</th>
-                                            <th>Salary</th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Office</th>
-                                            <th>Age</th>
-                                            <th>Start date</th>
-                                            <th>Salary</th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                       
-                                       
-                                        <tr>
-                                            <td>Jena Gaines</td>
-                                            <td>Office Manager</td>
-                                            <td>London</td>
-                                            <td>30</td>
-                                            <td>2008/12/19</td>
-                                            <td>$90,560</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Quinn Flynn</td>
-                                            <td>Support Lead</td>
-                                            <td>Edinburgh</td>
-                                            <td>22</td>
-                                            <td>2013/03/03</td>
-                                            <td>$342,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Charde Marshall</td>
-                                            <td>Regional Director</td>
-                                            <td>San Francisco</td>
-                                            <td>36</td>
-                                            <td>2008/10/16</td>
-                                            <td>$470,600</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Haley Kennedy</td>
-                                            <td>Senior Marketing Designer</td>
-                                            <td>London</td>
-                                            <td>43</td>
-                                            <td>2012/12/18</td>
-                                            <td>$313,500</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Tatyana Fitzpatrick</td>
-                                            <td>Regional Director</td>
-                                            <td>London</td>
-                                            <td>19</td>
-                                            <td>2010/03/17</td>
-                                            <td>$385,750</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Michael Silva</td>
-                                            <td>Marketing Designer</td>
-                                            <td>London</td>
-                                            <td>66</td>
-                                            <td>2012/11/27</td>
-                                            <td>$198,500</td>
-                                        </tr>
-                                 
-                                      
-                                    
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </main>
-<jsp:include page="adminbottom.jsp"></jsp:include>
-                
-            </div>
-   		</div>
 	</div>
-</div>
+<script type="text/javascript">
+
+	function loadReviews(page) {
+		document.getElementById("all-toggle").innerHTML ='<input type="checkbox" id="all-toggle-checkbox" onchange="toggleCheckbox();"/>' 
+		
+		
+		let tbody = document.querySelector("#review-table tbody");
+		
+		let pageNo = page || 1; 
+		document.querySelector("input[name=page]").value = pageNo;
+		let searchForm = document.getElementById("search-form");
+		let formData = new FormData(searchForm);
+		
+		let xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if(xhr.readyState === 4 && xhr.status === 200) {
+				let jsonText = xhr.responseText;
+				let result= JSON.parse(jsonText);
+				let pagination = result.pagination;
+				let reviews = result.reviews;
+				
+				
+				let rows ="";
+				for(let index = 0; index < reviews.length; index++) {
+					let review = reviews[index];
+					
+					let reviewNo = review.no;
+					let userNo = review.userNo;
+					let pdName = review.pdName
+					let userName = review.userName;
+					let title = review.title;
+					let score = review.score;
+					let createdDate = review.createdDate;
+					let deleted = review.deleted;
+					
+					if("Y" === deleted) {
+						deleted = "삭제";
+					} else {
+						deleted = "보유";
+					}					
+					
+					rows += "<tr> ";
+					rows += '<td><input type="checkbox" name="checkbox" value="' + reviewNo + '" onchange="changeCheckboxChecked();"/></td>'; 
+					rows += "<td>" + pdName + "</td>";
+					rows += "<td>" + userName + "</td>"
+					rows += "<td><a href='reviewDetailForm.jsp?reviewNo=" + reviewNo + "&pdNo=" + pdNo + "&userNo=" + userNo +"'>" + title + "</a></td>"; 
+					rows += "<td>" + score + "</td>";
+					rows += "<td>" + createdDate + "</td>";
+					rows += "<td>" + deleted + "</td>";
+					rows += "</tr>";
+				}
+				tbody.innerHTML = rows;
+				
+				let paginationContent = "";
+				
+				paginationContent += '<li class="page-item">';
+				if (pagination.currentPage > 1) {
+					paginationContent += '<a class="page-link" href="javascript:loadReviews('+(pagination.currentPage - 1)+')">이전</a>';
+				} else {
+					paginationContent += '<a class="page-link disabled" href="">이전</a>';
+				}
+				paginationContent += '</li>';
+				
+				
+				for (let num = pagination.beginPage; num <= pagination.endPage; num++) {
+					paginationContent += '<li class="page-item">'
+					if (pagination.currentPage === num) {
+						paginationContent += '<a class="page-link active" href="javascript:loadReviews('+num+')">'+num+'</a>'
+					} else {
+						paginationContent += '<a class="page-link" href="javascript:loadReviews('+num+')">'+num+'</a>'
+					}
+					paginationContent += '</li>';
+				}
+				
+				paginationContent += '<li class="page-item">'
+				if (pagination.currentPage < pagination.totalPages) {
+					paginationContent += '<a class="page-link"  href="javascript:loadReviews('+(pagination.currentPage + 1)+')">다음</a>';
+				} else {
+					paginationContent += '<a class="page-link disabled" href="">다음</a>';
+				}
+				paginationContent += '</li>';
+				
+				
+				document.getElementById("pagination").innerHTML = paginationContent;
+			}
+		}
+		
+		xhr.open("POST", "reviewList.jsp");
+		xhr.send(formData);
+		
+	} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	function toggleCheckbox() {
+	    let allToggleChecboxCheckedStatus = document.getElementById("all-toggle-checkbox").checked;
+	    let pdCheckboxNodeList = document.querySelectorAll("input[name='pdCheckbox']");
+	    for (let index = 0; index < pdCheckboxNodeList.length; index++) {
+	        let pdCheckbox = pdCheckboxNodeList[index];
+	        pdCheckbox.checked = allToggleChecboxCheckedStatus;
+	    }
+	}
+	
+	function changeCheckboxChecked() {
+	    let checkboxCount = document.querySelectorAll('input[name="pdCheckbox"]').length;
+	    let checkedCheckboxCount = document.querySelectorAll('input[name="pdCheckbox"]:checked').length;
+	
+	    document.getElementById("all-toggle-checkbox").checked = (checkboxCount === checkedCheckboxCount);
+	}
+
+
+
+
+
+
+
+</script>
 </body>
 </html>

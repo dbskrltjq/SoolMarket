@@ -7,6 +7,7 @@ public class ReviewDto {
 	private int no;
 	private int userNo;
 	private String userId;
+	private String userName;
 	private int pdNo;
 	private String pdName;
 	private String content;
@@ -16,6 +17,7 @@ public class ReviewDto {
 	private Date updatedDate;
 	private int score;
 	private int likeCount;
+	private String title;
 	
 	public ReviewDto () {}
 
@@ -113,4 +115,22 @@ public class ReviewDto {
 		this.likeCount = likeCount;
 	}
 
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	
+	
 }

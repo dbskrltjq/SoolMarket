@@ -158,7 +158,6 @@ public class Product {
 	}
 
 
-	
 	public String getDeleted() {
 		return deleted;
 	}

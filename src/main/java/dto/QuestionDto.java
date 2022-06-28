@@ -5,6 +5,7 @@ import java.util.Date;
 public class QuestionDto {
 	
 	private int no;
+	private int categoryNo;
 	private int userNo;
 	private String userName;
 	private int pdNo;
@@ -15,6 +16,7 @@ public class QuestionDto {
 	private Date createdDate;
 	private Date updatedDate;
 	private Date answerCreatedDate;
+	private String answered;
 	
 	public QuestionDto () {}
 
@@ -105,6 +107,23 @@ public class QuestionDto {
 	public void setAnswerCreatedDate(Date answerCreatedDate) {
 		this.answerCreatedDate = answerCreatedDate;
 	}
+
+	public int getCategoryNo() {
+		return categoryNo;
+	}
+
+	public void setCategoryNo(int categoryNo) {
+		this.categoryNo = categoryNo;
+	}
+
+	public String getAnswered() {
+		return answered;
+	}
+
+	public void setAnswered(String answered) {
+		this.answered = answered;
+	}
+	
 	
 	
 }

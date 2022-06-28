@@ -23,6 +23,26 @@
 	<jsp:param name="menu" value="product"/>
 </jsp:include>
 	<%
+		String fail = request.getParameter("fail");
+	%>
+	
+	<%
+		if ("invalid".equals(fail)) {
+	%>
+		<div class="alert alert-danger">
+			<Strong>오류</Strong>유요한 요청이 아닙니다.
+		</div>
+	<%
+		} else if ("deny".equals(fail)) {
+	%>
+		<div class="alert alert-danger">
+				<strong>거부 </strong> 다른 사용자의 리뷰를 변경할 수 없습니다.
+		</div>
+	<%
+		}
+	%>
+	
+	<%
 		//로그인된 유저 객체 확인
 		User user = (User) session.getAttribute("LOGINED_USER");
 		
@@ -39,6 +59,7 @@
 		List<QuestionDto> questions = productQuestionDao.getProductQuestions(pdNo);
 		
 	%>
+	
 	<div class="container mt-3 mb-5">
 		<div class="row" id="detail-row">
 			<div class="col-6">
@@ -193,9 +214,8 @@
 		         			<a href="">1</a>개의 댓글이 있습니다. <span class="text-info ">추천 </span> : <span class="test-info"><%=review.getLikeCount() %></span>
 		         				<%--비 로그인시 리뷰 추천창이 안뜨도록 했습니다. 리뷰 추천기능 넣었습니다. --%>
 		         			<button type="button" class="btn btn-info btn-sm <%=user == null ? "btn-outline-secondary disabled" : "btn-outline-primary" %>" onclick="likeReview(<%=review.getNo() %>)">추천하기</button>
-		     				<%-- 
 		     				<a href="reviewdelete.jsp?no=<%=review.getNo() %>&pdNo=<%=product.getNo() %>" class="btn btn-outline-secondary-sm">X</a>
-		     				--%>
+		     				
 		     		</div>
 	   			</div>
 			<%

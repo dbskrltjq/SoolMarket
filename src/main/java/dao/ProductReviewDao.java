@@ -33,7 +33,8 @@ public class ProductReviewDao {
 					+ ", R.review_deleted,R.review_created_date, R.review_updated_date, R.review_score, R.review_like_count "
 			       + "from sul_reviews R, sul_users U "
 			       + "where R.user_no = U.user_no "
-			       + "and R.pd_no = ? ";
+			       + "and R.pd_no = ? "
+			       + "and r.review_deleted != 'Y' ";
 		
 		return helper.selectList(sql, rs -> {
 			ReviewDto review = new ReviewDto();

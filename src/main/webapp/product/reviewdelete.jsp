@@ -20,11 +20,13 @@
 		Review review = reviewDao.getReviewByNo(reviewNo);
 		
 		if (review == null) {
-			throw new RuntimeException("리뷰 정보가 존재하지 않습니다.");
+			response.sendRedirect("detail.jsp?fail=invalid");
+			return;
 		}
 		
 		if (review.getUserNo() != user.getNo()) {
-			throw new RuntimeException("다른 사람이 작성한 글은 삭제할 수 없습니다.");
+			response.sendRedirect("detail.jsp?fail=deny");
+			return;
 		}
 		
 		review.setDeleted("Y");

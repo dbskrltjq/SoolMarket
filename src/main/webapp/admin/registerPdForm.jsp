@@ -24,6 +24,13 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
 <style type="text/css">
 	.input-group select {margin-right: 5px;}
+	html, body {
+		height: 100%;
+	}
+	.container-fluid {
+		height: 95%;
+		border-collapse: collapse;
+	}
 </style>
 </head>
 <%
@@ -51,7 +58,7 @@
 <body>
 <jsp:include page="admintop.jsp"></jsp:include>
 	<div class="container-fluid ">
-		<div class="row">
+		<div class="row h-100">
 			<div class="col-2 p-0">
 				<jsp:include page="adminleft.jsp"></jsp:include>
 			</div>

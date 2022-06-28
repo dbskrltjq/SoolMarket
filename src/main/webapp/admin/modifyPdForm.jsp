@@ -4,7 +4,7 @@
 <%@page import="java.util.List"%>
 <%@page import="dao.CategoryDao"%>
 <%@page import="vo.User" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" errorPage="../error/500.jsp"%>
+    pageEncoding="UTF-8" errorPage="../error/500.jsp" trimDirectiveWhitespaces="true"%>
 <html lang="ko">
 <head>
 	<meta charset="utf-8" />
@@ -17,8 +17,15 @@
 	<link href="css/styles.css" rel="stylesheet" />
 	<script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
-<style type="text/css">
-</style>
+	<style type="text/css">
+		html, body {
+			height: 100%;
+		}
+		.container-fluid {
+			height: 95%;
+			border-collapse: collapse;
+		}
+	</style>
 </head>
 <%
 	//세션에서 로그인된 관리자정보를 조회한다.
@@ -33,7 +40,7 @@
 <body>
 <jsp:include page="admintop.jsp"></jsp:include>
 	<div class="container-fluid ">
-		<div class="row">
+		<div class="row h-100">
 			<div class="col-2 p-0">
 				<jsp:include page="adminleft.jsp"></jsp:include>
 			</div>
@@ -48,7 +55,7 @@
 									<div class="d-flex mb-2">
 										<strong class="me-3"><i class="fas fa-table me-1"></i>상품정보수정</strong>
 									</div>
-									<div class="form-div ">
+									<div class="form-div">
 										<form id="modify-form" method="post">
 												<div class="input-group input-group-sm d-flex justify-content-around" >
 													<input type="hidden" name="page" />
@@ -221,7 +228,7 @@
 
 	function loadProducts(page) {
 		document.getElementById("delete-div").innerHTML = '<button type="button" class="btn btn-outline-secondary btn-sm" onclick="deleteProduct();">삭제하기</button>';
-		document.getElementById("all-toggle").innerHTML ='<input type="checkbox" id="all-toggle-checkbox" onchange="toggleCheckbox();"/>' // 페이지를 넘길 때 체크박스 초기화되도록? 다른 방법?
+		document.getElementById("all-toggle").innerHTML ='<input type="checkbox" id="all-toggle-checkbox" onchange="toggleCheckbox();"/>' 
 		let categoryNo = document.querySelector("select[name=category]").value;
 		let period = document.querySelector("select[name=period]").value;
 		let rows = document.querySelector("select[name=rows]").value;
@@ -363,7 +370,7 @@
 			}
 		}
 		xhr.open("POST", "productList.jsp");			
-		xhr.send(formData);		 
+		xhr.send(formData);		 			// 비동기방식 form을 보낼 경우에도 파일첨부처럼 multipart를 사용해야한다.
 	
 		
 	}
@@ -378,7 +385,7 @@
 			deletePdNoList.push(checkedCheckboxes[i].value);
 		}
 		
-		//////////// 질문!!!!!!!!!!!!//////////////
+		//////////// 질문!!!!!!!!!: 다른 방법: 1. 테이블 밖에 form생성 2. 나중에 스프링에서 배울 것
 		deletePdNoObj = { pdNos : deletePdNoList};
 		let queryStr = Object.entries(deletePdNoObj).map(item => item.join('=').replace(/,/g, '&'+item[0]+'=')).join('&');
 

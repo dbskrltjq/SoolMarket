@@ -21,7 +21,7 @@
 	int salePrice = StringUtil.stringToInt(mr.getParameter("salePrice"));
 	int stock = StringUtil.stringToInt(mr.getParameter("stock"));
 	String recommended = mr.getParameter("recommended");
-	System.out.println("상품번호 : " + pdNo + ", 상품명: " + name + ", 회사: " + company + ", 가격: " + price + ", 추천: " + recommended);
+	//System.out.println("상품번호 : " + pdNo + ", 상품명: " + name + ", 회사: " + company + ", 가격: " + price + ", 추천: " + recommended);
 	
 	ProductDao productDao = ProductDao.getInstance();
 	Product product = productDao.getProductByNo(pdNo);

@@ -79,7 +79,7 @@ public class ProductQuestionDao {
 	public List<QuestionDto> getQuestions(int beginIndex, int endIndex) throws SQLException {
 		String sql = "select q_no, user_no, pd_no, q_title, q_content, a_content, q_deleted, "
 			       + "q_created_date, q_updated_date,a_created_date,a_readed, a_answered "
-			       + "from (select row_number() over (order by pd_sale_quantity desc) row_number, "
+			       + "from (select row_number() over (order by q_no desc) row_number, "
 			       + "			q_no, user_no, pd_no, q_title, q_content, a_content, q_deleted, q_created_date, q_updated_date,a_created_date,a_readed, a_answered "
 			       + "		from sul_questions) "
 			       + "where row_number >= ? and row_number <= ? ";

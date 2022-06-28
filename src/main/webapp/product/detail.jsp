@@ -193,7 +193,9 @@
 		         			<a href="">1</a>개의 댓글이 있습니다. <span class="text-info ">추천 </span> : <span class="test-info"><%=review.getLikeCount() %></span>
 		         				<%--비 로그인시 리뷰 추천창이 안뜨도록 했습니다. 리뷰 추천기능 넣었습니다. --%>
 		         			<button type="button" class="btn btn-info btn-sm <%=user == null ? "btn-outline-secondary disabled" : "btn-outline-primary" %>" onclick="likeReview(<%=review.getNo() %>)">추천하기</button>
-		     				<a href="reviewdelete.jsp" class="btn btn-outline-secondary-sm">X</a>
+		     				<%-- 
+		     				<a href="reviewdelete.jsp?no=<%=review.getNo() %>&pdNo=<%=product.getNo() %>" class="btn btn-outline-secondary-sm">X</a>
+		     				--%>
 		     		</div>
 	   			</div>
 			<%
@@ -211,7 +213,9 @@
 					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#product-question-write" onclick="questionUserCheck(<%=product.getNo()%>)">
 		 				 상품문의 글쓰기
 					</button>
-					<a href="../questionlist.jsp" class="btn btn-outline-secondary " >상품문의 전체보기</a>
+					<%--
+					 <a href="../questionlist.jsp" class="btn btn-outline-secondary " >상품문의 전체보기</a>
+					 --%>
 				</div>
 				
 			</div>

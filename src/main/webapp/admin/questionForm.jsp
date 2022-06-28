@@ -62,9 +62,9 @@
 							<h2 class="my-4">상품문의 관리</h2>
 							<form class="form" id="search-form" method="post" enctype="multipart/form-data">
 								<strong style="font-size: x-small;"><span style="color: red;">※</span>검색조건을 입력해주세요.</strong>
-								<table class="table">
-									<tr>
-										<th>상품분류</th>
+								<table class="table border">
+									<tr class="border">
+										<th class="bg-light">상품분류</th>
 										<td>
 											<select class="form-select form-select-sm" name="category">
 												<option value="" disabled selected>카테고리 선택</option>
@@ -78,7 +78,7 @@
 										%>
 											</select>
 										</td>
-										<th>검색분류</th>
+										<th class="bg-light">검색분류</th>
 										<td style="display: inline-flex;">
 											<select class="form-select form-select-sm" name="search">
 												<option value="" selected disabled>검색조건</option>
@@ -89,8 +89,8 @@
 											<input type="text" class="form-control form-control-sm" name="keyword" placeholder="키워드 입력" style="width: auto;"/>
 										</td>
 									</tr>
-									<tr>
-										<th>문의기간조회</th>
+									<tr class="border">
+										<th class="bg-light">문의기간조회</th>
 											<td>
 												<input class="form-check-input" type="radio" name="period" value="0" checked >
 							  					<label class="form-check-label" for="inlineRadio1">오늘</label>
@@ -101,7 +101,7 @@
 								  				<input class="form-check-input" type="radio" name="period" id="inlineRadio2" value="9999" >
 								  				<label class="form-check-label" for="inlineRadio2">전체</label>		
 											</td>
-										<th>처리상태</th>
+										<th class="bg-light">처리상태</th>
 											<td>
 						  							<input class="form-check-input" type="radio" name="answered" value="Y" >
 						  							<label class="form-check-label" for="inlineRadio1">답변완료</label>

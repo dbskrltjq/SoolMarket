@@ -64,7 +64,7 @@
 							<form id="search-form" method="post" enctype="multipart/form-data">
 								<strong style="font-size: x-small;"><span style="color: red;">※</span>검색조건을 입력해주세요.</strong>
 								<table class="table border">
-									<tr>
+									<tr class="border">
 										<th class="bg-light">상품분류</th>
 										<td>
 											<select class="form-select form-select-sm" name="category">

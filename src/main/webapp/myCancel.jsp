@@ -13,6 +13,10 @@
 <title>Bootstrap demo</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+<style>
+	tr { text-align : center; }
+	td { text-align : center; padding: 5px;}
+</style>
 <body>
 <jsp:include page="common/nav.jsp">
 	<jsp:param name="menu" value="myCancel"/>

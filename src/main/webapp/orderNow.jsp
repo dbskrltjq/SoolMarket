@@ -8,7 +8,7 @@
 <%@page import="dto.CartItemDto"%>
 <%@page import="dao.CartItemDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" errorPage="error/500.jsp"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,7 +20,26 @@
 	.red {color: red;}
 	textarea { resize: none;}
     th { background-color: bg-light; }
-    #total-order-charge2 { color: #189FD8;}
+        
+    #total-order-charge2 { 
+    		color: #189FD8; 
+    		font-size: 35px; 
+    		font-weight: bold; 
+    		vertical-align: sub;
+    		}
+    		
+    #Stotal-order-charge2 {
+    		color: #189FD8; 
+    		font-size: 20px; 
+    		font-weight: bold; 
+    		vertical-align: sub;
+    		}
+    		
+    #total-order-text { 
+    		font-size: 22px; 
+    		font-weight: bold; 
+    		vertical-align: sub;
+    		}
 </style>
 </head>
 <body>
@@ -38,24 +57,6 @@
 			로그인되지 않은 채로 카트에 접근하려 하면 deny를 반환하고 로그인창으로 이동시킨다. 
 		-->
 		
-		<%
-			String fail = request.getParameter("fail");
-		
-			if ("invalid".equals(fail)) {
-		%>
-			<div class="alert alert-danger">
-				<strong>오류</strong>유효한 요청이 아닙니다. 
-			</div>	
-		<%
-			} else if("deny".equals(fail)) {
-		%>
-			<div class="alert alert-danger">
-				<strong>거부</strong>로그인 후 이용해 주세요.
-			</div>
-		<%
-			}
-		%>
-		
 		<% 	
 			User user = (User) session.getAttribute("LOGINED_USER");
 			if (user==null) {
@@ -71,7 +72,11 @@
 			OrderDao orderDao = OrderDao.getInstance();
 			
 			// 바로구매를 누른 상품 번호로 상품 정보를 찾는다.
-			Product product = orderDao.getProductByNo(pdNo);		
+			Product product = orderDao.getProductByNo(pdNo);	
+			
+			if (product == null) {
+				throw new RuntimeException("잘못된 요청입니다.");
+			}
 		
 			int totalDeliveryCharge = 0;											// 배송비
 			int totalPdPrice = product.getSalePrice()*quantity;
@@ -105,6 +110,9 @@
 					<tr>
 						<td class="align-middle">
 							<input type="hidden" name="pdNo" value="<%=product.getNo()%>"/>
+							<a class="text-decoration-none" href="product/detail.jsp?pdNo=<%=product.getNo()%>" >
+									<img src="pdImages/pd_<%=product.getNo() %>.jpg" style="width: 80px; height: 100px;"  />
+							</a>
 							<a class="text-dark text-decoration-none" href="product/detail.jsp?pdNo=<%=product.getNo()%>" >
 								<strong><%=product.getName() %></strong>
 							</a>
@@ -201,14 +209,11 @@
 		<table class="table mb-5 ">
 			<tbody class="orderReceiveForm">
 				<tr>
-					<!-- 기본 체크된 것은 주문자와 동일. 주문자의 정보가 들어간다.
-						 직접입력을 누를 경우, 배송정보 form이 모두 초기화된다. 
-						 value 사용하기!!! 주문자와 동일한 경우는 위 order-n value 뽑아서 넣자.
-						 직접 입력이면 "" <-- 이거 넣으면 빈칸 되니까 ... 이거 넣기 ... reset은 안 쓰는구만
-					-->
 					<th class="bg-light">배송지 확인</th>
-					<td><input type="radio" name="orderReceiveSelect" id="receive-place-same" value="order-receive-user" onchange="orderReceiveFormSame();" checked /> 주문자와 동일</td>
-					<td><input type="radio" name="orderReceiveSelect" id="receive-place-input" value="order-receive-input" onchange="orderReceiveFormInput();" /> 직접 입력</td>
+					<td>
+						<span><input type="radio" name="orderReceiveSelect" id="receive-place-same" value="order-receive-user" onchange="orderReceiveFormSame();" checked /> 주문자와 동일 &nbsp; &nbsp; </span>
+						<span><input type="radio" name="orderReceiveSelect" id="receive-place-input" value="order-receive-input" onchange="orderReceiveFormInput();" /> 직접 입력</span>
+					</td>				
 				</tr>
 				<tr>
 					<th class="bg-light"><span class="red">*</span> 받으실 분</th>
@@ -242,11 +247,10 @@
 		<table class="table mb-5 ">
 			<tbody>
 				<tr>
-					<th><span class="red">* 필수</span> 국세청 고시에 따른 분기별 명세 세무서 정보제공</th>
-					<td>
-						<label class="form-label">
+					<td><span class="red">* 필수</span> 국세청 고시에 따른 분기별 명세 세무서 정보제공 &nbsp; &nbsp; &nbsp;
+						<span><label class="form-label">
 							<input type="checkbox" name="mustCheckBox" value="mustCheck1" /> 동의합니다.
-						</label>
+						</label></span>
 					</td>
 				</tr>
 			</tbody>
@@ -262,7 +266,6 @@
 						<strong id="total-cart-price"><%=StringUtil.numberToString(totalPdPrice + totalDeliveryCharge) %></strong>원
 						<input type="hidden" name="totalPrice" value="<%=StringUtil.numberToString(totalPdPrice + totalDeliveryCharge) %>"/>
 					</td>
-
 				</tr>		
 				<tr>
 					<th class="bg-light">배송비</th>
@@ -329,17 +332,16 @@
 		<!-- 최종결제금액 -->
 		<div class="row mb-3 justify-content-end border">
 	    	<div class="col p-3">
-		    	<table class="table">
-		    			<tbody>
-		    				<tr>
-		    					<th class="text-center">
-									<th>최종결제금액</th>
-									<td class="text-end">
-										<h1 id="total-order-charge2"><strong><%=StringUtil.numberToString(totalPdPrice + totalDeliveryCharge) %></strong>원</h1>
-									</td>
-		    					</th>
-		    				</tr>
-		    			</tbody>
+		    	<table class="table table-borderless ">
+	    			<tbody>
+	    				<tr>
+							<td class="text-end">
+								<span id="total-order-text">최종결제금액 &nbsp;</span>
+								<span id="total-order-charge2"><%=StringUtil.numberToString(totalPdPrice + totalDeliveryCharge) %></span>
+								<span id="Stotal-order-charge2">원</span>
+							</td>
+	    				</tr>
+	    			</tbody>
 	    		</table>
 	    	</div>
 		</div>
@@ -439,7 +441,7 @@
 		document.querySelector('input[id="receive-addr"]').value = document.querySelector('input[id="order-addr"]').value;
 		document.querySelector('input[id="receive-detail-addr"]').value = document.querySelector('input[id="order-detaile-addr"]').value;
 		document.querySelector('input[id="receive-tel"]').value = document.querySelector('input[id="order-tel"]').value;
-		document.querySelector('input[id="receive-postcode"]').value = document.querySelector('input[id="order-email"]').value;
+		document.querySelector('input[id="receive-postcode"]').value = document.querySelector('input[id="order-postcode"]').value;
 		
 		document.querySelector('input[id="receive-name"]').readOnly = true;
 		document.querySelector('input[id="receive-addr"]').readOnly = true;
@@ -460,9 +462,9 @@
 		document.querySelector('input[id="receive-postcode"]').value = '';
 		
 		document.querySelector('input[id="receive-name"]').readOnly = false;
-		document.querySelector('input[id="receive-addr"]').readOnly = false;
+		document.querySelector('input[id="receive-addr"]').readOnly = true;
 		document.querySelector('input[id="receive-detail-addr"]').readOnly = false;
-		document.querySelector('input[id="receive-postcode"]').readOnly = false;
+		document.querySelector('input[id="receive-postcode"]').readOnly = true;
 		document.querySelector('input[id="receive-tel"]').readOnly = false;
 		document.querySelector('#post-code-button').disabled = false;
 		}

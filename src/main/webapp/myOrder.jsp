@@ -19,7 +19,7 @@
 </style>
 <body>
 <jsp:include page="common/nav.jsp">
-	<jsp:param name="menu" value="cart"/>
+	<jsp:param name="menu" value="myOrder"/>
 </jsp:include>
 <div class="container "  style="padding: 30px;">
 

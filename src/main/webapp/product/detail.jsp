@@ -1,3 +1,8 @@
+
+<%@page import="java.util.StringJoiner"%>
+
+<%@page import="dao.ReviewDao"%>
+
 <%@page import="dto.QuestionDto"%>
 <%@page import="dao.ProductQuestionDao"%>
 <%@page import="dto.ReviewDto"%>
@@ -33,9 +38,28 @@
 		ProductReviewDao productReviewDao = ProductReviewDao.getInstance();
 		List<ReviewDto> reviews = productReviewDao.getProductReviews(pdNo);
 		
+		
 		ProductQuestionDao productQuestionDao = ProductQuestionDao.getInstance();
 		List<QuestionDto> questions = productQuestionDao.getProductQuestions(pdNo);
 		
+		StringJoiner joiner = new StringJoiner(":");
+		
+		Cookie[] cookies = request.getCookies();
+		for (Cookie cookie : cookies) {
+			String name = cookie.getName();
+			if ("pdNo".equals(name)) {
+				String value = cookie.getValue();
+				joiner.add(value);
+			}
+		}
+		
+		if (!joiner.toString().contains(String.valueOf(pdNo))) {
+			joiner.add(String.valueOf(pdNo));
+		}
+		
+		Cookie cookie = new Cookie("pdNo", joiner.toString());
+		cookie.setMaxAge(60*60*24);
+		response.addCookie(cookie);
 	%>
 	<div class="container mt-3 mb-5">
 		<div class="row" id="detail-row">
@@ -394,7 +418,7 @@
 	function buy() {
 		let form = document.getElementById("product-form");
 		// form에서 id를 통해 값을 가져옵니다.
-		form.setAttribute("action","orderForm.jsp");
+		form.setAttribute("action","../orderNow.jsp");
 		// setAttribute를 통해 action 기능을 넣고 orderForm.jsp 페이지로 넘어가게 만들었습니다.
 		form.submit();
 		// 제출
@@ -403,7 +427,7 @@
 	function cart() {
 		let form = document.getElementById("product-form");
 		// form에서 id를 통해 값을 가져옵니다.
-		form.setAttribute("action","cartItemAdd.jsp");
+		form.setAttribute("action","../cartItemAdd.jsp");
 		// setAttribute를 통해 action 기능을 넣고 orderForm.jsp 페이지로 넘어가게 만들었습니다.
 		form.submit();
 		// 제출

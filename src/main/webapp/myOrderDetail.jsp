@@ -20,7 +20,7 @@
 </style>
 <body>
 <jsp:include page="common/nav.jsp">
-	<jsp:param name="menu" value="cart"/>
+	<jsp:param name="menu" value="myOrderDetail"/>
 </jsp:include>
 <div class="container "  style="padding: 30px;">
 
@@ -36,7 +36,7 @@
 		} else if("deny".equals(fail)) {
 	%>
 		<div class="alert alert-danger">
-			<strong>거부</strong> 다른 사용자의 주문정보는 조회 불가합니다.
+			<strong>거부</strong> 다른 사용자의 주문을 취소할 수 없습니다.
 		</div>
 	<%
 		}
@@ -50,6 +50,8 @@
 		}
 	%>
 	
+	<form id="my-order-detail" method="post">
+	<input type="hidden" name="from" value="myOrderDetail" />
 	<div class="row">			
   		<div class="col-2">
 			<h5 class="border-bottom pb-2  mb-4"><strong>마이페이지</strong></h5>
@@ -57,7 +59,7 @@
        		<p></p>
        		<div class="list-group list-group-flush mb-4">
        			<a href="myOrder.jsp" class="list-group-item list-group-item-action">- 주문목록</a>
-       			<a href="#" class="list-group-item list-group-item-action">- 취소 내역</a>
+       			<a href="myCancel.jsp" class="list-group-item list-group-item-action">- 취소 내역</a>
        			<a href="cart.jsp" class="list-group-item list-group-item-action">- 장바구니 보기</a>
 			</div>
 			<p><strong class="fs-6">회원정보</strong></p>
@@ -102,13 +104,17 @@
 					List<OrderItemDto> dtos = orderDao.getOrderItemsByOrderNo(orderNo);
 					Order order = orderDao.getOrderByOrderNo(orderNo);
 					
+					int totalPdsPrice = 0;				
+					int totalDeliveryCharge = 0;
+					
 					for (OrderItemDto dto : dtos) {
+						totalPdsPrice += dto.getSalePrice()*dto.getQuantity();
 				%>
 						<tr>
 							<td><%=dto.getOrderNo() %></td>
 							<td><%=dto.getCreatedDate() %></td>
 							<td style="text-align:left">
-								<a href="product/detail.jsp?pdNo=<%=dto.getPdNo() %>"><%=dto.getName() %></a>
+								<a class="text-dark text-decoration-none" href="product/detail.jsp?pdNo=<%=dto.getPdNo() %>"><%=dto.getName() %></a>
 							</td>
 							<td><%=StringUtil.numberToString(dto.getSalePrice()) %></td>
 							<td><%=StringUtil.numberToString(dto.getQuantity()) %></td>
@@ -117,13 +123,20 @@
 						
 				<%	
 						} 
+					totalDeliveryCharge = totalPdsPrice > 30000 ? 0 : 3000;
 				%>
 						<tr>
-							<td colspan="6" class="text-end">
-								총 주문금액 <strong><%=StringUtil.numberToString(order.getTotalPrice()) %></strong>
-								<img src="images/order_price_minus.png" alt="합계">
+							<td class="text-start" colspan="2">
+								<button type="button" id="btn-order-choice-del" class="btn btn-outline-secondary btn-sm" onclick="cancelOrder(); ">주문 취소</button>
+								<input type="hidden" name="orderNo" value=<%=orderNo %> />
+							</td>
+							<td colspan="4" class="text-end">
+								총 주문금액 <strong><%=StringUtil.numberToString(totalPdsPrice) %></strong>
+								<img src="images/order_price_plus.png" alt="합계">
+								택배비 <strong><%=StringUtil.numberToString(totalDeliveryCharge) %></strong>
+								<img src="images/order_price_minus.png" alt="빼기">
 								포인트 사용금액 <strong><%=StringUtil.numberToString(order.getUsedPoint()) %></strong> 
-								<img src="images/order_price_total.png" alt="합계">
+								<img src="images/order_price_total.png" alt="등호">
 								결제금액 <strong><%=StringUtil.numberToString(order.getPaymentPrice()) %></strong>
 							</td>
 						</tr>
@@ -133,8 +146,16 @@
 	    </div>
 	</div>
 </div>
+</form>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+	function cancelOrder() {
+		let form = document.getElementById("my-order-detail");
+		form.setAttribute("action", "orderCancel.jsp");
+		form.submit();
+	}
+</script>
 </body>
 </html>

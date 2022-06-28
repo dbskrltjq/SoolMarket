@@ -22,7 +22,7 @@
 	ReviewDao reviewDao = ReviewDao.getInstance();
 	MultipartRequest mr = new MultipartRequest(request, "");
 	
-	int categoryNo = StringUtil.stringToInt(mr.getParameter("categoryNo"));
+	int categoryNo = StringUtil.stringToInt(mr.getParameter("category"));
 	String search = mr.getParameter("search"); // "상품명": "name", "제목": "title", "내용": "content"
 	String keyword = mr.getParameter("keyword");
 	int period = StringUtil.stringToInt(mr.getParameter("period")); // 오늘 : 0, 7일: -7, 1개월: -30, 전체: -9999
@@ -38,20 +38,24 @@
 	
 	if(keyword.isBlank()) {
 		totalRows = reviewDao.getTotalRowsByCategoryNo(categoryNo, deleted, period);
+		System.out.println("test1");
 	} else {
 		if("name".equals(search)) {
 			totalRows = reviewDao.getTotalRowsByPdNameKeyword(categoryNo, deleted, keyword, period);
+			System.out.println("test2");
 		} else if("title".equals(search)) {
 			totalRows = reviewDao.getTotalRowsByTitleKeyword(categoryNo, deleted, keyword, period);
+			System.out.println("test3");
 		} else if("content".equals(search)) {
 			totalRows = reviewDao.getTotalRowsByContentKeyword(categoryNo, deleted, keyword, period);
+			System.out.println("test4");
 		}
 	}
 	System.out.println("totalRows: " + totalRows);
-	//Pagination pagination = new Pagination(rows, totalRows, currentPage);
+	Pagination pagination = new Pagination(rows, totalRows, currentPage);
 	
 	
-	 /* List<ReviewDto> reviewDtos = null;
+	 List<ReviewDto> reviewDtos = null;
 	
 	if(keyword.isBlank()) {
 			reviewDtos = reviewDao.getReviewDtoByCategoryNo(categoryNo, deleted, period, pagination.getBeginIndex(), pagination.getEndIndex());
@@ -71,7 +75,7 @@
 	
 	Gson gson = new Gson();
 	String jsonText = gson.toJson(result);
- 	out.write(jsonText); */ 
+ 	out.write(jsonText); 
 	
 	
 	

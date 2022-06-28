@@ -10,7 +10,7 @@
 <%@page import="dao.ProductReviewDao"%>
 <%@page import="vo.User"%>
 <%@ page language="java" contentType="application/json; charset=UTF-8"
-    pageEncoding="UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
+    pageEncoding="UTF-8" errorPage="../error/500.jsp" trimDirectiveWhitespaces="true"%>
 
 
 <%
@@ -32,7 +32,9 @@
 	int rows = StringUtil.stringToInt(mr.getParameter("rows"));
 	int currentPage = StringUtil.stringToInt(mr.getParameter("page"));
 	
-	int totalRows;
+	System.out.println("categoryNo:" + categoryNo + ", search: " + search + ", keyword: " + keyword + " period: " + period + ", deleted: " + deleted + " rows: " + rows );
+	
+	int totalRows = 0;
 	
 	if(keyword.isBlank()) {
 		totalRows = reviewDao.getTotalRowsByCategoryNo(categoryNo, deleted, period);
@@ -45,11 +47,11 @@
 			totalRows = reviewDao.getTotalRowsByContentKeyword(categoryNo, deleted, keyword, period);
 		}
 	}
+	System.out.println("totalRows: " + totalRows);
+	//Pagination pagination = new Pagination(rows, totalRows, currentPage);
 	
-	Pagination pagination = new Pagination(rows, totalRows, currentPage);
 	
-	
-	List<ReviewDto> reviewDtos = null;
+	 /* List<ReviewDto> reviewDtos = null;
 	
 	if(keyword.isBlank()) {
 			reviewDtos = reviewDao.getReviewDtoByCategoryNo(categoryNo, deleted, period, pagination.getBeginIndex(), pagination.getEndIndex());
@@ -69,7 +71,7 @@
 	
 	Gson gson = new Gson();
 	String jsonText = gson.toJson(result);
- 	out.write(jsonText);
+ 	out.write(jsonText); */ 
 	
 	
 	

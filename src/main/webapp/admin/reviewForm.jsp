@@ -163,11 +163,12 @@
 								<table class="table table-hover table-borderless text-center border-top border-bottom" id="review-table">
 									<colgroup>
 										<col width="5%">
-										<col width="20%">
+										<col width="15%">
 										<col width="10%">
 										<col width="*">
-										<col width="18%">
-										<col width="15%">
+										<col width="10%">
+										<col width="12%">
+										<col width="10%">
 									</colgroup>
 									<thead class="table-light">
 										<tr>
@@ -177,6 +178,7 @@
 											<th>제목</th>
 											<th>평점</th>
 											<th>등록일</th>
+											<th>상태</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -190,10 +192,11 @@
 											<td><%=reviewDto.getTitle() %></td>
 											<td><%=reviewDto.getScore() %></td>
 											<td><%=reviewDto.getUpdatedDate() %></td>
+											<td><%=reviewDto.getDeleted() %></td>
 										</tr>
 								<%
 									}
-								%>
+								%> 
 									</tbody>
 									<tfoot>
 										<tr>
@@ -220,7 +223,7 @@
 	</div>
 <script type="text/javascript">
 
-	function loadreviews(page) {
+	function loadReviews(page) {
 		document.getElementById("all-toggle").innerHTML ='<input type="checkbox" id="all-toggle-checkbox" onchange="toggleCheckbox();"/>' 
 		
 		
@@ -237,35 +240,36 @@
 				let jsonText = xhr.responseText;
 				let result= JSON.parse(jsonText);
 				let pagination = result.pagination;
-				let questions = result.questions;
+				let reviews = result.reviews;
 				
 				
 				let rows ="";
-				for(let index = 0; index < questions.length; index++) {
-					let question = questions[index];
+				for(let index = 0; index < reviews.length; index++) {
+					let review = reviews[index];
 					
-					let questionNo = question.no
-					let categoryNo = question.categoryNo;
-					let pdNo = question.pdNo;
-					let userNo = question.userNo;
-					let title = question.title;
-					let createdDate = question.createdDate;
+					let reviewNo = review.no;
+					let userNo = review.userNo;
+					let pdName = review.pdName
+					let userName = review.userName;
+					let title = review.title;
+					let score = review.score;
+					let createdDate = review.createdDate;
+					let deleted = review.deleted;
 					
-					let answered = question.answered;
-					
-					if("Y" === answered) {
-						answered = "답변완료";
+					if("Y" === deleted) {
+						deleted = "삭제";
 					} else {
-						answered = "답변필요";
+						deleted = "보유";
 					}					
 					
 					rows += "<tr> ";
-					rows += '<td><input type="checkbox" name="checkbox" value="' + questionNo + '" onchange="changeCheckboxChecked();"/></td>'; // 수정
-					rows += "<td data-product-category-no='"+ categoryNo + "'>" + categoryNo + "</td>";
-					rows += "<td>" + pdNo + "</td>"
-					rows += "<td><a href='questionDetailForm.jsp?questionNo=" + questionNo + "&pdNo=" + pdNo + "&userNo=" + userNo +"'>" + title + "</a></td>"; 
+					rows += '<td><input type="checkbox" name="checkbox" value="' + reviewNo + '" onchange="changeCheckboxChecked();"/></td>'; 
+					rows += "<td>" + pdName + "</td>";
+					rows += "<td>" + userName + "</td>"
+					rows += "<td><a href='reviewDetailForm.jsp?reviewNo=" + reviewNo + "&pdNo=" + pdNo + "&userNo=" + userNo +"'>" + title + "</a></td>"; 
+					rows += "<td>" + score + "</td>";
 					rows += "<td>" + createdDate + "</td>";
-					rows += "<td>" + answered + "</td>";
+					rows += "<td>" + deleted + "</td>";
 					rows += "</tr>";
 				}
 				tbody.innerHTML = rows;
@@ -304,7 +308,7 @@
 			}
 		}
 		
-		xhr.open("POST", "questionList.jsp");
+		xhr.open("POST", "reviewList.jsp");
 		xhr.send(formData);
 		
 	} 

@@ -1,4 +1,8 @@
+
+<%@page import="java.util.StringJoiner"%>
+
 <%@page import="dao.ReviewDao"%>
+
 <%@page import="dto.QuestionDto"%>
 <%@page import="dao.ProductQuestionDao"%>
 <%@page import="dto.ReviewDto"%>
@@ -38,6 +42,24 @@
 		ProductQuestionDao productQuestionDao = ProductQuestionDao.getInstance();
 		List<QuestionDto> questions = productQuestionDao.getProductQuestions(pdNo);
 		
+		StringJoiner joiner = new StringJoiner(":");
+		
+		Cookie[] cookies = request.getCookies();
+		for (Cookie cookie : cookies) {
+			String name = cookie.getName();
+			if ("pdNo".equals(name)) {
+				String value = cookie.getValue();
+				joiner.add(value);
+			}
+		}
+		
+		if (!joiner.toString().contains(String.valueOf(pdNo))) {
+			joiner.add(String.valueOf(pdNo));
+		}
+		
+		Cookie cookie = new Cookie("pdNo", joiner.toString());
+		cookie.setMaxAge(60*60*24);
+		response.addCookie(cookie);
 	%>
 	<div class="container mt-3 mb-5">
 		<div class="row" id="detail-row">

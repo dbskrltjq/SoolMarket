@@ -5,7 +5,7 @@
 <%@page import="dao.OrderDao"%>
 <%@page import="vo.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" errorPage="error/500.jsp"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,29 +14,15 @@
 <title>Bootstrap demo</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+<style>
+	tr { text-align : center; }
+	td { text-align : center; padding: 5px;}
+</style>
 <body>
 <jsp:include page="common/nav.jsp">
-	<jsp:param name="menu" value="myOrderDetail"/>
+	<jsp:param name="menu" value="myCancelDetail"/>
 </jsp:include>
 <div class="container "  style="padding: 30px;">
-
-	<%
-		String fail = request.getParameter("fail");
-	
-		if ("invalid".equals(fail)) {
-	%>
-		<div class="alert alert-danger">
-			<strong>오류</strong>유효한 요청이 아닙니다. 
-		</div>	
-	<%
-		} else if("deny".equals(fail)) {
-	%>
-		<div class="alert alert-danger">
-			<strong>거부</strong> 로그인 해주세요.
-		</div>
-	<%
-		}
-	%>
 		
 	<% 	
 		User user = (User) session.getAttribute("LOGINED_USER");
@@ -70,7 +56,7 @@
 				<div class="card-body">
 					<table class="order-complete table ">
 						<colgroup>
-							<col width="8%">
+							<col width="9%">
 							<col width="15%">
 							<col width="*">
 							<col width="10%">		
@@ -107,14 +93,17 @@
 						totalPdsPrice += dto.getSalePrice()*dto.getQuantity();
 				%>
 						<tr>
-							<td><%=dto.getOrderNo() %></td>
-							<td><%=dto.getCreatedDate() %></td>
+							<td class="align-middle"><%=dto.getOrderNo() %></td>
+							<td class="align-middle"><%=dto.getCreatedDate() %></td>
 							<td style="text-align:left">
+								<a class="text-decoration-none" href="product/detail.jsp?pdNo=<%=dto.getPdNo()%>" >
+									<img src="pdImages/pd_<%=dto.getPdNo()%>.jpg" style="width: 80px; height: 100px;"  />
+								</a>							
 								<a class="text-dark text-decoration-none" href="product/detail.jsp?pdNo=<%=dto.getPdNo() %>"><%=dto.getName() %></a>
 							</td>
-							<td><%=StringUtil.numberToString(dto.getSalePrice()) %></td>
-							<td><%=StringUtil.numberToString(dto.getQuantity()) %></td>
-							<td><%=StringUtil.numberToString(dto.getTotalPrice()) %></td>
+							<td class="align-middle"><%=StringUtil.numberToString(dto.getSalePrice()) %></td>
+							<td class="align-middle"><%=StringUtil.numberToString(dto.getQuantity()) %></td>
+							<td class="align-middle"><%=StringUtil.numberToString(dto.getTotalPrice()) %></td>
 						</tr>
 						
 				<%	

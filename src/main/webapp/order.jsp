@@ -14,26 +14,8 @@
 <%@page import="vo.Order"%>
 <%@page import="vo.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" errorPage="error/500.jsp"%>
 
-	<%
-		String fail = request.getParameter("fail");
-	
-		if ("invalid".equals(fail)) {
-	%>
-		<div class="alert alert-danger">
-			<strong>오류</strong>유효한 요청이 아닙니다. 
-		</div>	
-	<%
-		} else if("deny".equals(fail)) {
-	%>
-		<div class="alert alert-danger">
-			<strong>거부</strong>로그인이 필요한 서비스 입니다.
-		</div>
-	<%
-		}
-	%>
-	
 	<%
 	User user = (User) session.getAttribute("LOGINED_USER");
 	if (user == null) {
@@ -63,7 +45,7 @@
 	order.setReceivePostCode(Integer.parseInt(request.getParameter("receivePostcode")));					// 받는 사람 우편주소
 	order.setDeliveryMemo(request.getParameter("deliveryMemo"));											// 배송메세지
 	// title [좋은 마을 막걸리] 외 n개 상품 -> 이건 밑에서 한다.
-	
+
 	// 배열
 	// pdNo와 quantity를 parameter로 받았다. 몇 개의 상품이 전달될 지 모르니 배열 / list로 받아야 한다. 여기선 배열 -> list로 받았다. 
 	String[] productNoValues = request.getParameterValues("pdNo");

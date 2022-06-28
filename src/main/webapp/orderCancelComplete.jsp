@@ -3,7 +3,7 @@
 <%@page import="vo.User"%>
 <%@page import="util.StringUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" errorPage="error/500.jsp"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,30 +11,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bootstrap demo</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+	#cancel1 {
+    		font-size: 20px; 		
+	}
+	
+	#cancel2 {
+    		font-size: 25px; 	
+	}
+</style>
 </head>
 <body>
 <jsp:include page="common/nav.jsp">
 	<jsp:param name="menu" value="OCancleComplete"/>
 </jsp:include>
 <div class="container">
-   	<%
-		String fail = request.getParameter("fail");
-	
-		if ("invalid".equals(fail)) {
-	%>
-		<div class="alert alert-danger">
-			<strong>오류</strong>유효한 요청이 아닙니다. 
-		</div>	
-	<%
-		} else if("deny".equals(fail)) {
-	%>
-		<div class="alert alert-danger">
-			<strong>거부</strong> 로그인 해주세요.
-		</div>
-	<%
-		}
-	%>
-		
+
 	<% 	
 		User user = (User) session.getAttribute("LOGINED_USER");
 		if (user==null) {
@@ -52,12 +44,22 @@
 	
 	<div class="row mb-3"> 
 		<div class="col">
-		 	<h3 class="mt-5"><%=user.getName()%> 고객님의</h3>
-		 	<h2><strong><%=order.getTitle() %></strong></h2>
-		 	<h3>이 취소되었습니다.</h3>
+		    <div class="card mt-5 mb-5">
+				<div class="card-body p-5">
+					<p>
+						<span id="cancel1"><%=user.getName()%> 고객님의</span>
+					</p>
+					<p>
+						<span id="cancel2"><strong><%=order.getTitle() %></strong></span>
+					</p>
+					<p>
+						<span id="cancel1">주문이 취소되었습니다.</span>
+					</p>
 	      		<a href="myCancelDetail.jsp?orderNo=<%=order.getNo()%>" id="mycancle-go-link" class="btn btn-outline-secondary mt-4">취소 내역 보기</a>
 	      		<a href="home.jsp" id="shop-go-link" class="btn btn-primary mt-4">홈으로 가기</a>
-    	</div>
+    			</div>
+        	</div>
+   		</div>
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>

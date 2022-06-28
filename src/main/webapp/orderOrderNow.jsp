@@ -13,25 +13,7 @@
 <%@page import="vo.Order"%>
 <%@page import="vo.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-
-	<%
-		String fail = request.getParameter("fail");
-	
-		if ("invalid".equals(fail)) {
-	%>
-		<div class="alert alert-danger">
-			<strong>오류</strong>유효한 요청이 아닙니다. 
-		</div>	
-	<%
-		} else if("deny".equals(fail)) {
-	%>
-		<div class="alert alert-danger">
-			<strong>거부</strong>로그인이 필요한 서비스 입니다.
-		</div>
-	<%
-		}
-	%>
+    pageEncoding="UTF-8" errorPage="error/500.jsp"%>
 	
 	<%
 	User user = (User) session.getAttribute("LOGINED_USER");
@@ -47,6 +29,10 @@
 	// order 객체에 값들을 담고 있다. 
 	// 10,000 형태의 것들은 ,를 없애준 뒤 (replace) int로 형변환해준다.
 	Order order = new Order();
+	
+	if (order.getUserNo() != user.getNo()) {
+		throw new RuntimeException("잘못된 요청입니다.");
+	}
 	
 	order.setNo(orderNo);
 	order.setUserNo(user.getNo());																			// 유저번호

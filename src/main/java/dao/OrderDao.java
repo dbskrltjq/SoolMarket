@@ -136,13 +136,14 @@ public class OrderDao {
 
 	// orderNo로 주문정보 읽어온다. orderComplete 사용됨.
 	public Order getOrderByOrderNo(int orderNo) throws SQLException {
-		String sql = "select ORDER_NO, ORDER_PAYMENT_PRICE, ORDER_TOTAL_QUANTITY, ORDER_CREATED_DATE, ORDER_STATUS, ORDER_TITLE, ORDER_TOTAL_PRICE, ORDER_USED_POINT, ORDER_DEPOSITE_POINT "
+		String sql = "select USER_NO, ORDER_NO, ORDER_PAYMENT_PRICE, ORDER_TOTAL_QUANTITY, ORDER_CREATED_DATE, ORDER_STATUS, ORDER_TITLE, ORDER_TOTAL_PRICE, ORDER_USED_POINT, ORDER_DEPOSITE_POINT "
 				+ "from SUL_ORDERS "
 				+ "where order_no = ? ";
 		
 		return helper.selectOne(sql, rs -> {
 			Order order = new Order();
 			
+			order.setUserNo(rs.getInt("USER_NO"));
 			order.setNo(rs.getInt("ORDER_NO"));
 			order.setPaymentPrice(rs.getInt("ORDER_PAYMENT_PRICE"));
 			order.setTotalQuantity(rs.getInt("ORDER_TOTAL_QUANTITY"));

@@ -4,7 +4,7 @@
 <%@page import="java.util.List"%>
 <%@page import="dao.CartItemDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" errorPage="error/500.jsp"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,7 +15,6 @@
 </head>
 <style>
 	#cart-notice {
-		color: #B8874D;
 		color: #B8874D;
 		font-size: 12px;
 	}
@@ -33,22 +32,6 @@
 		로그인되지 않은 채로 카트에 접근하려 하면 deny를 반환하고 로그인창으로 이동시킨다. -->
 		
 		<%
-			String fail = request.getParameter("fail");
-		
-			if ("invalid".equals(fail)) {
-		%>
-			<div class="alert alert-danger">
-				<strong>오류</strong>유효한 요청이 아닙니다. 
-			</div>	
-		<%
-			} else if("deny".equals(fail)) {
-		%>
-			<div class="alert alert-danger">
-				<strong>거부</strong>다른 사용자의 장바구니 아이템을 변경할 수 없습니다.
-			</div>
-		<%
-			}
-
 			User user = (User) session.getAttribute("LOGINED_USER");
 			if (user==null) {
 				response.sendRedirect("loginform.jsp?fail=deny"); 
@@ -74,7 +57,6 @@
 			<table class="cart-list table">
 				<colgroup>
 					<col width="3%">
-					<!-- 사진 파일 넣어야 한다. 클릭하면 datail.jsp로 이동해야 한다. -->
 					<col width="*">
 					<col width="13%">
 					<col width="10%">
@@ -90,7 +72,7 @@
 								<label for="allCheck1"></label>
 							</div>
 						</th>
-						<th>상품/옵션정보</th>
+						<th class="text-center">상품/옵션정보</th>
 						<th>수량</th>
 						<th>상품금액</th>
 						<th>할인/적립</th>
@@ -124,6 +106,9 @@
 									onchange="changeCheckboxChecked(); updateCartPrice();"/>
 							</td>
 							<td class="align-middle">
+								<a class="text-decoration-none" href="product/detail.jsp?pdNo=<%=item.getPdNo()%>" >
+									<img src="pdImages/pd_<%=item.getPdNo() %>.jpg" style="width: 80px; height: 100px;"  />
+								</a>
 								<a class="text-dark text-decoration-none" href="product/detail.jsp?pdNo=<%=item.getPdNo()%>" >
 									<strong><%=item.getPdName() %></strong>
 								</a>
@@ -169,7 +154,7 @@
 			</form>
 		</div>
 	</div>
-	<div class="row mb-3"> <!-- 버튼이 위에 있을지 밑에 있을지 고민 중 -->
+	<div class="row mb-5"> <!-- 버튼이 위에 있을지 밑에 있을지 고민 중 -->
     	<div class="col-6">
 			<button type="button" id="btn-order-choice-del" class="btn btn-outline-secondary btn-sm" onclick="cartPdDelete(); ">선택 상품 삭제</button>
       		<a href="javascript:history.back();" id="shop-go-link" class="btn btn-outline-secondary btn-sm">쇼핑 계속하기</a>

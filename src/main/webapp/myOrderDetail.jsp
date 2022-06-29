@@ -70,7 +70,8 @@
 			</div>
 		</div>
 		<div class="col-10 mt-3">
-			<div class="card">
+		<h3><strong class="mt-3">주문 상세</strong></h3>
+			<div class="card mt-3">
 				<div class="card-body">
 					<table class="order-complete table ">
 						<colgroup>

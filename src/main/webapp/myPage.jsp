@@ -1,3 +1,4 @@
+<%@page import="dao.UserDao"%>
 <%@page import="util.StringUtil"%>
 <%@page import="vo.Order"%>
 <%@page import="java.util.List"%>
@@ -58,7 +59,15 @@
 				</div>
 				<div class="col-3">
 					<h6><strong>포인트</strong></h6>
-					<label><%=user.getPoint() %></label>원
+					<label>
+						<%
+							UserDao userDao = UserDao.getInstance();
+							user = userDao.getUserByNo(user.getNo());
+						%>
+						<%= 
+							StringUtil.numberToString(user.getPoint())
+						%>
+					</label>원
 				</div>
 				<div class="col-3">
 					<h6><strong>예치금</strong></h6>
@@ -76,7 +85,6 @@
 							<col width="*">	
 							<col width="10%">
 							<col width="10%">
-							<col width="5%">
 					</colgroup>
 					<thead>
 						<tr class="bg-light">
@@ -85,7 +93,6 @@
 							<th>주문정보</th>
 							<th>주문상태</th>
 							<th>결제금액</th>
-							<th>확인/리뷰</th>
 						</tr>
 					</thead>
 					<tbody class="table-group-divider">
@@ -111,7 +118,6 @@
 							</td>
 							<td><%=order.getStatus() %></td>
 							<td><%= StringUtil.numberToString(order.getPaymentPrice()) %></td>
-							<td></td>
 						</tr>
 				<%
 						}

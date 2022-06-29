@@ -34,13 +34,13 @@
 		if ("invalid".equals(fail)) {
 	%>
 		<div class="alert alert-danger">
-			<Strong>오류</Strong>유요한 요청이 아닙니다.
+			<Strong>오류 </Strong>유요한 요청이 아닙니다.
 		</div>
 	<%
 		} else if ("deny".equals(fail)) {
 	%>
 		<div class="alert alert-danger">
-				<strong>거부 </strong> 다른 사용자의 리뷰를 변경할 수 없습니다.
+				<strong>거부 </strong> 다른 사용자의 것을 변경할 수 없습니다.
 		</div>
 	<%
 		}
@@ -57,7 +57,6 @@
 		
 		ProductReviewDao productReviewDao = ProductReviewDao.getInstance();
 		List<ReviewDto> reviews = productReviewDao.getProductReviews(pdNo);
-		
 		
 		ProductQuestionDao productQuestionDao = ProductQuestionDao.getInstance();
 		List<QuestionDto> questions = productQuestionDao.getProductQuestions(pdNo);
@@ -88,7 +87,7 @@
 		<div class="row" id="detail-row">
 			<div class="col-6">
 				<div>
-					<img alt="" src="../images/sample1.jpg" class="img-thumbnail" >
+					<img alt="" src="../<%=product.getImageUrl() %>" class="img-thumbnail" >
 				</div>
 			</div>
 			<div class="col-6">

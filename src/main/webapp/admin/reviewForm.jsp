@@ -60,15 +60,15 @@
 				<div id="layoutSidenav_content">
 					<main>
 						<div class="container-fluid px-4">
-							<h2 class="mt-4">상품리뷰 관리</h2>
+							<h1 class="my-4">상품리뷰 관리</h1>
 							<form id="search-form" method="post" enctype="multipart/form-data">
-									<div class="row">
-										<div class="col-1">
-											<strong>상품분류</strong>
-										</div>
-										<div class="col-5">
+								<strong style="font-size: x-small;"><span style="color: red;">※</span>검색조건을 입력해주세요.</strong>
+								<table class="table border">
+									<tr class="border">
+										<th class="bg-light">상품분류</th>
+										<td>
 											<select class="form-select form-select-sm" name="category">
-												<option disabled selected>카테고리 선택</option>
+												<option value="" disabled selected>카테고리 선택</option>
 											<%
 											for (Category category : categories) {
 											%>
@@ -77,11 +77,9 @@
 											}
 											%>
 											</select>
-										</div>
-										<div class="col-1">
-											<strong>검색분류</strong>
-										</div>
-										<div class="col-5 d-inline-flex">
+										</td>
+										<th class="bg-light">검색분류</th>
+										<td style="display: inline-flex;">
 											<select class="form-select form-select-sm" name="search">
 												<option value="" selected disabled>검색조건</option>
 												<option value="name">상품명</option>
@@ -89,64 +87,36 @@
 												<option value="content">내용</option>
 											</select> 
 											<input type="text" class="form-control form-control-sm" name="keyword" placeholder="키워드 입력" style="width: auto;"/>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-1">
-											<strong>리뷰등록일</strong>
-										</div>
-										<div class="col-5  d-inline-flex">
-											<div class="col-9 " style=" width: auto;">
-												<div class="form-check form-check-inline">
-						  							<input class="form-check-input" type="radio" name="period" value="0" checked >
-						  							<label class="form-check-label" for="inlineRadio1">오늘</label>
-												</div>
-												<div class="form-check form-check-inline">
-							  						<input class="form-check-input" type="radio" name="period" id="inlineRadio2" value="7" >
-							  						<label class="form-check-label" for="inlineRadio2">7일</label>
-												</div>
-												<div class="form-check form-check-inline">
-							  						<input class="form-check-input" type="radio" name="period" id="inlineRadio2" value="30" >
-							  						<label class="form-check-label" for="inlineRadio2">1개월</label>
-												</div>
-												<div class="form-check form-check-inline">
-							  						<input class="form-check-input" type="radio" name="period" id="inlineRadio2" value="9999" >
-							  						<label class="form-check-label" for="inlineRadio2">전체</label>
-												</div>
-											</div>
-										</div>
-										<div class="col-1">
-											<strong>처리상태</strong>
-										</div>
-										<div class="col-5 d-inline-flex">
-											<div class="col-sm-9">
-												<div class="form-check form-check-inline">
-						  							<input class="form-check-input" type="radio" name="deleted" value="Y" >
-						  							<label class="form-check-label" for="inlineRadio1">삭제</label>
-												</div>
-												<div class="form-check form-check-inline">
-							  						<input class="form-check-input" type="radio" name="deleted" id="inlineRadio2" value="N" checked>
-							  						<label class="form-check-label" for="inlineRadio2">보유</label>
-												</div>
-												
-											</div>
-										</div>
-									</div>
-									<div class="row d-flex justify-content-center mt-3">
-											<button type="button" class="btn btn-primary btn-sm me-2" id="search-btn" onclick="loadReviews();" style="width: 8%;">검색</button>
-											<input type="reset" class="btn btn-outline-secondary btn-sm" style="width: 8%;"/>
-									</div>
-							
-							<div class="row">
-								<h6>총 1개</h6>
-							</div>
+										</td>
+									</tr>
+									<tr>
+										<th class="bg-light">리뷰등록기간</th>
+											<td>
+												<input class="form-check-input" type="radio" name="period" value="0" checked >
+							  					<label class="form-check-label" for="inlineRadio1">오늘</label>
+							  					<input class="form-check-input" type="radio" name="period" id="inlineRadio2" value="7" >
+								  				<label class="form-check-label" for="inlineRadio2">7일</label>
+								  				<input class="form-check-input" type="radio" name="period" id="inlineRadio2" value="30" >
+								  				<label class="form-check-label" for="inlineRadio2">1개월</label>
+								  				<input class="form-check-input" type="radio" name="period" id="inlineRadio2" value="9999" >
+								  				<label class="form-check-label" for="inlineRadio2">전체</label>		
+											</td>
+										<th class="bg-light">처리상태</th>
+											<td>
+						  						<input class="form-check-input" type="radio" name="deleted" value="Y" >
+						  						<label class="form-check-label" for="inlineRadio1">삭제</label>
+							  					<input class="form-check-input" type="radio" name="deleted" id="inlineRadio2" value="N" checked>
+							  					<label class="form-check-label" for="inlineRadio2">보유</label>
+											</td>
+									</tr>
+								</table>	
+								<div class="row d-flex justify-content-center mt-3">
+									<button type="button" class="btn btn-primary btn-sm me-2" id="search-btn" onclick="loadReviews();" style="width: 8%;">검색</button>
+									<input type="reset" class="btn btn-outline-secondary btn-sm" style="width: 8%;"/>
+								</div>
 							<div class="row d-flex justify-content-between my-2">
 								<div class="">
 									<button class="btn btn-outline-primary btn-sm">삭제</button>
-									<!-- <select class="form-select form-select-sm me-2" name="period" onchange="﻿">
-										<option value="">등록일순</option>
-										<option value="">오래된순</option>
-									</select> -->
 									<select class="form-select form-select-sm float-end" name="rows" onchange="">
 										<option value="5" <%=rows == 5 ? "selected" : ""%>>5개씩
 											보기</option>
@@ -163,10 +133,10 @@
 								<table class="table table-hover table-borderless text-center border-top border-bottom" id="review-table">
 									<colgroup>
 										<col width="5%">
+										<col width="27%">
 										<col width="15%">
-										<col width="10%">
 										<col width="*">
-										<col width="10%">
+										<col width="6%">
 										<col width="12%">
 										<col width="10%">
 									</colgroup>
@@ -182,21 +152,21 @@
 										</tr>
 									</thead>
 									<tbody>
-								<%
+								<%--  <%
 									for(ReviewDto reviewDto : reviewDtos) {
 								%>			
 										<tr>					
-											<td><input type="checkbox" value="<%=reviewDto.getNo() %>" /></td>
+											<td><input type="checkbox" name="checkbox" value="<%=reviewDto.getNo() %>" /></td>
 											<td><%=reviewDto.getPdName() %></td>
 											<td><%=reviewDto.getUserName() %></td>
 											<td><%=reviewDto.getTitle() %></td>
 											<td><%=reviewDto.getScore() %></td>
-											<td><%=reviewDto.getUpdatedDate() %></td>
+											<td><%=reviewDto.getCreatedDate() %></td>
 											<td><%=reviewDto.getDeleted() %></td>
 										</tr>
 								<%
 									}
-								%> 
+								%>   --%>
 									</tbody>
 									<tfoot>
 										<tr>
@@ -215,7 +185,6 @@
 
 						</div>
 					</main>
-					<jsp:include page="adminbottom.jsp"></jsp:include>
 
 				</div>
 			</div>
@@ -224,7 +193,12 @@
 <script type="text/javascript">
 
 	function loadReviews(page) {
-		document.getElementById("all-toggle").innerHTML ='<input type="checkbox" id="all-toggle-checkbox" onchange="toggleCheckbox();"/>' 
+		
+		let selectCategoryValue = document.querySelector("select[name=category]").value;
+		if(selectCategoryValue === '') {
+			alert("카테고리를 선택해주세요!");
+			return;
+		}
 		
 		
 		let tbody = document.querySelector("#review-table tbody");
@@ -249,6 +223,7 @@
 					
 					let reviewNo = review.no;
 					let userNo = review.userNo;
+					let pdNo = review.pdNo;
 					let pdName = review.pdName
 					let userName = review.userName;
 					let title = review.title;
@@ -313,34 +288,18 @@
 		
 	} 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	function toggleCheckbox() {
 	    let allToggleChecboxCheckedStatus = document.getElementById("all-toggle-checkbox").checked;
-	    let pdCheckboxNodeList = document.querySelectorAll("input[name='pdCheckbox']");
-	    for (let index = 0; index < pdCheckboxNodeList.length; index++) {
-	        let pdCheckbox = pdCheckboxNodeList[index];
-	        pdCheckbox.checked = allToggleChecboxCheckedStatus;
+	    let checkboxNodeList = document.querySelectorAll("input[name='checkbox']");
+	    for (let index = 0; index < checkboxNodeList.length; index++) {
+	        let checkbox = checkboxNodeList[index];
+	        checkbox.checked = allToggleChecboxCheckedStatus;
 	    }
 	}
 	
 	function changeCheckboxChecked() {
-	    let checkboxCount = document.querySelectorAll('input[name="pdCheckbox"]').length;
-	    let checkedCheckboxCount = document.querySelectorAll('input[name="pdCheckbox"]:checked').length;
+	    let checkboxCount = document.querySelectorAll('input[name="checkbox"]').length;
+	    let checkedCheckboxCount = document.querySelectorAll('input[name="checkbox"]:checked').length;
 	
 	    document.getElementById("all-toggle-checkbox").checked = (checkboxCount === checkedCheckboxCount);
 	}

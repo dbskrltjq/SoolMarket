@@ -10,6 +10,7 @@ public class ReviewDto {
 	private String userName;
 	private int pdNo;
 	private String pdName;
+	private String title;
 	private String content;
 	private String fileName;
 	private String deleted;
@@ -18,12 +19,15 @@ public class ReviewDto {
 	private int score;
 	private int likeCount;
 
+	private String answerContent;
+	private String answered;
+	private Date answerCreatedDate;
+
 	private String imageUrl;
 	
 	
-	
 
-	private String title;
+
 
 	
 	public ReviewDto () {}
@@ -153,6 +157,30 @@ public class ReviewDto {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public String getAnswerContent() {
+		return answerContent;
+	}
+
+	public void setAnswerContent(String answerContent) {
+		this.answerContent = answerContent;
+	}
+
+	public String getAnswered() {
+		return answered;
+	}
+
+	public void setAnswered(String answered) {
+		this.answered = answered;
+	}
+
+	public Date getAnswerCreatedDate() {
+		return answerCreatedDate;
+	}
+
+	public void setAnswerCreatedDate(Date answerCreatedDate) {
+		this.answerCreatedDate = answerCreatedDate;
 	}
 
 	

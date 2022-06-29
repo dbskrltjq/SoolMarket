@@ -18,12 +18,19 @@ public class Review {
 	private String imageUrl;
 	private String answerContent;
 	
-
 	private String title;
 
-	
+
 	public Review() {}
 
+	public String getAnswerContent() {
+		return answerContent;
+	}
+	
+	
+	public void setAnswerContent(String answerContent) {
+		this.answerContent = answerContent;
+	}
 	
 	
 	
@@ -41,15 +48,7 @@ public class Review {
 
 
 
-	public String getAdminContent() {
-		return adminContent;
-	}
 
-
-
-	public void setAdminContent(String adminContent) {
-		this.adminContent = adminContent;
-	}
 
 
 

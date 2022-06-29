@@ -9,6 +9,7 @@ public class QuestionDto {
 	private int userNo;
 	private String userName;
 	private int pdNo;
+	private String pdName;
 	private String title;
 	private String content;
 	private String answerContent;
@@ -123,6 +124,15 @@ public class QuestionDto {
 	public void setAnswered(String answered) {
 		this.answered = answered;
 	}
+
+	public String getPdName() {
+		return pdName;
+	}
+
+	public void setPdName(String pdName) {
+		this.pdName = pdName;
+	}
+	
 	
 	
 	

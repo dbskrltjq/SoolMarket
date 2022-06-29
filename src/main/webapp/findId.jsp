@@ -163,7 +163,7 @@
 			if(xhr.readyState === 4 && xhr.status === 200) {
 				let jsonText = xhr.responseText;				
 				let result = JSON.parse(jsonText);	
-				alert("결과 : " + result.pass + " 이름: " + result.name + " 아이디: " + result.foundId );
+				//alert("결과 : " + result.pass + " 이름: " + result.name + " 아이디: " + result.foundId );
 				if(result.pass) {
 					//helperField.textContent = "회원정보를 찾았습니다.";
 					document.getElementById("find-id-form").action = "findId.jsp?foundId=" + result.foundId + "&name=" + result.name; 

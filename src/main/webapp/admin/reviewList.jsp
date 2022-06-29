@@ -32,26 +32,22 @@
 	int rows = StringUtil.stringToInt(mr.getParameter("rows"));
 	int currentPage = StringUtil.stringToInt(mr.getParameter("page"));
 	
-	System.out.println("categoryNo:" + categoryNo + ", search: " + search + ", keyword: " + keyword + " period: " + period + ", deleted: " + deleted + " rows: " + rows );
+	//System.out.println("categoryNo:" + categoryNo + ", search: " + search + ", keyword: " + keyword + " period: " + period + ", deleted: " + deleted + " rows: " + rows );
 	
 	int totalRows = 0;
 	
 	if(keyword.isBlank()) {
 		totalRows = reviewDao.getTotalRowsByCategoryNo(categoryNo, deleted, period);
-		System.out.println("test1");
 	} else {
 		if("name".equals(search)) {
 			totalRows = reviewDao.getTotalRowsByPdNameKeyword(categoryNo, deleted, keyword, period);
-			System.out.println("test2");
 		} else if("title".equals(search)) {
 			totalRows = reviewDao.getTotalRowsByTitleKeyword(categoryNo, deleted, keyword, period);
-			System.out.println("test3");
 		} else if("content".equals(search)) {
 			totalRows = reviewDao.getTotalRowsByContentKeyword(categoryNo, deleted, keyword, period);
-			System.out.println("test4");
 		}
 	}
-	System.out.println("totalRows: " + totalRows);
+	//System.out.println("totalRows: " + totalRows);
 	Pagination pagination = new Pagination(rows, totalRows, currentPage);
 	
 	
@@ -68,6 +64,8 @@
 				reviewDtos = reviewDao.getReviewDtoByContentKeyword(categoryNo, deleted, keyword, period, pagination.getBeginIndex(), pagination.getEndIndex());
 			}
 		}
+	
+	//System.out.println(reviewDtos.size());
 	
 	Map<String, Object> result = new HashMap<>();
 	result.put("pagination", pagination);

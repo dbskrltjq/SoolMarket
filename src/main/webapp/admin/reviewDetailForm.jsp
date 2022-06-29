@@ -1,3 +1,5 @@
+<%@page import="dto.ReviewDto"%>
+<%@page import="dao.ReviewDao"%>
 <%@page import="dao.ProductDao"%>
 <%@page import="vo.Product"%>
 <%@page import="vo.User"%>
@@ -21,6 +23,7 @@
 	<script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
 <style type="text/css">
+
 	html, body {
 		height: 100%;
 	}
@@ -41,7 +44,7 @@
 %>
 </head>
 <%
-	int questionNo = StringUtil.stringToInt(request.getParameter("questionNo"));
+	int reviewNo = StringUtil.stringToInt(request.getParameter("reviewNo"));
 	int pdNo = StringUtil.stringToInt(request.getParameter("pdNo"));
 	int userNo = StringUtil.stringToInt(request.getParameter("userNo"));
 	
@@ -51,38 +54,47 @@
 	ProductDao productDao = ProductDao.getInstance();
 	Product product = productDao.getProductByNo(pdNo);
 	
-	ProductQuestionDao productQuestionDao = ProductQuestionDao.getInstance();
-	QuestionDto questionDto = productQuestionDao.getProductQuestion(questionNo);
+	ReviewDao reviewDao = ReviewDao.getInstance();
+	ReviewDto reviewDto = reviewDao.getReviewDtoByreviewNo(reviewNo);
 %>
 <body>
 	<jsp:include page="admintop.jsp"></jsp:include>
-		<div class="container-fluid">
+		<div class="container-fluid ">
 		   <div class="row h-100" id=first-row >
 			   <div class="col-2 p-0" >
 			   		<jsp:include page="adminleft.jsp"></jsp:include>
 			   </div>
 			   <div class="col-10 p-4">
 			   		<div class="row m-3">
-			   			<h3>문의 상세 페이지</h3>
+			   			<h3>리뷰 상세 페이지</h3>
 			   		</div>
 					<h6><i class="fa-solid fa-square-info"></i> 상품정보</h6>		   			
 			   		<div class="container border border-secondary bg-light" > 
-				   		<div class="row m-3">
+				   		<div class="row m-3 ">
 				   			<div class="col-2">
 				   				<a href="../product/detail.jsp?pdNo=<%=pdNo %>"><img src="../<%=product.getImageUrl() %>" alt="이미지 준비중입니다."  class="img-thumbnail"  width="150"></a>
 				   			</div>
 				   			<div class="col-8">
-					   			<div class="row mt-5" style="font-weight: bold;">
-				   					<p>상품명: <%=product.getName() %></p>
-					   				<p>판매가격: <%=product.getPrice() %> 원</p>
+					   			<div class="row">
+				   					<p>상품명: <strong><%=product.getName() %></strong></p>
+					   				<p>판매가격: <strong><%=product.getSalePrice() %></strong> 원</p>
+					   				<p>리뷰평균점수: <strong style="color: red;">
+					   		<%
+					   			for(int i = 1; i <= product.getReviewScore() ; i++) {
+					   				
+					   		%>
+					   				★
+					   		<%
+					   			}
+					   		%>		</strong> </p>
 					   			</div>
 				   			</div>
 				   		</div>
 			   		</div>
-			   		<div class="row mb-4" style="font-size: small; font-weight: bold;">
+					<div class="row mb-4" style="font-size: small; font-weight: bold;">
 						<p><span style="color: red;">※</span> 상품이미지를 클릭하시면 상품상세페이지로 이동합니다.</p>			   				
 					</div>
-			   		<h6><i class="fa-solid fa-comments-question-check"></i> 문의내역</h6>
+			   		<h6><i class="fa-solid fa-comments-question-check"></i> 리뷰내역</h6>
 			   		<div class="container p-3">
 			   		<table class="table border" id="user-info">
 			   			<tr>
@@ -99,7 +111,7 @@
 			   			</tr>
 			   			<tr>
 			   				<th class="bg-light">작성일</th>
-			   				<td><%=questionDto.getCreatedDate() %></td>
+			   				<td><%=reviewDto.getCreatedDate() %></td>
 			   				<th class="bg-light">첨부파일</th>
 			   				<td></td>
 			   			</tr>
@@ -107,16 +119,16 @@
 			   		<table class="table border">
 			   			<tr>
 			   				<th class="bg-light">제목</th>
-			   				<td><%=questionDto.getTitle() %></td>
+			   				<td><%=reviewDto.getTitle() %></td>
 			   			</tr>
 			   			<tr>
 			   				<th class="bg-light">내용</th>
-			   				<td><%=questionDto.getContent() %></td>
+			   				<td><%=reviewDto.getContent() %></td>
 			   			</tr>
 			   		</table>
 			   		<div class="d-flex justify-content-end">
 			   	<%
-			   		if("N".equals(questionDto.getAnswered())) {
+			   		if("N".equals(reviewDto.getAnswered())) {
 			   	%>
 			   			<button class="btn btn-outline-secondary" data-bs-toggle='modal' data-bs-target='#question-answer-modal'>답글작성</button>
 			   	<%
@@ -127,7 +139,7 @@
 			   		<h6><i class="fa-solid fa-comments-question-check"></i> 답변내역</h6>
 			   		<div class="container p-3">
 			   	<%
-			   		if("N".equals(questionDto.getAnswered())) {
+			   		if("N".equals(reviewDto.getAnswered())) {
 			   			
 			   	%>
 			   		<strong style="color: red;">!</strong> 답변을 작성해주세요
@@ -137,11 +149,11 @@
 			   			<table class="table border">
 			   			<tr>
 			   				<th class="bg-light">작성일자</th>
-			   				<td><%=questionDto.getAnswerCreatedDate() %></td>
+			   				<td><%=reviewDto.getAnswerCreatedDate() %></td>
 			   			</tr>
 			   			<tr>
 			   				<th class="bg-light">답변내용</th>
-			   				<td><%=questionDto.getAnswerContent() %></td>
+			   				<td><%=reviewDto.getAnswerContent() %></td>
 			   			</tr>
 			   		</table>
 			   		<button class="btn btn-outline-secondary" data-bs-toggle='modal' data-bs-target='#question-answer-modal'>답글수정</button>
@@ -159,7 +171,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-	        <h5 class="modal-title" id="staticBackdropLabel">상품문의 답변쓰기</h5>
+	        <h5 class="modal-title" id="staticBackdropLabel">상품리뷰 답변쓰기</h5>
 	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 	      </div>
 	      <div class="modal-body">
@@ -175,11 +187,11 @@
 						<p><%=product.getName() %></p>
 					</div>
 				</div>
-	       		 <form class="border bg-light p-3" id="answer-form" method="post" action="addAnswer.jsp?job=question" >
-					<input type="hidden" name="questionNo" value="<%=questionNo %>" />
+	       		 <form class="border bg-light p-3" id="answer-form" method="post" action="addAnswer.jsp?job=review" >
+					<input type="hidden" name="reviewNo" value="<%=reviewNo %>" />
 					<div class="mb-3">
 					<%
-						String answerContent = questionDto.getAnswerContent();
+						String answerContent = reviewDto.getAnswerContent();
 					%>
 						<label class="form-label">내용</label>	                                <!-- 답글작성과 답글수정 기능을 구분하기 위한 것입니다.  -->
 						<textarea rows="5" class="form-control" id="content-form" name="content"><%= answerContent != null ? answerContent : "" %></textarea>

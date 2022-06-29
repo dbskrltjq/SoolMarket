@@ -7,13 +7,13 @@
 <%@page import="com.google.gson.JsonElement"%>
 <%@page import="java.util.List"%>
 <%@page import="com.google.gson.Gson"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="application/json; charset=UTF-8"
     pageEncoding="UTF-8" errorPage="../error/500.jsp"%>
 <%
 	//세션에서 관리자정보를 조회한다.
 	User admin = (User) session.getAttribute("ADMIN");
 	if (admin == null) {
-		throw new RuntimeException("상품수정은 관리자 로그인 후 사용가능한 서비스 입니다.");
+		throw new RuntimeException("상품수정 및 관리는 관리자 로그인 후 사용가능한 서비스 입니다.");
 	}
 	
     Map<String, Object> result = new HashMap<>();
@@ -21,6 +21,7 @@
 
 	String[] pdNoList = request.getParameterValues("pdNos");
 	
+	// alert창에서 ~~상품 외 7개를 출력하기 위해서
     Product firstProduct = productDao.getProductByNo(StringUtil.stringToInt(pdNoList[0]));
     	result.put("pdNo", firstProduct.getNo());
     	result.put("pdName", firstProduct.getName());

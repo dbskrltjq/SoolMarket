@@ -296,6 +296,7 @@
 								<strong>A.답변드립니다.</strong>
 								<P><%=question.getAnswerContent() %></P>
 				      		</div>
+				  		<a href="questiondelete.jsp?no=<%=question.getNo() %>&pdNo=<%=product.getNo() %>" class="btn btn-outline-secondary-sm">X</a>
 				    	</div>
 				  	</div>
 			<%

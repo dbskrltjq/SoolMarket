@@ -65,6 +65,7 @@ public class ProductQuestionDao {
 				   + "from sul_questions Q, sul_products P, sul_users U "
 				   + "where Q.user_no = U.user_no "
 				   + "and Q.pd_no = P.pd_no "
+				   + "and q_deleted != 'Y' "
 				   + "and Q.pd_no = ? ";
 		
 		return helper.selectList(sql, rs -> {
@@ -86,6 +87,15 @@ public class ProductQuestionDao {
 			return question;
 			
 		},productNo);
+	}
+	
+	public void updateQuestionDelete(QuestionDto question) throws SQLException {
+		String sql = "update sul_questions "
+			       + "set "
+			       + "		q_deleted = ? "
+			       +"where q_no = ? ";
+		
+		helper.update(sql,question.getDeleted(), question.getNo());
 	}
 
 }

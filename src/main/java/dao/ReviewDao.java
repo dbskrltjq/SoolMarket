@@ -474,6 +474,16 @@ public class ReviewDao {
 			return rs.getInt("cnt");
 		}, userNo, pdNo);
 	}
+	
+	public void updateReviewDelete(Review review) throws SQLException {
+		String sql = "update sul_reviews "
+				   + "set "
+				   + "    review_deleted = ? "
+				   + "where review_no = ? ";
+		
+		helper.update(sql,review.getDeleted(), review.getNo());
+	}
+
 
 	
 	////////////////////////////////////////////////////////////// 관리자페이지 상품리뷰관리///////////////////////////////////////////////////////////////////////

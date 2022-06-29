@@ -21,6 +21,7 @@
 		
 		if (question == null) {
 			response.sendRedirect("detail.jsp?fail=invalid&pdNo=" + pdNo);
+			// 다시 보낼때 detail의 필수값을 생각해보고 빠먹지 않게 잘 적어서 보내기
 			return;
 		}
 		

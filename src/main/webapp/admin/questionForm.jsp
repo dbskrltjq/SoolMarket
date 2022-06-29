@@ -114,13 +114,10 @@
 									<button type="button" class="btn btn-primary btn-sm me-2" id="search-btn" onclick="loadQuestions();" style="width: 8%;">검색</button>
 									<input type="reset" class="btn btn-outline-secondary btn-sm" style="width: 8%;"/>
 								</div>
-							<div class="row">
-								<h6>총 1개</h6>
-							</div>
 							<div class="row d-flex justify-content-between my-2">
 								<div class="">
-									<button class="btn btn-outline-primary btn-sm">삭제</button>
-									<select class="form-select form-select-sm float-end" name="rows" onchange="">
+									<button class="btn btn-outline-primary btn-sm" onclick="deleteQuestion();">삭제</button>
+									<select class="form-select form-select-sm float-end" name="rows" onchange="loadQuestions();">
 										<option value="5" <%=rows == 5 ? "selected" : ""%>>5개씩
 											보기</option>
 										<option value="10" <%=rows == 10 ? "selected" : ""%>>10개씩
@@ -146,7 +143,7 @@
 										<tr>
 											<th id=all-toggle><input type="checkbox" id="all-toggle-checkbox" onchange="toggleCheckbox();" /></th>
 											<th>상품분류</th>
-											<th>상품번호</th>
+											<th>상품명</th>
 											<th>제목</th>
 											<th>등록일</th>
 											<th>비고</th>
@@ -172,13 +169,45 @@
 
 						</div>
 					</main>
-					<jsp:include page="adminbottom.jsp"></jsp:include>
 
 				</div>
 			</div>
 		</div>
 	</div>
 <script type="text/javascript">
+
+
+	function deleteQuestion() {
+		let checkedCheckboxes = document.querySelectorAll('input[name="checkbox"]:checked');
+		
+		let deleteQuestionList = new Array();
+		
+		for(let i = 0; i < checkedCheckboxes.length; i ++) {
+			deleteQuestionList.push(checkedCheckboxes[i].value);
+		}
+		
+		deleteQuestionNoObj = { questionNos : deleteQuestionList};
+		let queryStr = Object.entries(deleteQuestionNoObj).map(item => item.join('=').replace(/,/g, '&'+item[0]+'=')).join('&');
+		//alert(queryStr);
+		
+		
+		
+		
+		 let xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState === 4 && xhr.status === 200) {
+				let jsonText = xhr.responseText;
+				let result = JSON.parse(jsonText);
+				let deletedCount = result.deletedCount;
+				alert("상품문의 (" + deletedCount + ") 가 삭제되었습니다.");			// 여러개 삭제할 경우 수정하기
+				loadQuestions(1);
+			}
+		}
+		
+		xhr.open("GET", "deleteQuestion.jsp?" + queryStr);
+		xhr.send();  
+	}
+
 
 	function loadQuestions(page) {
 		//document.getElementById("all-toggle").innerHTML ='<input type="checkbox" id="all-toggle-checkbox" onchange="toggleCheckbox();"/>' 
@@ -217,7 +246,7 @@
 					let userNo = question.userNo;
 					let title = question.title;
 					let createdDate = question.createdDate;
-			
+					let deleted = question.deleted;
 					
 					let answered = question.answered;
 					
@@ -233,7 +262,7 @@
 					rows += "<td>" + pdName + "</td>"
 					rows += "<td><a href='questionDetailForm.jsp?questionNo=" + questionNo + "&pdNo=" + pdNo + "&userNo=" + userNo +"'>" + title + "</a></td>"; 
 					rows += "<td>" + createdDate + "</td>";
-					rows += "<td>" + answered + "</td>";
+					rows += "<td>" + answered + deleted +"</td>";
 					rows += "</tr>";
 				}
 				tbody.innerHTML = rows;

@@ -41,7 +41,8 @@ public class ProductQuestionDao {
 	public QuestionDto getProductQuestion(int questionNo) throws SQLException {
 		String sql = "select * "
 				   + "from sul_questions "
-				   + "where q_no = ? ";
+				   + "where q_no = ? "
+				   + "and q_deleted = 'N' ";
 		return helper.selectOne(sql, rs -> {
 			QuestionDto question = new QuestionDto();
 			question.setNo(rs.getInt("q_no"));
@@ -93,12 +94,13 @@ public class ProductQuestionDao {
 	public List<QuestionDto> getQuestionsWithoutKeyword(int period, String answered, int beginIndex, int endIndex) throws SQLException {
 			
 			String sql = "select * "
-					   + "from (select row_number() over (order by Q.q_no desc) row_number, Q.*, P.category_no, U.user_name "
+					   + "from (select row_number() over (order by Q.q_no desc) row_number, Q.*, P.category_no, P.pd_name, U.user_name "
 					   + "		from sul_questions Q, sul_products P,  sul_users U "
 					   + "		where Q.user_no = U.user_no "
 					   + "		and Q.pd_no = P.pd_no "
 					   + "		AND q.q_created_date >= trunc(sysdate - ?) "
-					   + "		and Q.a_answered = ?) "
+					   + "		and Q.a_answered = ? "
+					   + "      and Q.q_deleted = 'N' ) "
 					   + "where row_number >= ? and row_number <= ? ";
 					   
 			
@@ -117,6 +119,7 @@ public class ProductQuestionDao {
 				question.setUpdatedDate(rs.getDate("q_updated_date"));
 				question.setAnswerCreatedDate(rs.getDate("a_created_date"));
 				question.setAnswered(rs.getString("a_answered"));
+				question.setPdName(rs.getString("pd_name"));
 				
 				return question;
 				
@@ -130,7 +133,8 @@ public class ProductQuestionDao {
 				+ "where Q.user_no = U.user_no "
 				+ "and Q.pd_no = P.pd_no "
 				+ "AND q.q_created_date >= trunc(sysdate - ?) "
-				+ "and Q.a_answered = ? ";
+				+ "and Q.a_answered = ? "
+				+ "and Q.q_deleted = 'N' ";
 		
 		return helper.selectOne(sql, rs -> {
 			return rs.getInt("cnt");
@@ -145,7 +149,8 @@ public class ProductQuestionDao {
 				+ "		where Q.user_no = U.user_no "
 				+ "		and Q.pd_no = P.pd_no "
 				+ "		AND q.q_created_date >= trunc(sysdate - ?) "
-				+ "		and Q.a_answered = ?) "
+				+ "		and Q.a_answered = ? "
+				+ "      and Q.q_deleted = 'N' ) "
 				+ "where row_number >= ? and row_number <= ? "
 				+ "and category_no = ? ";
 		
@@ -180,7 +185,8 @@ public class ProductQuestionDao {
 				+ "and Q.pd_no = P.pd_no "
 				+ "and P.category_no = ? "
 				+ "AND q.q_created_date >= trunc(sysdate - ?) "
-				+ "and Q.a_answered = ? ";
+				+ "and Q.a_answered = ? "
+				+ "and Q.q_deleted = 'N' ";
 		
 		return helper.selectOne(sql, rs -> {
 			return rs.getInt("cnt");
@@ -207,7 +213,8 @@ public class ProductQuestionDao {
 				   + "		and Q.pd_no = P.pd_no "
 				   + "		and P.pd_name like '%' || ? || '%' "
 				   + "		AND q.q_created_date >= trunc(sysdate - ?) "
-				   + "		and Q.a_answered = ?) "
+				   + "		and Q.a_answered = ? "
+				   + "      and Q.q_deleted = 'N' ) "
 				   + "where row_number >= ? and row_number <= ? ";
 		
 		return helper.selectList(sql, rs -> {
@@ -239,7 +246,8 @@ public class ProductQuestionDao {
 				+ "and Q.pd_no = P.pd_no "
 				+ "and P.pd_name like '%' || ? || '%' "
 				+ "AND q.q_created_date >= trunc(sysdate - ?) "
-				+ "and Q.a_answered = ? ";
+				+ "and Q.a_answered = ? "
+				+ "and Q.q_deleted = 'N' ";
 		
 		return helper.selectOne(sql, rs -> {
 			return rs.getInt("cnt");
@@ -255,7 +263,8 @@ public class ProductQuestionDao {
 				+ "		and Q.pd_no = P.pd_no "
 				+ "		and P.pd_name like '%' || ? || '%' "
 				+ "		AND q.q_created_date >= trunc(sysdate - ?) "
-				+ "		and Q.a_answered = ?) "
+				+ "		and Q.a_answered = ? "
+				+ "      and Q.q_deleted = 'N' ) "
 				+ "where row_number >= ? and row_number <= ? "
 				+ "and category_no = ? ";
 		
@@ -290,7 +299,8 @@ public class ProductQuestionDao {
 				+ "and P.category_no = ? "
 				+ "and P.pd_name like '%' || ? || '%' "
 				+ "AND q.q_created_date >= trunc(sysdate - ?) "
-				+ "and Q.a_answered = ? ";
+				+ "and Q.a_answered = ? "
+				+ "and Q.q_deleted = 'N' ";
 		
 		return helper.selectOne(sql, rs -> {
 			return rs.getInt("cnt");
@@ -314,7 +324,8 @@ public class ProductQuestionDao {
 					+ "		and Q.pd_no = P.pd_no "
 					+ "		and Q.q_title like '%' || ? || '%' "
 					+ "		and q.q_created_date >= trunc(sysdate - ?) "
-					+ "		and Q.a_answered = ?) "
+					+ "		and Q.a_answered = ? "
+					+ "      and Q.q_deleted = 'N' ) "
 					+ "where row_number >= ? and row_number <= ? ";
 		
 		return helper.selectList(sql, rs -> {
@@ -347,7 +358,8 @@ public class ProductQuestionDao {
 				+ "and Q.pd_no = P.pd_no "
 				+ "and Q.q_title like '%' || ? || '%' "
 				+ "AND q.q_created_date >= trunc(sysdate - ?) "
-				+ "and Q.a_answered = ? ";
+				+ "and Q.a_answered = ? "
+				+ "and Q.q_deleted = 'N' ";
 		
 		return helper.selectOne(sql, rs -> {
 			return rs.getInt("cnt");
@@ -363,7 +375,8 @@ public class ProductQuestionDao {
 				+ "		and Q.pd_no = P.pd_no "
 				+ "		and Q.q_title like '%' || ? || '%' "
 				+ "		AND q.q_created_date >= trunc(sysdate - ?) "
-				+ "		and Q.a_answered = ?) "
+				+ "		and Q.a_answered = ? "
+				+ "      and Q.q_deleted = 'N' ) "
 				+ "where row_number >= ? and row_number <= ? "
 				+ "and category_no = ? ";
 		
@@ -398,7 +411,8 @@ public class ProductQuestionDao {
 				+ "and P.category_no = ? "
 				+ "and Q.q_title like '%' || ? || '%' "
 				+ "AND q.q_created_date >= trunc(sysdate - ?) "
-				+ "and Q.a_answered = ? ";
+				+ "and Q.a_answered = ? "
+				+ "and Q.q_deleted = 'N' ";
 		
 		return helper.selectOne(sql, rs -> {
 			return rs.getInt("cnt");
@@ -422,7 +436,8 @@ public class ProductQuestionDao {
 				+ "		and Q.pd_no = P.pd_no "
 				+ "		and Q.q_content like '%' || ? || '%' "
 				+ "		AND q.q_created_date >= trunc(sysdate - ?) "
-				+ "		and Q.a_answered = ?) "
+				+ "		and Q.a_answered = ? "
+				+ "      and Q.q_deleted = 'N' ) "
 				+ "where row_number >= ? and row_number <= ? ";
 				
 		
@@ -456,7 +471,8 @@ public class ProductQuestionDao {
 				+ "and Q.pd_no = P.pd_no "
 				+ "and Q.q_content like '%' || ? || '%' "
 				+ "AND q.q_created_date >= trunc(sysdate - ?) "
-				+ "and Q.a_answered = ? ";
+				+ "and Q.a_answered = ? "
+				+ "and Q.q_deleted = 'N' ";
 		
 		return helper.selectOne(sql, rs -> {
 			return rs.getInt("cnt");
@@ -473,7 +489,8 @@ public class ProductQuestionDao {
 				+ "		 and Q.pd_no = P.pd_no "
 				+ "      and Q.q_content like '%' || ? || '%' "
 				+ "      AND q.q_created_date >= trunc(sysdate - ?) "
-				+ "      and Q.a_answered = ?) "
+				+ "      and Q.a_answered = ? "
+				+ "      and Q.q_deleted = 'N' ) "
 				+ "where row_number >= ? and row_number <= ? "
 				+ "and category_no = ? ";
 		
@@ -508,6 +525,7 @@ public class ProductQuestionDao {
 				+ "and Q.q_content like '%' || ? || '%' "
 				+ "AND q.q_created_date >= trunc(sysdate - ?) "
 				+ "and Q.a_answered = ? "
+				+ "and Q.q_deleted = 'N' "
 				+ "order by Q.q_no desc ";
 		
 		return helper.selectOne(sql, rs -> {
@@ -515,5 +533,12 @@ public class ProductQuestionDao {
 		}, categoryNo, keyword, period, answered);
 	}
 
-
+	public void deleteQuestionByNo(int questionNo) throws SQLException {
+		String sql = "update sul_questions "
+				   + " set "
+				   + "  q_deleted = 'Y' "
+				   + "where q_no = ? ";
+		helper.update(sql, questionNo);
+	}
+	
 }

@@ -167,7 +167,7 @@
 	      <div class="row">
 					<div class="col-6 py-3 ">
 						<div>
-							<img alt="" src="../images/sample1.jpg" class="img-thumbnail" width="200">
+							<img alt="" src="../<%=product.getImageUrl() %>" class="img-thumbnail" width="200">
 						</div>
 					</div>
 					<div class="col-6 p-3">

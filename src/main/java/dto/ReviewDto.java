@@ -18,11 +18,36 @@ public class ReviewDto {
 	private Date updatedDate;
 	private int score;
 	private int likeCount;
+
 	private String answerContent;
 	private String answered;
 	private Date answerCreatedDate;
+
+	private String imageUrl;
+	
+	
+
+
+
 	
 	public ReviewDto () {}
+	
+	
+
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+
+
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+
+
+
 
 	public int getNo() {
 		return no;

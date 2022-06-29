@@ -14,9 +14,44 @@ public class Review {
 	private Date updatedDate;
 	private int score;
 	private int likeCount;
+
+	private String imageUrl;
+	private String answerContent;
+	
+
 	private String title;
+
 	
 	public Review() {}
+
+	
+	
+	
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+
+
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+
+
+
+
+	public String getAdminContent() {
+		return adminContent;
+	}
+
+
+
+	public void setAdminContent(String adminContent) {
+		this.adminContent = adminContent;
+	}
+
+
 
 	public int getNo() {
 		return no;

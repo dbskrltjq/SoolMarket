@@ -5,7 +5,7 @@
 <%@page import="vo.Order"%>
 <%@page import="util.StringUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" errorPage="error/500.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,31 +16,31 @@
 </head>
 <style>
 	tr { text-align : center; }
-	td { text-align : center; }
+	td { text-align : center; padding: 5px;}
+	.modal {
+	        text-align: center;
+	}
+	 
+	@media screen and (min-width: 768px) { 
+	        .modal:before {
+	                display: inline-block;
+	                vertical-align: middle;
+	                content: " ";
+	                height: 100%;
+	        }
+	}
+	 
+	.modal-dialog {
+	        display: inline-block;
+	        text-align: left;
+	        vertical-align: middle;
+	}
 </style>
 <body>
 <jsp:include page="common/nav.jsp">
 	<jsp:param name="menu" value="myOrderDetail"/>
 </jsp:include>
 <div class="container "  style="padding: 30px;">
-
-	<%
-		String fail = request.getParameter("fail");
-	
-		if ("invalid".equals(fail)) {
-	%>
-		<div class="alert alert-danger">
-			<strong>오류</strong>유효한 요청이 아닙니다. 
-		</div>	
-	<%
-		} else if("deny".equals(fail)) {
-	%>
-		<div class="alert alert-danger">
-			<strong>거부</strong> 다른 사용자의 주문을 취소할 수 없습니다.
-		</div>
-	<%
-		}
-	%>
 		
 	<% 	
 		User user = (User) session.getAttribute("LOGINED_USER");
@@ -74,7 +74,7 @@
 				<div class="card-body">
 					<table class="order-complete table ">
 						<colgroup>
-							<col width="8%">
+							<col width="9%">
 							<col width="15%">
 							<col width="*">
 							<col width="10%">		
@@ -111,24 +111,52 @@
 						totalPdsPrice += dto.getSalePrice()*dto.getQuantity();
 				%>
 						<tr>
-							<td><%=dto.getOrderNo() %></td>
-							<td><%=dto.getCreatedDate() %></td>
-							<td style="text-align:left">
+							<td class="align-middle"><%=dto.getOrderNo() %></td>
+							<td class="align-middle"><%=dto.getCreatedDate() %></td>
+							<td class="align-middle" style="text-align:left">
+								<a class="text-decoration-none" href="product/detail.jsp?pdNo=<%=dto.getPdNo()%>" >
+									<img src="pdImages/pd_<%=dto.getPdNo()%>.jpg" style="width: 80px; height: 100px;"  />
+								</a>								
 								<a class="text-dark text-decoration-none" href="product/detail.jsp?pdNo=<%=dto.getPdNo() %>"><%=dto.getName() %></a>
 							</td>
-							<td><%=StringUtil.numberToString(dto.getSalePrice()) %></td>
-							<td><%=StringUtil.numberToString(dto.getQuantity()) %></td>
-							<td><%=StringUtil.numberToString(dto.getTotalPrice()) %></td>
+							<td class="align-middle"><%=StringUtil.numberToString(dto.getSalePrice()) %></td>
+							<td class="align-middle"><%=StringUtil.numberToString(dto.getQuantity()) %></td>
+							<td class="align-middle"><%=StringUtil.numberToString(dto.getTotalPrice()) %></td>
 						</tr>
 						
 				<%	
 						} 
 					totalDeliveryCharge = totalPdsPrice > 30000 ? 0 : 3000;
 				%>
+				
+						<!-- Button trigger modal -->
 						<tr>
 							<td class="text-start" colspan="2">
-								<button type="button" id="btn-order-choice-del" class="btn btn-outline-secondary btn-sm" onclick="cancelOrder(); ">주문 취소</button>
+								<button type="button" id="btn-order-choice-del" class="btn btn-outline-secondary btn-sm" "
+										data-bs-toggle="modal" data-bs-target="#product-question-write">주문 취소
+								</button>
 								<input type="hidden" name="orderNo" value=<%=orderNo %> />
+								
+						<!-- Modal -->
+							<div class="modal fade" id="product-question-write" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+										</div>
+										<div class="modal-body">     
+											<div class="row">
+												<div class="text-center" >
+													<p><strong class="fs-3">정말 주문을 취소하시겠습니까?</strong></p>
+													<p class="fs-7 mb-5">주문 취소가 확정된 후에는 취소 철회가 불가합니다.</p>
+											        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">돌아가기</button>
+											        <button type="button" class="btn btn-secondary" onclick="cancelOrder();">주문 취소</button>
+												</div>
+											</div>
+										</div>
+									</div>		
+								</div>
+							</div>	
 							</td>
 							<td colspan="4" class="text-end">
 								총 주문금액 <strong><%=StringUtil.numberToString(totalPdsPrice) %></strong>

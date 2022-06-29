@@ -934,4 +934,20 @@ public class ProductDao {
 		
 		helper.delete(sql, productNo);
 	}
+	
+	public Product getUrlByNo(Integer pdNo) throws SQLException {
+		String sql = "select pd_no, pd_name, pd_sale_price, pd_image_url "
+				   + "from sul_products "
+				   + "where pd_no = ? ";
+		
+		return helper.selectOne(sql, rs -> {
+			Product product = new Product();
+			product.setNo(rs.getInt("pd_no"));
+			product.setName(rs.getString("pd_name"));
+			product.setSalePrice(rs.getInt("pd_sale_price"));
+			product.setImageUrl(rs.getString("pd_image_url"));
+			
+			return product;
+		}, pdNo);
+	}
 }

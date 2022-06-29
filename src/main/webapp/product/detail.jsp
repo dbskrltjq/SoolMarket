@@ -27,6 +27,26 @@
 	<jsp:param name="menu" value="product"/>
 </jsp:include>
 	<%
+		String fail = request.getParameter("fail");
+	%>
+	
+	<%
+		if ("invalid".equals(fail)) {
+	%>
+		<div class="alert alert-danger">
+			<Strong>오류</Strong>유요한 요청이 아닙니다.
+		</div>
+	<%
+		} else if ("deny".equals(fail)) {
+	%>
+		<div class="alert alert-danger">
+				<strong>거부 </strong> 다른 사용자의 리뷰를 변경할 수 없습니다.
+		</div>
+	<%
+		}
+	%>
+	
+	<%
 		//로그인된 유저 객체 확인
 		User user = (User) session.getAttribute("LOGINED_USER");
 		
@@ -42,6 +62,7 @@
 		ProductQuestionDao productQuestionDao = ProductQuestionDao.getInstance();
 		List<QuestionDto> questions = productQuestionDao.getProductQuestions(pdNo);
 		
+		// pdNo파라미터값을 전달 받아 쿠키에 저장
 		StringJoiner joiner = new StringJoiner(":");
 		
 		Cookie[] cookies = request.getCookies();
@@ -59,8 +80,10 @@
 		
 		Cookie cookie = new Cookie("pdNo", joiner.toString());
 		cookie.setMaxAge(60*60*24);
+		cookie.setPath("/semi/");
 		response.addCookie(cookie);
 	%>
+	
 	<div class="container mt-3 mb-5">
 		<div class="row" id="detail-row">
 			<div class="col-6">
@@ -184,7 +207,7 @@
 						%>
 							<span>★★★★★</span>
 						<%
-							} else if(review.getScore() ==4 ) {
+							} else if(review.getScore() == 4 ) {
 						%>
 							<span>★★★★</span>
 						<%
@@ -196,7 +219,7 @@
 						%>
 							<span>★★</span>
 						<%
-							} else if (review.getScore() ==1 ) {
+							} else if (review.getScore() == 1 ) {
 						%>
 							<span>★</span>
 						<%
@@ -215,7 +238,8 @@
 		         			<a href="">1</a>개의 댓글이 있습니다. <span class="text-info ">추천 </span> : <span class="test-info"><%=review.getLikeCount() %></span>
 		         				<%--비 로그인시 리뷰 추천창이 안뜨도록 했습니다. 리뷰 추천기능 넣었습니다. --%>
 		         			<button type="button" class="btn btn-info btn-sm <%=user == null ? "btn-outline-secondary disabled" : "btn-outline-primary" %>" onclick="likeReview(<%=review.getNo() %>)">추천하기</button>
-		     				<a href="reviewdelete.jsp" class="btn btn-outline-secondary-sm">X</a>
+		     				<a href="reviewdelete.jsp?no=<%=review.getNo() %>&pdNo=<%=product.getNo() %>" class="btn btn-outline-secondary-sm">X</a>
+		     				
 		     		</div>
 	   			</div>
 			<%
@@ -233,7 +257,9 @@
 					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#product-question-write" onclick="questionUserCheck(<%=product.getNo()%>)">
 		 				 상품문의 글쓰기
 					</button>
-					<a href="productQuestionlist.jsp" class="btn btn-outline-secondary " >상품문의 전체보기</a>
+					<%--
+					 <a href="../questionlist.jsp" class="btn btn-outline-secondary " >상품문의 전체보기</a>
+					 --%>
 				</div>
 				
 			</div>

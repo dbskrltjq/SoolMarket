@@ -12,7 +12,7 @@
 	
 	
 	
-	MultipartRequest mr = new MultipartRequest(request, "C:\\eclipse\\workspace-web\\attached-file");
+	MultipartRequest mr = new MultipartRequest(request, "C:\\eclipse\\workspace-web\\semi\\src\\main\\webapp\\reviewImage");
 	
 	int productNo = Integer.parseInt(mr.getParameter("productNo"));
 	int score = Integer.parseInt(mr.getParameter("score"));

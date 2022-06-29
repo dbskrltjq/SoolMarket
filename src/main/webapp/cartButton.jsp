@@ -24,6 +24,7 @@
 			 text-decoration-line: none;
 			 color : #333333;
 		}
+
 </style>
 <body>
 <div class="container">
@@ -31,99 +32,59 @@
 		User user = (User) session.getAttribute("LOGINED_USER"); 
 	%>
 
-   <p>버튼을 누르면 상품이 담깁니다.</p>
-   <!-- 여기의 userNo는 session에서 가지고 와야 한다. 
-   		userNo를 그대로 넘기면 안 된다. 지금은 계속 로그인하기 번거로워서 값 넣어놓는 거다.-->
-      	<a href="cartItemAdd.jsp?userNo=6&pdNo=107&quantity=3" 
-	      	id="cart-go-link" 
-	      	class="btn btn-outline-secondary btn-sm">상품 추가
-      	</a>
-      	
-   <p>버튼을 누르면 바로구매가 가능합니다..</p>
-   <!-- 여기의 userNo는 session에서 가지고 와야 한다. -->
-      	<a href="orderNow.jsp?userNo=6&pdNo=107&quantity=3" 
-	      	id="order-now-link" 
-	      	class="btn btn-outline-secondary btn-sm">바로 구매
-      	</a>
-      	
-     	<div class="col-8 ms-5 mt-3">
-		<div class="row border">
-			<div class="col-3">
-			
-				<%=user.getName() %>님의 마이페이지입니다.
-			</div>
-			<div class="col-3">
-				<h6><strong>쿠폰</strong></h6>
-				<label>0</label>장
-			</div>
-			<div class="col-3">
-				<h6><strong>포인트</strong></h6>
-				<label><%=StringUtil.numberToString(user.getPoint()) %></label>원
-			</div>
-			<div class="col-3">
-				<h6><strong>예치금</strong></h6>
-				<label>0</label>원
-			</div>
-		</div>
-		
-		<div class="row mt-5">
-			<div class="col-12">
-				<h6><strong>최근 주문 정보</strong><span> 최근 30일 내에 주문하신 내역입니다.</span></h6>
-				<a href="myOrder.jsp" class="my-order-link" style="text-align:right">+ 더보기</a>
-			</div>
-			<table class="border">
-				<colgroup>
-						<col width="10%">
-						<col width="15%">
-						<col width="*">	
-						<col width="10%">
-						<col width="10%">
-						<col width="5%">
-				</colgroup>
-				<thead>
-					<tr class="bg-light">
-						<th>주문번호</th>
-						<th>날짜</th>
-						<th>주문정보</th>
-						<th>주문상태</th>
-						<th>결제금액</th>
-						<th>확인/리뷰</th>
-					</tr>
-				</thead>
-				<tbody class="table-group-divider">
-			<%
-				OrderDao orderDao = OrderDao.getInstance();
-				List<Order> orders = orderDao.getRecentOrdersByUserNo(user.getNo());
-				
-				if(orders.isEmpty()) {
-			%>
-				<tr>
-					<td colspan="6" class="text-center"><strong>지난 30일간의 주문내역이 없습니다.</strong></td>
-				</tr>
-			
-			<%
-				} else {
-					for(Order order : orders) {
-			%>
-					<tr >
-						<td><%=order.getNo() %></td>
-						<td><%=order.getCreatedDate() %></td>
-						<td style="text-align:left">
-							<a href="myOrderDetail.jsp?orderNo=<%=order.getNo() %>" class="my-order-link"><%=order.getTitle() %></a>
+
+	
+							
+							<td class="text-start" colspan="2">
+								<button type="button" id="btn-order-choice-del" class="btn btn-outline-secondary btn-sm" "
+										data-bs-toggle="modal" data-bs-target="#product-question-write">주문 취소
+								</button>
+								
+								
+	<!-- Button trigger modal -->
+
+	<!-- Modal -->
+							<div class="modal fade" id="product-question-write" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+										</div>
+										<div class="modal-body">     
+											<div class="row">
+												<div class="text-center" >
+													<p><strong class="fs-3">정말 주문을 취소하시겠습니까?</strong></p>
+													<p class="fs-7 mb-5">주문 취소가 확정된 후에는 취소 철회가 불가합니다.</p>
+											        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">돌아가기</button>
+											        <button type="button" class="btn btn-secondary" onclick="cancelOrder();">주문 취소</button>
+												</div>
+											</div>
+										</div>
+									</div>		
+								</div>
+							</div>																
 						</td>
-						<td><%=order.getStatus() %></td>
-						<td><%= StringUtil.numberToString(order.getPaymentPrice()) %></td>
-						<td></td>
-					</tr>
-			<%
-					}
-				}
-			%>
-				</tbody>
-			</table>
-		</div>
-	</div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// 상품 문의시 
+function questionUserCheck(productNo) {
+	let xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState === 4 && xhr.status === 200) {
+			let jsonText = xhr.responseText;
+			let result = JSON.parse(jsonText);
+			if (!result.exist) {
+				// 비로그인시
+				alert("쇼핑몰 회원님만 글작성 가능합니다.")
+				location.replace("../loginform.jsp?fail=deny");
+				return;
+			}
+		}
+	}
+	xhr.open("GET",'questionUserCheck.jsp')
+	xhr.send();
+}
+</script>
 </body>
 </html>

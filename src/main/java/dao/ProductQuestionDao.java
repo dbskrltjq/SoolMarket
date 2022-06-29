@@ -88,6 +88,7 @@ public class ProductQuestionDao {
 			
 		},productNo);
 	}
+
 	
 	public List<QuestionDto> getQuestionsWithoutKeyword(int period, String answered, int beginIndex, int endIndex) throws SQLException {
 			
@@ -513,4 +514,6 @@ public class ProductQuestionDao {
 			return rs.getInt("cnt");
 		}, categoryNo, keyword, period, answered);
 	}
+
+
 }

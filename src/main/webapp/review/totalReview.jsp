@@ -229,15 +229,15 @@
 				
 			</div>
 			<%
-				if (user == null && review.getaContent() == null) {
+				if (user == null && review.getAnswerContent() == null) {
 			%>
 				<p><a href="">0</a>개의 댓글이 있습니다. <span class="text-info">추천 </span> : <span class="test-info"><%=review.getLikeCount() %></span> <button type="button" class="btn btn-info btn-sm" onclick="likeReviewNoUser()">추천하기</button> </p>
 			<% 
-				} else if (user != null && review.getaContent() == null) {
+				} else if (user != null && review.getAnswerContent() == null) {
 			%>
 				<p><a href="">0</a>개의 댓글이 있습니다. <span class="text-info">추천 </span> : <span class="test-info"><%=review.getLikeCount() %></span> <button type="button" class="btn btn-info btn-sm" onclick="likeReview(<%=review.getNo() %>)">추천하기</button> </p>
 			<%
-				}else if (user == null && review.getaContent() != null) {
+				}else if (user == null && review.getAnswerContent() != null) {
 			%>
 				<a data-bs-toggle="collapse" href="#collapseExample<%=review.getNo() %>" role="button" aria-expanded="false" aria-controls="collapseExample">
     			1개의 댓글이 있습니다.
@@ -254,7 +254,7 @@
 				}
 			%>
 				<div class="collapse" id="collapseExample<%=review.getNo() %>">
-			  		<div class="card card-body " > <%=review.getaContent() %> </div>
+			  		<div class="card card-body " > <%=review.getAnswerContent() %> </div>
 			</div>
 			
 			

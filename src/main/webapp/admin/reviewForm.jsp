@@ -117,7 +117,7 @@
 							<div class="row d-flex justify-content-between my-2">
 								<div class="">
 									<button class="btn btn-outline-primary btn-sm">삭제</button>
-									<select class="form-select form-select-sm float-end" name="rows" onchange="">
+									<select class="form-select form-select-sm float-end" name="rows" onchange="loadReviews();">
 										<option value="5" <%=rows == 5 ? "selected" : ""%>>5개씩
 											보기</option>
 										<option value="10" <%=rows == 10 ? "selected" : ""%>>10개씩

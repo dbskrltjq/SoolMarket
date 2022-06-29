@@ -36,7 +36,7 @@
          	<p><strong class="fs-6">쇼핑정보</strong><p>
          	<div class="list-group list-group-flush mb-4">
          		<a href="myOrder.jsp" class="list-group-item list-group-item-action">- 주문목록</a>
-         		<a href="#" class="list-group-item list-group-item-action">- 취소 내역</a>
+         		<a href="myCancel.jsp" class="list-group-item list-group-item-action">- 취소 내역</a>
          		<a href="cart.jsp" class="list-group-item list-group-item-action">- 장바구니 보기</a>
 			</div>
 			<p><strong class="fs-6">회원정보</strong></p>
@@ -50,7 +50,7 @@
 			<div class="row border">
 				<div class="col-3">
 				
-					<%=user.getName() %>님의 마이페이지입니다.
+					<strong><%=user.getName() %></strong>님의 마이페이지
 				</div>
 				<div class="col-3">
 					<h6><strong>쿠폰</strong></h6>

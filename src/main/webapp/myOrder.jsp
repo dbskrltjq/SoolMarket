@@ -66,8 +66,9 @@
 			</div>
 		</div>
 		<div class="col-10 mt-3">
-			<div class="card">
-				<div class="card-body">
+		<h3><strong class="mt-3">나의 주문</strong></h3>
+			<div class="card mt-3">
+				<div class="card-body ">
 					<table class="order-complete table">
 						<colgroup>
 							<col width="10%">

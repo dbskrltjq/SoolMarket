@@ -177,11 +177,11 @@
 						</div>
 						
 					</main>
-					<jsp:include page="adminbottom.jsp"></jsp:include>
 				</div>
 			</div>
 		</div>
 	</div>
+					<jsp:include page="adminbottom.jsp"></jsp:include>
 </body>
 
 <script type="text/javascript">

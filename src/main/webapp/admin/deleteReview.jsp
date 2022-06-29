@@ -1,12 +1,12 @@
 <%@page import="com.google.gson.Gson"%>
-<%@page import="dto.QuestionDto"%>
+<%@page import="dto.ReviewDto"%>
 <%@page import="util.StringUtil"%>
-<%@page import="dao.ProductQuestionDao"%>
+<%@page import="dao.ReviewDao"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
 <%@page import="vo.User"%>
 <%@ page language="java" contentType="application/json; charset=UTF-8"
-    pageEncoding="UTF-8" errorPage="../error/500.jsp" trimDirectiveWhitespaces="true"%>
+    pageEncoding="UTF-8" trimDirectiveWhitespaces="true" errorPage="../error/500.jsp" %>
 <%
 	//세션에서 관리자정보를 조회한다.
 	User admin = (User) session.getAttribute("ADMIN");
@@ -15,17 +15,17 @@
 	}
 	
     Map<String, Object> result = new HashMap<>();
-	ProductQuestionDao productQuestionDao = ProductQuestionDao.getInstance();
+	ReviewDao reviewDao = ReviewDao.getInstance();
 
-	String[] questionNoList = request.getParameterValues("questionNos");
+	String[] reviewNoList = request.getParameterValues("reviewNos");
 	
-	for(String questionNoValue : questionNoList) {
-		int questionNo = StringUtil.stringToInt(questionNoValue);
-		QuestionDto questionDto = productQuestionDao.getProductQuestion(questionNo);
-		productQuestionDao.deleteQuestionByNo(questionNo);
+	for(String reviewNoValue : reviewNoList) {
+		int reviewNo = StringUtil.stringToInt(reviewNoValue);
+		ReviewDto reviewDto = reviewDao.getReviewDtoByreviewNo(reviewNo);
+		reviewDao.deleteReviewByNo(reviewNo);
 	}
 	
-	result.put("deletedCount", questionNoList.length);
+	result.put("deletedCount", reviewNoList.length);
 	
 	
     

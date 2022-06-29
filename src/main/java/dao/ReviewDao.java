@@ -489,7 +489,13 @@ public class ReviewDao {
 				   
 	}
 	
-	
+	public void deleteReviewByNo(int reviewNo) throws SQLException {
+		String sql = "update sul_reviews "
+				   + " set "
+				   + "  review_deleted = 'Y' "
+				   + "where review_no = ? ";
+		helper.update(sql, reviewNo);
+	}
 	
 	
 	

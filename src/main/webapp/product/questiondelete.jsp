@@ -12,19 +12,20 @@
 			response.sendRedirect("../loginform.jsp?fail=deny");
 			return;
 		}
-		int questionNo = StringUtil.stringToInt(request.getParameter("no"));
+		
+		int questionNo = StringUtil.stringToInt(request.getParameter("quNo"));
 		int pdNo = StringUtil.stringToInt(request.getParameter("pdNo"));
 		
 		ProductQuestionDao dao = ProductQuestionDao.getInstance();
 		QuestionDto question = dao.getProductQuestion(questionNo);
 		
 		if (question == null) {
-			response.sendRedirect("detail.jsp?fail=invalid");
+			response.sendRedirect("detail.jsp?fail=invalid&pdNo=" + pdNo);
 			return;
 		}
 		
 		if (question.getUserNo() != user.getNo()) {
-			response.sendRedirect("detail.jsp?fail=deny");
+			response.sendRedirect("detail.jsp?fail=error&pdNo=" + pdNo);
 			return;
 		}
 		

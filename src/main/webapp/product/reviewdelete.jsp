@@ -20,12 +20,12 @@
 		Review review = reviewDao.getReviewByNo(reviewNo);
 		
 		if (review == null) {
-			response.sendRedirect("detail.jsp?fail=invalid");
+			response.sendRedirect("detail.jsp?fail=invalid&pdNo=" + pdNo);
 			return;
 		}
 		
 		if (review.getUserNo() != user.getNo()) {
-			response.sendRedirect("detail.jsp?fail=deny");
+			response.sendRedirect("detail.jsp?fail=deny&pdNo=" + pdNo);
 			return;
 		}
 		

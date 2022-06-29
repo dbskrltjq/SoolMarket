@@ -40,7 +40,13 @@
 		} else if ("deny".equals(fail)) {
 	%>
 		<div class="alert alert-danger">
-				<strong>거부 </strong> 다른 사용자의 것을 변경할 수 없습니다.
+				<strong>거부 </strong> 다른 사용자의 리뷰를 삭제할 수 없습니다.
+		</div>
+	<%
+		} else if ("error".equals(fail)) {
+	%>
+		<div class="alert alert-danger">
+				<strong>거부 </strong> 다른 사용자의 문의글을 삭제할 수 없습니다.
 		</div>
 	<%
 		}
@@ -87,7 +93,7 @@
 		<div class="row" id="detail-row">
 			<div class="col-6">
 				<div>
-					<img alt="" src="../<%=product.getImageUrl() %>" class="img-thumbnail" >
+					<img alt="" src="../<%=product.getImageUrl() %>"  class="ratio ratio-1x1">
 				</div>
 			</div>
 			<div class="col-6">
@@ -237,7 +243,7 @@
 		         			<a href="">1</a>개의 댓글이 있습니다. <span class="text-info ">추천 </span> : <span class="test-info"><%=review.getLikeCount() %></span>
 		         				<%--비 로그인시 리뷰 추천창이 안뜨도록 했습니다. 리뷰 추천기능 넣었습니다. --%>
 		         			<button type="button" class="btn btn-info btn-sm <%=user == null ? "btn-outline-secondary disabled" : "btn-outline-primary" %>" onclick="likeReview(<%=review.getNo() %>)">추천하기</button>
-		     				<a href="reviewdelete.jsp?no=<%=review.getNo() %>&pdNo=<%=product.getNo() %>" class="btn btn-outline-secondary-sm">X</a>
+		     				<a href="reviewdelete.jsp?qno=<%=review.getNo() %>&pdNo=<%=product.getNo() %>" class="btn btn-outline-secondary-sm">X</a>
 		     				
 		     		</div>
 	   			</div>
@@ -296,7 +302,7 @@
 								<strong>A.답변드립니다.</strong>
 								<P><%=question.getAnswerContent() %></P>
 				      		</div>
-				  		<a href="questiondelete.jsp?no=<%=question.getNo() %>&pdNo=<%=product.getNo() %>" class="btn btn-outline-secondary-sm">X</a>
+				  		<a href="questiondelete.jsp?quNo=<%=question.getNo() %>&pdNo=<%=product.getNo() %>" class="btn btn-outline-secondary-sm">X</a>
 				    	</div>
 				  	</div>
 			<%

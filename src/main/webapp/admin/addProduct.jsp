@@ -12,7 +12,7 @@
 	}  
 	
 	// multipart/form-data요청을 처리하는 MultipartRequest객체 생성하기
-	MultipartRequest mr = new MultipartRequest(request, "C:\\eclipse\\workspace-web\\productImages");
+	MultipartRequest mr = new MultipartRequest(request, "../pdImages");
 	
 	// 요청파라미터값을 조회
 	int categoryNo = StringUtil.stringToInt(mr.getParameter("categoryNo"));
@@ -37,6 +37,7 @@
 	
 	if(fileName != null) {
 		newProduct.setFileName(fileName);
+		newProduct.setImageUrl(fileName);
 	} else {
 		newProduct.setFileName("이미지 없음");
 	}

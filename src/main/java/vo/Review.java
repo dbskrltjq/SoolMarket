@@ -16,7 +16,7 @@ public class Review {
 	private int likeCount;
 
 	private String imageUrl;
-	private String adminContent;
+	private String answerContent;
 	
 	private String title;
 

@@ -16,7 +16,7 @@ public class Review {
 	private int likeCount;
 
 	private String imageUrl;
-	private String answerContent;
+	private String adminContent;
 	
 	private String title;
 
@@ -24,12 +24,12 @@ public class Review {
 	public Review() {}
 
 	public String getAnswerContent() {
-		return answerContent;
+		return adminContent;
 	}
 	
 	
 	public void setAnswerContent(String answerContent) {
-		this.answerContent = answerContent;
+		this.adminContent = answerContent;
 	}
 	
 	

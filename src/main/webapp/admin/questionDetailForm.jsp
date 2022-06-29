@@ -167,7 +167,11 @@
 	      <div class="row">
 					<div class="col-6 py-3 ">
 						<div>
+<<<<<<< HEAD
 							<img alt="이미지 준비중입니다." src="../<%=product.getImageUrl() %>" class="img-thumbnail" width="200">
+=======
+							<img alt="" src="../<%=product.getImageUrl() %>" class="img-thumbnail" width="200">
+>>>>>>> 289d9d0c2f14eddb69ee74d53eaca9ac36b5c76d
 						</div>
 					</div>
 					<div class="col-6 p-3">

@@ -39,7 +39,7 @@ public class ReviewDao {
 			review.setNo(rs.getInt("review_no"));
 			review.setPdNo(rs.getInt("pd_no"));
 			review.setImageUrl(rs.getString("pd_image_url"));
-			review.setaContent(rs.getString("review_a_content"));
+			review.setAnswerContent(rs.getString("review_a_content"));
 			
 			return review;
 		},categoryNo, beginIndex, endIndex);
@@ -66,7 +66,7 @@ public class ReviewDao {
 			review.setNo(rs.getInt("review_no"));
 			review.setPdNo(rs.getInt("pd_no"));
 			review.setImageUrl(rs.getString("pd_image_url"));
-			review.setaContent(rs.getString("review_a_content"));
+			review.setAnswerContent(rs.getString("review_a_content"));
 			
 			return review;
 		},categoryNo, beginIndex, endIndex);
@@ -93,7 +93,7 @@ public class ReviewDao {
 			review.setNo(rs.getInt("review_no"));
 			review.setPdNo(rs.getInt("pd_no"));
 			review.setImageUrl(rs.getString("pd_image_url"));
-			review.setaContent(rs.getString("review_admin_content"));
+			review.setAnswerContent(rs.getString("review_admin_content"));
 			
 			return review;
 		},categoryNo, beginIndex, endIndex);
@@ -124,7 +124,7 @@ public class ReviewDao {
 			review.setNo(rs.getInt("review_no"));
 			review.setPdNo(rs.getInt("pd_no"));
 			review.setImageUrl(rs.getString("pd_image_url"));
-			review.setaContent(rs.getString("review_a_content"));
+			review.setAnswerContent(rs.getString("review_a_content"));
 			
 			return review;
 		}, categoryNo, keyword, beginIndex, endIndex);
@@ -151,7 +151,7 @@ public class ReviewDao {
 			review.setNo(rs.getInt("review_no"));
 			review.setPdNo(rs.getInt("pd_no"));
 			review.setImageUrl(rs.getString("pd_image_url"));
-			review.setaContent(rs.getString("review_a_content"));
+			review.setAnswerContent(rs.getString("review_a_content"));
 			
 			return review;
 		},categoryNo, keyword, beginIndex, endIndex);
@@ -178,7 +178,7 @@ public class ReviewDao {
 			review.setNo(rs.getInt("review_no"));
 			review.setPdNo(rs.getInt("pd_no"));
 			review.setImageUrl(rs.getString("pd_image_url"));
-			review.setaContent(rs.getString("review_a_content"));
+			review.setAnswerContent(rs.getString("review_a_content"));
 			
 			return review;
 		},categoryNo, keyword, beginIndex, endIndex);
@@ -213,7 +213,7 @@ public class ReviewDao {
 			review.setNo(rs.getInt("review_no"));
 			review.setPdNo(rs.getInt("pd_no"));
 			review.setImageUrl(rs.getString("pd_image_url"));
-			review.setaContent(rs.getString("review_a_content"));
+			review.setAnswerContent(rs.getString("review_a_content"));
 			
 			return review;
 		}, beginIndex, endIndex);
@@ -240,7 +240,7 @@ public class ReviewDao {
 			review.setNo(rs.getInt("review_no"));
 			review.setPdNo(rs.getInt("pd_no"));
 			review.setImageUrl(rs.getString("pd_image_url"));
-			review.setaContent(rs.getString("review_a_content"));
+			review.setAnswerContent(rs.getString("review_a_content"));
 			
 			return review;
 		}, beginIndex, endIndex);
@@ -267,7 +267,7 @@ public class ReviewDao {
 			review.setNo(rs.getInt("review_no"));
 			review.setPdNo(rs.getInt("pd_no"));
 			review.setImageUrl(rs.getString("pd_image_url"));
-			review.setaContent(rs.getString("review_a_content"));
+			review.setAnswerContent(rs.getString("review_a_content"));
 			
 			return review;
 		}, beginIndex, endIndex);
@@ -300,7 +300,7 @@ public class ReviewDao {
 			review.setNo(rs.getInt("review_no"));
 			review.setPdNo(rs.getInt("pd_no"));
 			review.setImageUrl(rs.getString("pd_image_url"));
-			review.setaContent(rs.getString("review_a_content"));
+			review.setAnswerContent(rs.getString("review_a_content"));
 			
 			return review;
 		},keyword, beginIndex, endIndex);
@@ -327,7 +327,7 @@ public class ReviewDao {
 			review.setNo(rs.getInt("review_no"));
 			review.setPdNo(rs.getInt("pd_no"));
 			review.setImageUrl(rs.getString("pd_image_url"));
-			review.setaContent(rs.getString("review_a_content"));
+			review.setAnswerContent(rs.getString("review_a_content"));
 			
 			return review;
 		},keyword, beginIndex, endIndex);
@@ -354,7 +354,7 @@ public class ReviewDao {
 			review.setNo(rs.getInt("review_no"));
 			review.setPdNo(rs.getInt("pd_no"));
 			review.setImageUrl(rs.getString("pd_image_url"));
-			review.setaContent(rs.getString("review_a_content"));
+			review.setAnswerContent(rs.getString("review_a_content"));
 		
 			
 			return review;

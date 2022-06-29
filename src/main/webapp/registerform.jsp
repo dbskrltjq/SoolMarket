@@ -14,9 +14,9 @@
 </head>
 <body>
 <jsp:include page="common/nav.jsp"></jsp:include>
-	<div class="container" class="padding: 30px;">
-		<div class="row">
-			<div class="col-8">
+	<div class="container">
+		<div class="row my-5 justify-content-center">
+			<div class="col-8" >
 				<div class="row mb-5 border-bottom">
 					<div class="col-12">
 						<h5>
@@ -24,15 +24,15 @@
 						</h5>
 					</div>
 				</div>
-				<div class="col-12 border-bottom">
+				<div class="col-12 border-bottom pt-3 ps-2">
 					<h6>
 						<strong>기본정보</strong>
 					</h6>
-					<p style="font-size: xx-small; text-align: right;">
-						<span>*</span>표시는 반드시 입력해야할 항목입니다.
+					<p class="me-3" style="font-size: xx-small; text-align: right;">
+						<strong><span>*</span>표시는 반드시 입력해야할 항목입니다.</strong>
 					</p>
 				</div>
-				<form action="register.jsp" method="post" onsubmit="return submitRegisterForm();" class="bg-light">
+				<form action="register.jsp" method="post" onsubmit="return submitRegisterForm();" class="bg-light pb-3">
 					<table class="table">
 						<tr>
 							<th><span>*</span> 아이디</th>

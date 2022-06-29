@@ -24,8 +24,8 @@
 		<div class="col-6">
 			<h3><strong>로그인</strong></h3>
 	  		<form method="post" class="border p-5 mb-5" id="login-form" action="login.jsp?job=user"  onsubmit="return submitLoginForm()">
-	    		<img class="mb-4" src="images/logo.png" alt="" width="200" height="200">
-	    		<div class="radioDiv">
+	    		<img class="mb-4" src="images/mainLogo.png" alt="" width="400" height="130">
+	    		<div class="radioDiv mt-5">
 		    		 <div class="form-check form-check-inline">
 						<input class="form-check-input" type="radio" name="radiobox" id="user-radio" value="option1" checked onchange="changeRadio();">
 						<label class="form-check-label" for="inlineCheckbox1">회원</label>

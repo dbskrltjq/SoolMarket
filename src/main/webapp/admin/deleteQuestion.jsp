@@ -25,7 +25,6 @@
 		productQuestionDao.deleteQuestionByNo(questionNo);
 	}
 	
-	QuestionDto questionDto = productQuestionDao.getProductQuestion(StringUtil.stringToInt(questionNoList[0]));
 	result.put("deletedCount", questionNoList.length);
 	
 	

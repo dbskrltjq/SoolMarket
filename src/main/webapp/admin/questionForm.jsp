@@ -116,7 +116,7 @@
 								</div>
 							<div class="row d-flex justify-content-between my-2">
 								<div class="">
-									<button class="btn btn-outline-primary btn-sm" onclick="deleteQuestion();">삭제</button>
+									<button type="button" class="btn btn-outline-primary btn-sm" onclick="deleteQuestion();">삭제</button>
 									<select class="form-select form-select-sm float-end" name="rows" onchange="loadQuestions();">
 										<option value="5" <%=rows == 5 ? "selected" : ""%>>5개씩
 											보기</option>
@@ -174,6 +174,7 @@
 			</div>
 		</div>
 	</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
 
 
@@ -197,10 +198,11 @@
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState === 4 && xhr.status === 200) {
 				let jsonText = xhr.responseText;
-				let result = JSON.parse(jsonText);
-				let deletedCount = result.deletedCount;
-				alert("상품문의 (" + deletedCount + ") 가 삭제되었습니다.");			// 여러개 삭제할 경우 수정하기
-				loadQuestions(1);
+				let result = JSON.parse(jsonText);										// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+				let deletedCount = result.deletedCount;									// form안에 버튼을 사용할 때 주의!! ajzx를 사용할 것이면 type을 꼭 button으로! 넣지 않으면 form
+																						// 자체가 submit된다.
+				alert("상품문의 (" + deletedCount + "개 ) 가 삭제되었습니다.");			// 여러개 삭제할 경우 수정하기
+				loadQuestions();
 			}
 		}
 		
@@ -262,7 +264,7 @@
 					rows += "<td>" + pdName + "</td>"
 					rows += "<td><a href='questionDetailForm.jsp?questionNo=" + questionNo + "&pdNo=" + pdNo + "&userNo=" + userNo +"'>" + title + "</a></td>"; 
 					rows += "<td>" + createdDate + "</td>";
-					rows += "<td>" + answered + deleted +"</td>";
+					rows += "<td>" + answered +"</td>";
 					rows += "</tr>";
 				}
 				tbody.innerHTML = rows;

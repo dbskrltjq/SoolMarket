@@ -31,24 +31,30 @@
 			}
 		}
 	}
-	
 	//Collections.reverse(valuesList);
 	valuesList.remove(recent);
 	String[] valueArray = valuesList.toArray(new String[valuesList.size()]);
 	
+
 	for (int i=0; i<valueArray.length; i++) {
 		joiner.add(valueArray[i]);
 	}
-
-	Cookie cookie = new Cookie("pdNo", joiner.toString());
-	if (valuesList.size() == 0) {
+	
+   if (joiner.toString() == "") {
+	   
+		Cookie cookie = new Cookie("pdNo", null);
 		cookie.setMaxAge(0);
+		cookie.setPath("/semi/");
 		response.addCookie(cookie);
-	} 
-	cookie.setMaxAge(60*60*24);
-	cookie.setPath("/semi/");
-	response.addCookie(cookie);
-	
-	
+		
+   } else if (joiner.toString() != "") {
+	   
+		Cookie cookie = new Cookie("pdNo", joiner.toString());
+		cookie.setMaxAge(60*60*24);
+		cookie.setPath("/semi/");
+		response.addCookie(cookie);
+		
+   }
+
 	response.sendRedirect("list.jsp?categoryNo=" + categoryNo + "&sort=" + sort + "&rows=" + rows);
 %>
